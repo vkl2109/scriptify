@@ -25,10 +25,11 @@ const styles = StyleSheet.create({
   line: {
     width: '40%',
     borderWidth: 0.75,
-    borderColor: '#101010'
+    borderColor: 'white'
   },
   text: {
     fontSize: 20,
-    fontStyle: 'italic'
+    fontStyle: 'italic',
+    color: 'white',
   }
 });

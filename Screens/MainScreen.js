@@ -43,7 +43,7 @@ export function MainScreen () {
                         value={code}
                         setValue={setCode}
                         />
-                    {code.length === 6 && <PrimaryButton
+                    {code.length === 4 && <PrimaryButton
                         onPress={handleJoin}
                         text={'Join Game'}
                         />}

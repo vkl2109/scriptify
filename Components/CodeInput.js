@@ -10,7 +10,7 @@ import {
 } from 'react-native-confirmation-code-field';
 
 export function CodeInput ({ value, setValue }) {
-    const ref = useBlurOnFulfill({value, cellCount: 6});
+    const ref = useBlurOnFulfill({value, cellCount: 4});
     const [props, getCellOnLayoutHandler] = useClearByFocusCell({
         value,
         setValue,
@@ -23,7 +23,7 @@ export function CodeInput ({ value, setValue }) {
             // Use `caretHidden={false}` when users can't paste a text value, because context menu doesn't appear
             value={value}
             onChangeText={setValue}
-            cellCount={6}
+            cellCount={4}
             rootStyle={styles.codeFieldRoot}
             keyboardType="number-pad"
             textContentType="oneTimeCode"
@@ -46,16 +46,19 @@ const styles = StyleSheet.create({
         marginTop: 20
     },
     cell: {
-        width: 40,
-        height: 40,
-        lineHeight: 32,
-        fontSize: 20,
+        width: 50,
+        height: 50,
+        lineHeight: 40,
+        fontSize: 30,
         borderWidth: 2,
         marginHorizontal: 10,
         borderColor: '#00000030',
+        borderRadius: 10,
         textAlign: 'center',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        backgroundColor: 'white',
+        overflow: 'hidden'
     },
     focusCell: {
         borderColor: '#000',
