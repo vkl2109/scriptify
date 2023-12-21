@@ -42,6 +42,10 @@ export function MainScreen () {
                     value={code}
                     setValue={setCode}
                     />
+                {code.length == 6 && <PrimaryButton
+                    onPress={handleJoin}
+                    text={'Join Game'}
+                    />}
             </View>
             </KeyboardAvoidingView>
         </SafeAreaView>
