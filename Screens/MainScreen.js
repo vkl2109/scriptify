@@ -13,14 +13,15 @@ import {
     PrimaryButton,
     CodeInput
 } from '../Components'
-// import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { useNavigation } from '@react-navigation/native';
 
 export function MainScreen () {
     const {height, width} = useWindowDimensions();
+    const navigation = useNavigation();
     const [ code, setCode ] = useState('')
 
     const handleStart = () => {
-
+        navigation.navigate('Start')
     }
 
     const handleJoin = () => {
@@ -30,23 +31,23 @@ export function MainScreen () {
     return(
         <SafeAreaView style={styles.container}>
             <KeyboardAvoidingView style={styles.container} behavior='padding'>
-            <Text style={styles.title}>Scriptify</Text>
-            <View style={styles.lowerHalf(width)}>
-                <PrimaryButton
-                    onPress={handleStart}
-                    text={'Start Game'}
-                    />
-                <Divider text={'or'}/>
-                <Text style={styles.joinText}>Input Code to Join Game</Text>
-                <CodeInput 
-                    value={code}
-                    setValue={setCode}
-                    />
-                {code.length == 6 && <PrimaryButton
-                    onPress={handleJoin}
-                    text={'Join Game'}
-                    />}
-            </View>
+                <Text style={styles.title}>Scriptify</Text>
+                <View style={styles.lowerHalf(width)}>
+                    <PrimaryButton
+                        onPress={handleStart}
+                        text={'Start Game'}
+                        />
+                    <Divider text={'or'}/>
+                    {/* <Text style={styles.joinText}>Input Code to Join Game</Text> */}
+                    <CodeInput 
+                        value={code}
+                        setValue={setCode}
+                        />
+                    {code.length === 6 && <PrimaryButton
+                        onPress={handleJoin}
+                        text={'Join Game'}
+                        />}
+                </View>
             </KeyboardAvoidingView>
         </SafeAreaView>
     )
