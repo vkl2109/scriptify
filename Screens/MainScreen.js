@@ -23,7 +23,7 @@ export function MainScreen () {
                     >
                         <Text style={styles.startText}>Start Game</Text>
                 </TouchableOpacity>
-                <Divider />
+                <Divider text={'or'}/>
             </View>
         </SafeAreaView>
     )
