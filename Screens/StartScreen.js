@@ -16,7 +16,7 @@ export function StartScreen () {
         <SafeAreaView style={styles.container}>
             <BackHeader />
             <FlatList 
-                ListHeaderComponent={<Text style={styles.title}>Choose Your Category</Text>}
+                ListHeaderComponent={<Text style={styles.title}>Choose A Category</Text>}
                 contentContainerStyle={styles.categories}
                 data={categories}
                 renderItem={({ item, index }) => (

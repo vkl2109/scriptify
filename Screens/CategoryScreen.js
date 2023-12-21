@@ -12,8 +12,10 @@ import {
     PlayerCheck,
     PrimaryButton,
 } from '../Components'
+import { useNavigation } from '@react-navigation/native'
 
-export function CategoryScreen ({ route, navigation }) {
+export function CategoryScreen ({ route }) {
+    const navigation = useNavigation()
     const { title, players } = route.params
     const [ selected, setSelected ] = useState(new Set(players.map(player => player.name)))
 
@@ -31,13 +33,14 @@ export function CategoryScreen ({ route, navigation }) {
     }
 
     const handleStart = () => {
-        navigation.navigate('Game')
+        navigation.navigate('Waiting', {
+            code: 'DXQZ',
+        })
     }
 
     return(
         <SafeAreaView style={styles.container}>
-            <BackHeader />
-            <Text style={styles.title}>{title}</Text>
+            <BackHeader title={title} />
             <FlatList
                 ListHeaderComponent={
                     <Text style={styles.subTitle}>Who's Playing?</Text>
@@ -50,8 +53,16 @@ export function CategoryScreen ({ route, navigation }) {
                         <PlayerCheck player={item.name} key={index} selected={selected.has(item.name)}/>
                     </TouchableOpacity>
                 )}
+                ListFooterComponent={
+                    <Text style={styles.subTitle}>✅ {selected.size}</Text>
+                }
                 />
-            <PrimaryButton text={'START'} onPress={handleStart} />
+            {selected.size > 0 
+            ?
+                <PrimaryButton text={'START'} onPress={handleStart} />
+            :
+                <Text style={styles.errorTxt}>Must Select At Least One Player</Text>
+            }
         </SafeAreaView>
     )
 }
@@ -63,19 +74,19 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-start',
     },
-    title: {
-        fontSize: 30,
-        fontWeight: 'bold',
-        color: 'white',
-    },
     subTitle: {
         color: 'white',
-        fontSize: 20
+        fontSize: 20,
     },
     players: {
         flex: 1,
         width: '100%',
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    errorTxt: {
+        color: 'red',
+        fontSize: 15,
+        fontWeight: 'bold',
     }
 })
