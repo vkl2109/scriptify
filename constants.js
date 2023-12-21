@@ -15,3 +15,7 @@ const categories = [
         title: 'Suits',
     },
 ]
+
+export {
+    categories
+}

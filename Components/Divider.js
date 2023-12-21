@@ -8,7 +8,7 @@ export function Divider ({ text }) {
     return(
         <View style={styles.dividerWrapper}>
             <View style={styles.line} />
-            <Text>{text}</Text>
+            <Text style={styles.text}>{text}</Text>
             <View style={styles.line} />
         </View>
     )
@@ -24,7 +24,11 @@ const styles = StyleSheet.create({
   },
   line: {
     width: '40%',
-    borderWidth: 0.9,
+    borderWidth: 0.75,
     borderColor: '#101010'
+  },
+  text: {
+    fontSize: 20,
+    fontStyle: 'italic'
   }
 });
