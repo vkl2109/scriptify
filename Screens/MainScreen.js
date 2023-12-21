@@ -3,15 +3,20 @@ import {
     View,
     Text, 
     TextInput,
+    KeyboardAvoidingView,
+    useWindowDimensions
 } from 'react-native';
 import { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { 
     Divider,
     PrimaryButton,
+    CodeInput
 } from '../Components'
+// import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 export function MainScreen () {
+    const {height, width} = useWindowDimensions();
     const [ code, setCode ] = useState('')
 
     const handleStart = () => {
@@ -24,20 +29,21 @@ export function MainScreen () {
 
     return(
         <SafeAreaView style={styles.container}>
+            <KeyboardAvoidingView style={styles.container} behavior='padding'>
             <Text style={styles.title}>Scriptify</Text>
-            <View style={styles.lowerHalf}>
+            <View style={styles.lowerHalf(width)}>
                 <PrimaryButton
                     onPress={handleStart}
                     text={'Start Game'}
                     />
                 <Divider text={'or'}/>
-                <TextInput 
+                <Text style={styles.joinText}>Input Code to Join Game</Text>
+                <CodeInput 
                     value={code}
-                    onChangeText={setCode}
-                    style={styles.input}
-                    placeholder='Code'
+                    setValue={setCode}
                     />
             </View>
+            </KeyboardAvoidingView>
         </SafeAreaView>
     )
 }
@@ -49,21 +55,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-evenly',
   },
-  lowerHalf: {
-    width: '100%',
+  lowerHalf:(w) => ({
+    width: w,
     justifyContent: 'center',
     alignItems: 'center',
-  },
+  }),
   title: {
     fontSize: 50,
     fontWeight: 'bold',
     color: 'white',
   },
-  input: {
-    height: 50,
-    width: '50%',
-    backgroundColor: 'white',
-    borderRadius: 50,
-    padding: 10,
+  joinText: {
+    margin: 5,
   }
 });
