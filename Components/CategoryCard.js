@@ -3,9 +3,11 @@ import {
     TouchableOpacity,
     View,
     Text,
+    ImageBackground,
     useWindowDimensions,
 } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
+import images from '../assets'
 
 export function CategoryCard ({ category }) {
     const navigation = useNavigation();
@@ -20,12 +22,22 @@ export function CategoryCard ({ category }) {
             onPress={handleCategory}
             style={styles.cardWrapper(width)}
             >
-            <View style={styles.topRow}>
-                <Text style={styles.title}>{category.title}</Text>
-            </View>
-            <View style={styles.bottomRow}>
-                <Text style={styles.title}>{category.players} players</Text>
-            </View>
+            <ImageBackground 
+                source={images[category.image]}
+                style={styles.image}
+                resizeMode='cover'
+                >
+                <View style={styles.topRow}>
+                    <View style={styles.textWrapper}>
+                        <Text style={styles.title}>{category.title}</Text>
+                    </View>
+                </View>
+                <View style={styles.bottomRow}>
+                    <View style={styles.textWrapper}>
+                        <Text style={styles.title}>{category.players} players</Text>
+                    </View>
+                </View>
+            </ImageBackground>
         </TouchableOpacity>
     )
 }
@@ -35,19 +47,16 @@ const styles = StyleSheet.create({
         margin: 20, 
         width: w * 0.9,
         height: 100,
-        padding: 15,
-        borderRadius: 20,
-        borderWidth: 1,
         borderColor: 'white',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        alignItems: 'center',
+        overflow: 'hidden',
+        borderRadius: 20,
     }),
     topRow: {
         width: '100%',
         flexDirection: 'row',
         justifyContent: 'flex-start',
-        alignItems: 'center'
+        alignItems: 'center',
+        padding: 15,
     },
     title: {
         color: 'white',
@@ -57,6 +66,21 @@ const styles = StyleSheet.create({
         width: '100%',
         flexDirection: 'row',
         justifyContent: 'flex-end',
-        alignItems: 'center'
+        alignItems: 'center',
+        paddingBottom: 10,
+        paddingRight: 10,
+    },
+    image: {
+        width: '100%',
+        height: '100%',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        borderRadius: 20,
+    },
+    textWrapper: {
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        padding: 5,
+        borderRadius: 20,
     }
 })

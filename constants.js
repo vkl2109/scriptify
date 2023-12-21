@@ -14,7 +14,7 @@ const categories = [
     {
         image: 'gossip',
         players: '4-6',
-        title: 'Gossip Girls',
+        title: 'Gossip Girl',
     },
     {
         image: 'suits',
