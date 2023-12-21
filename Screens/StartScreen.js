@@ -2,9 +2,7 @@ import {
     StyleSheet, 
     View,
     Text, 
-    TextInput,
-    KeyboardAvoidingView,
-    useWindowDimensions
+    FlatList,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context'
 import {
@@ -18,14 +16,21 @@ export function StartScreen () {
     return(
         <SafeAreaView style={styles.container}>
             <BackHeader />
-            <Text style={styles.title}>Choose Your Category</Text>
-            <View style={styles.categories}>
+            <FlatList 
+                ListHeaderComponent={<Text style={styles.title}>Choose Your Category</Text>}
+                contentContainerStyle={styles.categories}
+                data={categories}
+                renderItem={({ item, index }) => (
+                    <CategoryCard category={item} key={index} />
+                )}
+                />
+            {/* <View style={styles.categories}>
                 {categories.map((category, i) => {
                     return(
                         <CategoryCard category={category} key={i} />
                     )
                 })}
-            </View>
+            </View> */}
         </SafeAreaView>
     )
 }
