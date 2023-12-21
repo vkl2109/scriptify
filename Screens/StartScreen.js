@@ -9,7 +9,6 @@ import {
     BackHeader,
     CategoryCard
 } from '../Components'
-import { useNavigation } from '@react-navigation/native';
 import { categories } from '../constants'
 
 export function StartScreen () {
@@ -24,13 +23,6 @@ export function StartScreen () {
                     <CategoryCard category={item} key={index} />
                 )}
                 />
-            {/* <View style={styles.categories}>
-                {categories.map((category, i) => {
-                    return(
-                        <CategoryCard category={category} key={i} />
-                    )
-                })}
-            </View> */}
         </SafeAreaView>
     )
 }

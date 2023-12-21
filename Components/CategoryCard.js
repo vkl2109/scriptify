@@ -14,7 +14,10 @@ export function CategoryCard ({ category }) {
     const { height, width } = useWindowDimensions();
 
     const handleCategory = () => {
-        navigation.navigate('Category')
+        navigation.navigate('Category', {
+            players: category.players,
+            title: category.title
+        })
     }
 
     return(
@@ -34,7 +37,7 @@ export function CategoryCard ({ category }) {
                 </View>
                 <View style={styles.bottomRow}>
                     <View style={styles.textWrapper}>
-                        <Text style={styles.title}>{category.players} players</Text>
+                        <Text style={styles.title}>{category.count} players</Text>
                     </View>
                 </View>
             </ImageBackground>
