@@ -2,14 +2,23 @@ import {
     StyleSheet, 
     View,
     Text, 
-    TouchableOpacity,
+    TextInput,
 } from 'react-native';
+import { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Divider } from '../Components'
+import { 
+    Divider,
+    PrimaryButton,
+} from '../Components'
 
 export function MainScreen () {
+    const [ code, setCode ] = useState('')
 
     const handleStart = () => {
+
+    }
+
+    const handleJoin = () => {
 
     }
 
@@ -17,13 +26,17 @@ export function MainScreen () {
         <SafeAreaView style={styles.container}>
             <Text style={styles.title}>Scriptify</Text>
             <View style={styles.lowerHalf}>
-                <TouchableOpacity 
-                    style={styles.buttonStart}
+                <PrimaryButton
                     onPress={handleStart}
-                    >
-                        <Text style={styles.startText}>Start Game</Text>
-                </TouchableOpacity>
+                    text={'Start Game'}
+                    />
                 <Divider text={'or'}/>
+                <TextInput 
+                    value={code}
+                    onChangeText={setCode}
+                    style={styles.input}
+                    placeholder='Code'
+                    />
             </View>
         </SafeAreaView>
     )
@@ -46,17 +59,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'white',
   },
-  buttonStart: {
-    backgroundColor: '#F0ECE5',
-    width: '90%',
+  input: {
     height: 50,
-    margin: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 100,
-  },
-  startText: {
-    fontWeight: 'bold',
-    color: '#161A30',
+    width: '50%',
+    backgroundColor: 'white',
+    borderRadius: 50,
+    padding: 10,
   }
 });
