@@ -34,7 +34,7 @@ export function CategoryScreen ({ route }) {
 
     const handleStart = () => {
         navigation.navigate('Waiting', {
-            code: 'DXQZ',
+            code: 'AAAA',
         })
     }
 

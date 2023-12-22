@@ -25,7 +25,10 @@ export function MainScreen () {
     }
 
     const handleJoin = () => {
-
+        navigation.navigate('Waiting', {
+          code: code,
+        })
+        setCode('')
     }
 
     return(
