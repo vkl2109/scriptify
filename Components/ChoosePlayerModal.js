@@ -49,15 +49,23 @@ const choiceStyles = StyleSheet.create({
 
 export function ChoosePlayerModal({ unchosen, isVisible }) {
     const [ name, setName ] = useState('')
+    const [ error, setError ] = useState('')
     const [ choice, setChoice ] = useState()
     const navigation = useNavigation()
 
     const handlePlay = async () => {
         try {
+            if (name == '') setError('Enter Name')
+            if (!choice) setError('Choose Player')
             const sessionRef = doc(db, 'sessions', code)
+
         }
         catch (e) {
-
+            console.log(e)
+        }
+        finally {
+            setChoice()
+            setName('')
         }
     }
 
@@ -100,7 +108,7 @@ export function ChoosePlayerModal({ unchosen, isVisible }) {
                         )}
                         // ListFooterComponent={<Text>Choose Character</Text>}
                         />
-                    
+                    <Text style={styles.errorText}>{error}</Text>
                     <PrimaryButton 
                         text={"Let's Play"} 
                         onPress={handlePlay}
@@ -124,7 +132,7 @@ const styles = StyleSheet.create({
         height: '50%',
         backgroundColor: 'white',
         borderRadius: 20,
-        paddingTop: 20,
+        padding: 20,
         justifyContent: 'space-between',
         alignItems: 'center'
     },
@@ -156,5 +164,10 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    errorText: {
+        color: 'red',
+        fontSize: 15,
+        margin: 5,
     }
 })
