@@ -5,20 +5,58 @@ import {
     TouchableOpacity,
     ActivityIndicator
 } from 'react-native'
-import { useState, useContext } from 'react'
+import { 
+    useState, 
+    useContext,
+    useEffect,
+} from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import {
-    BackHeader
+    BackHeader,
+    ChoosePlayerModal
 } from '../Components'
 import { AuthContext } from '../Context/AuthContextProvider'
 import { useNavigation } from '@react-navigation/native'
 import { AntDesign } from '@expo/vector-icons';
+import {
+  doc,
+  onSnapshot,
+  updateDoc,
+} from "firebase/firestore";
+import { db } from '../firebase'
 
 export function WaitingScreen ({ route }) {
-    const { code } = route.params
+    const { category, code } = route.params
     const { deviceID } = useContext(AuthContext)
-    const [ players, setPlayers ] = useState([])
+    const [ players, setPlayers ] = useState(new Set())
+    const [ unchosen, setUnchosen] = useState(new Set())
     const navigation = useNavigation()
+
+    useEffect(() => {
+        const sessionRef = doc(db, "sessions", code);
+        const unsubscribe = onSnapshot(sessionRef, (doc) => {
+            if (doc.exists()) {
+                const sessionData = doc.data()
+                const newPlayers = new Set()
+                const newChosen = new Set()
+                for (let [key, value] of Object.entries(sessionData.players)) {
+                    if (value == '') {
+                        newChosen.add(key)
+                    }
+                    else {
+                        newPlayers.add(value)
+                    }
+                }
+                console.log(newPlayers, newChosen)
+                setUnchosen(newChosen)
+                setPlayers(newPlayers)
+            }
+        })
+
+        return () => {
+            unsubscribe()
+        }
+    },[])
 
     const handleClose = () => {
         navigation.navigate('Main')
@@ -26,6 +64,10 @@ export function WaitingScreen ({ route }) {
 
     return(
         <SafeAreaView style={styles.container}>
+            <ChoosePlayerModal 
+            unchosen={unchosen}
+            isVisible={!players.has(deviceID)}
+            />
             <View style={styles.topRow}>
                 <TouchableOpacity
                     style={styles.closeButton}
@@ -36,7 +78,7 @@ export function WaitingScreen ({ route }) {
             </View>
             <Text style={styles.codeText}>{code}</Text>
             <Text style={styles.subText}>Session Code</Text>
-            {players.length == 0 &&
+            {players.size == 0 &&
                 <View style={styles.waiting}>
                     <ActivityIndicator size='large' />
                     <Text style={styles.waitingText}>Waiting for Players to Join</Text>

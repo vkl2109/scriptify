@@ -16,8 +16,9 @@ import { useNavigation } from '@react-navigation/native'
 
 export function CategoryScreen ({ route }) {
     const navigation = useNavigation()
-    const { title, players } = route.params
-    const [ selected, setSelected ] = useState(new Set(players.map(player => player.name)))
+    const { category } = route.params
+    const { title, players } = category
+    const [ selected, setSelected ] = useState(new Set(players))
 
     const toggleSelected = (player) => {
         if (selected.has(player)) {
@@ -35,6 +36,7 @@ export function CategoryScreen ({ route }) {
     const handleStart = () => {
         navigation.navigate('Waiting', {
             code: 'AAAA',
+            category: category,
         })
     }
 
@@ -49,8 +51,8 @@ export function CategoryScreen ({ route }) {
                 data={players}
                 renderItem={({ item, index }) => (
                     <TouchableOpacity
-                        onPress={() => toggleSelected(item.name)}>
-                        <PlayerCheck player={item.name} key={index} selected={selected.has(item.name)}/>
+                        onPress={() => toggleSelected(item)}>
+                        <PlayerCheck player={item} key={index} selected={selected.has(item)}/>
                     </TouchableOpacity>
                 )}
                 ListFooterComponent={

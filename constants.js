@@ -11,24 +11,12 @@ const categories = [
         count: '4-6',
         title: 'Friends',
         players: [
-            {
-                name: 'Chandler',
-            },
-            {
-                name: 'Rachel',
-            },
-            {
-                name: 'Ross'
-            },
-            {
-                name: 'Monica',
-            },
-            {
-                name: 'Joey',
-            },
-            {
-                name: 'Phoebe',
-            }
+            'Chander',
+            'Rachel',
+            'Monica',
+            'Ross',
+            'Phoebe',
+            'Joey'
         ]
     },
     {
@@ -36,24 +24,12 @@ const categories = [
         count: '4-6',
         title: 'Gossip Girl',
         players: [
-            {
-                name: 'Nate',
-            },
-            {
-                name: 'Serena',
-            },
-            {
-                name: 'Chuck'
-            },
-            {
-                name: 'Blair',
-            },
-            {
-                name: 'Dan',
-            },
-            {
-                name: 'Jenny',
-            }
+            'Nate',
+            'Serena',
+            'Chuck',
+            'Blair',
+            'Dan',
+            'Jenny',
         ]
     },
     {
@@ -61,24 +37,12 @@ const categories = [
         count: '2-4',
         title: 'Suits',
         players: [
-            {
-                name: 'Louis',
-            },
-            {
-                name: 'Donna',
-            },
-            {
-                name: 'Harvey'
-            },
-            {
-                name: 'Mike',
-            },
-            {
-                name: 'Rachel',
-            },
-            {
-                name: 'Jessica',
-            }
+            'Louis',
+            'Donna',
+            'Harvey',
+            'Mike',
+            'Rachel',
+            'Jessica',
         ]
     },
 ]

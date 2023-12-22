@@ -15,8 +15,7 @@ export function CategoryCard ({ category }) {
 
     const handleCategory = () => {
         navigation.navigate('Category', {
-            players: category.players,
-            title: category.title
+            category: category
         })
     }
 
