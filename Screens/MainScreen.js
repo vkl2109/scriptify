@@ -6,7 +6,10 @@ import {
     KeyboardAvoidingView,
     useWindowDimensions
 } from 'react-native';
-import { useState } from 'react'
+import { 
+  useState,
+  useContext,
+} from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { 
     Divider,
@@ -14,11 +17,13 @@ import {
     CodeInput
 } from '../Components'
 import { useNavigation } from '@react-navigation/native';
+import { AuthContext } from '../Context/AuthContextProvider'
 
 export function MainScreen () {
     const {height, width} = useWindowDimensions();
     const navigation = useNavigation();
     const [ code, setCode ] = useState('')
+    const { currentUser } = useContext(AuthContext)
 
     const handleStart = () => {
         navigation.navigate('Start')
@@ -35,6 +40,12 @@ export function MainScreen () {
         <SafeAreaView style={styles.container}>
             <KeyboardAvoidingView style={styles.container} behavior='padding'>
                 <Text style={styles.title}>Scriptify</Text>
+                {currentUser && 
+                  <View style={styles.welcomeBlock}>
+                    <Text style={styles.welcomeBackTxt}>Welcome Back</Text>
+                    <Text style={styles.nameTxt}>{currentUser}</Text>
+                  </View>
+                }
                 <View style={styles.lowerHalf(width)}>
                     <PrimaryButton
                         onPress={handleStart}
@@ -75,5 +86,19 @@ const styles = StyleSheet.create({
   },
   joinText: {
     margin: 5,
+  },
+  welcomeBlock: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  welcomeBackTxt: {
+    fontStyle: 'italic',
+    fontSize: 20,
+    color: 'white',
+  },
+  nameTxt: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: 'white',
   }
 });

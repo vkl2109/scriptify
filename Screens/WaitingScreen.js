@@ -29,9 +29,10 @@ import { db } from '../firebase'
 export function WaitingScreen ({ route }) {
     const { category, code } = route.params
     const { deviceID } = useContext(AuthContext)
-    const [ players, setPlayers ] = useState(new Set())
+    const [ players, setPlayers ] = useState(null)
     const [ unchosen, setUnchosen] = useState(new Set())
     const [ showCancel, setCancel ] = useState(false)
+    const [ hasChosen, setHasChosen ] = useState(false)
     const navigation = useNavigation()
 
     useEffect(() => {
@@ -49,12 +50,13 @@ export function WaitingScreen ({ route }) {
                         newPlayers.add(value)
                     }
                 }
-                console.log(newPlayers, newChosen)
+                // console.log(newPlayers, newChosen)
+                if (!newPlayers.has(deviceID)) setHasChosen(true)
                 setUnchosen(newChosen)
                 setPlayers(newPlayers)
             }
         })
-
+        console.log(deviceID)
         return () => {
             unsubscribe()
         }
@@ -62,11 +64,11 @@ export function WaitingScreen ({ route }) {
 
     return(
         <SafeAreaView style={styles.container}>
-            <ChoosePlayerModal 
+            {/* <ChoosePlayerModal 
                 unchosen={unchosen}
-                isVisible={!players.has(deviceID)}
+                isVisible={hasChosen}
                 code={code}
-                />
+                /> */}
             <CancelGameModal 
                 showCancel={showCancel}
                 setCancel={setCancel}
@@ -81,7 +83,12 @@ export function WaitingScreen ({ route }) {
             </View>
             <Text style={styles.codeText}>{code}</Text>
             <Text style={styles.subText}>Session Code</Text>
-            {players.size == 0 &&
+            {!players ?
+                <View style={styles.waiting}>
+                    <ActivityIndicator size='large' />
+                </View>
+            :
+            players.size == 0 &&
                 <View style={styles.waiting}>
                     <ActivityIndicator size='large' />
                     <Text style={styles.waitingText}>Waiting for Players to Join</Text>

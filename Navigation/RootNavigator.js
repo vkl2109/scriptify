@@ -17,7 +17,7 @@ export function RootNavigator () {
             <Stack.Screen name="Main" component={MainScreen} />
             <Stack.Screen name="Start" component={StartScreen} />
             <Stack.Screen name="Category" component={CategoryScreen} />
-            <Stack.Screen name="Waiting" component={WaitingScreen} />
+            <Stack.Screen name="Waiting" component={WaitingScreen} options={{gestureEnabled: false}}/>
         </Stack.Navigator>
     )
 }
