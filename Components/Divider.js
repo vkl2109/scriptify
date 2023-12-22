@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     alignItems: 'center',
     flexDirection: 'row',
-    margin: 10,
+    marginTop: 20,
   },
   line: {
     width: '40%',

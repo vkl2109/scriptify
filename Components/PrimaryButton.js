@@ -4,13 +4,25 @@ import {
     Text,
 } from 'react-native'
 
-export function PrimaryButton ({ text, onPress }) {
+export function PrimaryButton ({ 
+    text, 
+    onPress,
+    variant = "primary"
+}) {
     return(
         <TouchableOpacity 
             onPress={onPress}
-            style={styles.buttonStart}
+            style={[styles.buttonStart, {
+                backgroundColor: variant == "primary" ? '#F0ECE5' : '#31304D'
+            }]}
             >
-            <Text style={styles.buttonText}>{text}</Text>
+            <Text 
+                style={[styles.buttonText, {
+                    color: variant == "primary" ? '#161A30' : 'white'
+                }]}
+                >
+                {text}
+            </Text>
         </TouchableOpacity>
     )
 }
@@ -26,7 +38,7 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         fontWeight: 'bold',
-        color: '#161A30',
         fontSize: 24
-    }
+    },
+
 })

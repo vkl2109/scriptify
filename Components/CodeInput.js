@@ -43,7 +43,7 @@ export function CodeInput ({ value, setValue }) {
 
 const styles = StyleSheet.create({
     codeFieldRoot: {
-        marginTop: 20
+        margin: 20
     },
     cell: {
         width: 50,

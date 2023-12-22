@@ -13,7 +13,8 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context'
 import {
     BackHeader,
-    ChoosePlayerModal
+    ChoosePlayerModal,
+    CancelGameModal,
 } from '../Components'
 import { AuthContext } from '../Context/AuthContextProvider'
 import { useNavigation } from '@react-navigation/native'
@@ -30,6 +31,7 @@ export function WaitingScreen ({ route }) {
     const { deviceID } = useContext(AuthContext)
     const [ players, setPlayers ] = useState(new Set())
     const [ unchosen, setUnchosen] = useState(new Set())
+    const [ showCancel, setCancel ] = useState(false)
     const navigation = useNavigation()
 
     useEffect(() => {
@@ -58,20 +60,21 @@ export function WaitingScreen ({ route }) {
         }
     },[])
 
-    const handleClose = () => {
-        navigation.navigate('Main')
-    }
-
     return(
         <SafeAreaView style={styles.container}>
             <ChoosePlayerModal 
-            unchosen={unchosen}
-            isVisible={!players.has(deviceID)}
-            />
+                unchosen={unchosen}
+                isVisible={!players.has(deviceID)}
+                code={code}
+                />
+            <CancelGameModal 
+                showCancel={showCancel}
+                setCancel={setCancel}
+                />
             <View style={styles.topRow}>
                 <TouchableOpacity
                     style={styles.closeButton}
-                    onPress={handleClose}
+                    onPress={() => setCancel(true)}
                     >
                     <AntDesign name="close" size={24} color="white" />
                 </TouchableOpacity>

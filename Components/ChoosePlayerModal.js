@@ -8,11 +8,14 @@ import {
     FlatList,
     useWindowDimensions
 } from 'react-native'
-import { useState } from 'react'
+import { 
+    useState,
+    useContext
+} from 'react'
 import { BlurView } from 'expo-blur'
 import {
     PrimaryButton
-} from '../Components'
+} from './PrimaryButton'
 import { db } from '../firebase'
 import {
   doc,
@@ -20,6 +23,7 @@ import {
 } from "firebase/firestore";
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
+import { AuthContext } from '../Context/AuthContextProvider'
 
 function ChoicePlayer ({ player, selected }) {
     const { height, width } = useWindowDimensions()
@@ -47,25 +51,44 @@ const choiceStyles = StyleSheet.create({
     }
 })
 
-export function ChoosePlayerModal({ unchosen, isVisible }) {
+export function ChoosePlayerModal({ unchosen, isVisible, code }) {
     const [ name, setName ] = useState('')
     const [ error, setError ] = useState('')
     const [ choice, setChoice ] = useState()
     const navigation = useNavigation()
+    const { deviceID } = useContext(AuthContext)
 
     const handlePlay = async () => {
         try {
-            if (name == '') setError('Enter Name')
-            if (!choice) setError('Choose Player')
+            if (name == '') {
+                setError('Enter Name')
+                return
+            }
+            if (!choice) {
+                setError('Choose Player')
+                return
+            }
             const sessionRef = doc(db, 'sessions', code)
-
+            const updatePlayer = `players.${choice}`
+            await updateDoc(sessionRef, {
+                [updatePlayer]: deviceID
+            })
+            setChoice()
+            setName('')
+            setError('')
         }
         catch (e) {
             console.log(e)
+            setError('Please Try Again')
         }
-        finally {
+    }
+
+    const toggleChoice = (item) => {
+        if (choice == item) {
             setChoice()
-            setName('')
+        }
+        else {
+            setChoice(item)
         }
     }
 
@@ -100,7 +123,7 @@ export function ChoosePlayerModal({ unchosen, isVisible }) {
                         contentContainerStyle={styles.flatlist}
                         renderItem={({ item, index }) => (
                             <TouchableOpacity 
-                                onPress={() => setChoice(item)}
+                                onPress={() => toggleChoice(item)}
                                 key={index}
                                 >
                                 <ChoicePlayer player={item} selected={choice == item}/>
@@ -112,6 +135,7 @@ export function ChoosePlayerModal({ unchosen, isVisible }) {
                     <PrimaryButton 
                         text={"Let's Play"} 
                         onPress={handlePlay}
+                        variant={"secondary"}
                         />
                 </View>
             </BlurView>
