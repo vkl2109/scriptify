@@ -3,7 +3,8 @@ import {
     View,
     Text,
     TouchableOpacity,
-    ActivityIndicator
+    ActivityIndicator,
+    FlatList
 } from 'react-native'
 import { 
     useState, 
@@ -12,7 +13,6 @@ import {
 } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import {
-    BackHeader,
     ChoosePlayerModal,
     CancelGameModal,
 } from '../Components'
@@ -22,8 +22,10 @@ import { AntDesign } from '@expo/vector-icons';
 import {
   doc,
   onSnapshot,
+  getDoc,
   updateDoc,
 } from "firebase/firestore";
+import { fetchDoc } from '../Hooks'
 import { db } from '../firebase'
 
 export function WaitingScreen ({ route }) {
@@ -33,11 +35,12 @@ export function WaitingScreen ({ route }) {
     const [ unchosen, setUnchosen] = useState(new Set())
     const [ showCancel, setCancel ] = useState(false)
     const [ hasChosen, setHasChosen ] = useState(false)
+    const [ host, setHost ] = useState('')
     const navigation = useNavigation()
 
     useEffect(() => {
         const sessionRef = doc(db, "sessions", code);
-        const unsubscribe = onSnapshot(sessionRef, (doc) => {
+        const unsubscribe = onSnapshot(sessionRef, async (doc) => {
             if (doc.exists()) {
                 const sessionData = doc.data()
                 const newPlayers = new Set()
@@ -50,25 +53,31 @@ export function WaitingScreen ({ route }) {
                         newPlayers.add(value)
                     }
                 }
-                // console.log(newPlayers, newChosen)
+                const hostData = await fetchDoc('users', sessionData?.host)
+                if (hostData) setHost(hostData?.name)
                 if (!newPlayers.has(deviceID)) setHasChosen(true)
                 setUnchosen(newChosen)
                 setPlayers(newPlayers)
             }
         })
-        console.log(deviceID)
         return () => {
             unsubscribe()
         }
     },[])
 
+    const getName = async (key) => {
+        const playerData = await fetchData('users', key)
+        if (playerData) return playerData?.name
+    }
+
     return(
         <SafeAreaView style={styles.container}>
-            {/* <ChoosePlayerModal 
+            <ChoosePlayerModal 
                 unchosen={unchosen}
                 isVisible={hasChosen}
+                setIsVisible={setHasChosen}
                 code={code}
-                /> */}
+                />
             <CancelGameModal 
                 showCancel={showCancel}
                 setCancel={setCancel}
@@ -81,19 +90,29 @@ export function WaitingScreen ({ route }) {
                     <AntDesign name="close" size={24} color="white" />
                 </TouchableOpacity>
             </View>
-            <Text style={styles.codeText}>{code}</Text>
-            <Text style={styles.subText}>Session Code</Text>
+            <View style={styles.centerColumn}>
+                <Text style={styles.codeText}>{code}</Text>
+                <Text style={styles.subText}>Session Code</Text>
+            </View>
+            {host != '' && <Text style={styles.hostTxt}>Host: {host}</Text>}
             {!players ?
                 <View style={styles.waiting}>
                     <ActivityIndicator size='large' />
                 </View>
             :
-            players.size == 0 &&
+            (players.size == 0 ?
                 <View style={styles.waiting}>
                     <ActivityIndicator size='large' />
                     <Text style={styles.waitingText}>Waiting for Players to Join</Text>
                 </View>
-            }
+            :
+            <FlatList
+                data={players}
+                renderItem={({ item, index }) => (
+                    <Text>{}</Text>
+                )}
+                />
+            )}
         </SafeAreaView>
     )
 }
@@ -103,7 +122,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#31304D',
         alignItems: 'center',
-        justifyContent: 'flex-start',
+        justifyContent: 'space-between',
     },
     topRow: {
         width: '100%',
@@ -136,5 +155,14 @@ const styles = StyleSheet.create({
     waitingText: {
         color: 'white',
         margin: 10,
+    },
+    centerColumn: {
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    hostTxt: {
+        color: 'white',
+        fontSize: 20,
     }
 })

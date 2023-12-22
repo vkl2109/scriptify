@@ -51,16 +51,16 @@ const choiceStyles = StyleSheet.create({
     }
 })
 
-export function ChoosePlayerModal({ unchosen, isVisible, code }) {
+export function ChoosePlayerModal({ unchosen, isVisible, setIsVisible, code }) {
     const [ name, setName ] = useState('')
     const [ error, setError ] = useState('')
     const [ choice, setChoice ] = useState()
     const navigation = useNavigation()
-    const { deviceID } = useContext(AuthContext)
+    const { currentUser, deviceID } = useContext(AuthContext)
 
     const handlePlay = async () => {
         try {
-            if (name == '') {
+            if (!currentUser && name == '') {
                 setError('Enter Name')
                 return
             }
@@ -76,6 +76,7 @@ export function ChoosePlayerModal({ unchosen, isVisible, code }) {
             setChoice()
             setName('')
             setError('')
+            setIsVisible(false)
         }
         catch (e) {
             console.log(e)
@@ -94,10 +95,10 @@ export function ChoosePlayerModal({ unchosen, isVisible, code }) {
 
     return(
         <Modal
-            animationType='slide'
+            animationType='fade'
             visible={isVisible}
             transparent
-            onRequestClose={() => console.log('close')}
+            onRequestClose={() => setIsVisible(false)}
             >
             <BlurView
                 style={styles.wrapper}
@@ -110,13 +111,17 @@ export function ChoosePlayerModal({ unchosen, isVisible, code }) {
                     <Ionicons name="arrow-back" size={32} color="white" />
                 </TouchableOpacity>
                 <View style={styles.main}>
+                    {currentUser
+                    ?
+                    <Text style={styles.name}>{currentUser}</Text>
+                    :
                     <TextInput 
                         value={name}
                         onChangeText={setName}
                         style={styles.nameInput}
                         maxLength={12}
                         placeholder='name'
-                        />
+                        />}
                     {/* <Text>Enter Your Name</Text> */}
                     <FlatList
                         data={Array.from(unchosen)}
@@ -153,7 +158,6 @@ const styles = StyleSheet.create({
     },
     main: {
         width: '75%',
-        height: '50%',
         backgroundColor: 'white',
         borderRadius: 20,
         padding: 20,
@@ -170,6 +174,11 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 20,
     },
+    name: {
+        fontSize: 30,
+        fontWeight: 'bold',
+        color: '#31304D'
+    },
     backBtn: {
         padding: 10,
         borderRadius: 20,
@@ -185,7 +194,6 @@ const styles = StyleSheet.create({
     },
     flatlist: {
         width: '100%',
-        flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
     },

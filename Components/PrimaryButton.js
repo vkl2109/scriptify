@@ -29,7 +29,6 @@ export function PrimaryButton ({
 
 const styles = StyleSheet.create({
     buttonStart: {
-        backgroundColor: '#F0ECE5',
         width: '90%',
         height: 50,
         justifyContent: 'center',
