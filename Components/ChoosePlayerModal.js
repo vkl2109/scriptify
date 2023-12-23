@@ -24,6 +24,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { AuthContext } from '../Context/AuthContextProvider'
+import { friendCategory } from '../constants'
 
 function ChoicePlayer ({ player, selected }) {
     const { height, width } = useWindowDimensions()
@@ -51,7 +52,7 @@ const choiceStyles = StyleSheet.create({
     }
 })
 
-export function ChoosePlayerModal({ unchosen, isVisible, setIsVisible, code }) {
+export function ChoosePlayerModal({ unchosen, isVisible, setIsVisible, code, totalPlayers }) {
     const [ name, setName ] = useState('')
     const [ error, setError ] = useState('')
     const [ choice, setChoice ] = useState()
@@ -69,9 +70,22 @@ export function ChoosePlayerModal({ unchosen, isVisible, setIsVisible, code }) {
                 return
             }
             const sessionRef = doc(db, 'sessions', code)
-            const updatePlayer = `players.${choice}`
+            const newPlayerObject = {
+                id: deviceID,
+                name: name == '' ? currentUser : name,
+                choice: choice,
+            }
+            const newPlayersArray = []
+            for (const player of totalPlayers) {
+                if (player?.choice == choice) {
+                    newPlayersArray.push(newPlayerObject)
+                }
+                else {
+                    newPlayersArray.push(player)
+                }
+            }
             await updateDoc(sessionRef, {
-                [updatePlayer]: deviceID
+                players: newPlayersArray
             })
             setChoice()
             setName('')
@@ -124,14 +138,14 @@ export function ChoosePlayerModal({ unchosen, isVisible, setIsVisible, code }) {
                         />}
                     {/* <Text>Enter Your Name</Text> */}
                     <FlatList
-                        data={Array.from(unchosen)}
+                        data={unchosen}
                         contentContainerStyle={styles.flatlist}
                         renderItem={({ item, index }) => (
                             <TouchableOpacity 
-                                onPress={() => toggleChoice(item)}
+                                onPress={() => toggleChoice(item?.choice)}
                                 key={index}
                                 >
-                                <ChoicePlayer player={item} selected={choice == item}/>
+                                <ChoicePlayer player={item?.choice} selected={choice == item?.choice}/>
                             </TouchableOpacity>
                         )}
                         // ListFooterComponent={<Text>Choose Character</Text>}

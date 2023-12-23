@@ -15,6 +15,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import {
     ChoosePlayerModal,
     CancelGameModal,
+    PlayerRow
 } from '../Components'
 import { AuthContext } from '../Context/AuthContextProvider'
 import { useNavigation } from '@react-navigation/native'
@@ -35,6 +36,7 @@ export function WaitingScreen ({ route }) {
     const [ unchosen, setUnchosen] = useState(new Set())
     const [ showCancel, setCancel ] = useState(false)
     const [ hasChosen, setHasChosen ] = useState(false)
+    const [ totalPlayers, setTotalPlayers ] = useState([])
     const [ host, setHost ] = useState('')
     const navigation = useNavigation()
 
@@ -43,19 +45,21 @@ export function WaitingScreen ({ route }) {
         const unsubscribe = onSnapshot(sessionRef, async (doc) => {
             if (doc.exists()) {
                 const sessionData = doc.data()
-                const newPlayers = new Set()
-                const newChosen = new Set()
-                for (let [key, value] of Object.entries(sessionData.players)) {
-                    if (value == '') {
-                        newChosen.add(key)
+                const newPlayers = []
+                const newChosen = []
+                const playerIDs = new Set()
+                setTotalPlayers(sessionData?.players)
+                for (const player of sessionData?.players) {
+                    if (player?.deviceID == '') {
+                        newChosen.push(player)
                     }
                     else {
-                        newPlayers.add(value)
+                        newPlayers.push(player)
                     }
+                    playerIDs.add(player?.deviceID)
                 }
-                const hostData = await fetchDoc('users', sessionData?.host)
-                if (hostData) setHost(hostData?.name)
-                if (!newPlayers.has(deviceID)) setHasChosen(true)
+                if (!playerIDs.has(deviceID)) setHasChosen(true)
+                setHost(sessionData?.host)
                 setUnchosen(newChosen)
                 setPlayers(newPlayers)
             }
@@ -65,17 +69,13 @@ export function WaitingScreen ({ route }) {
         }
     },[])
 
-    const getName = async (key) => {
-        const playerData = await fetchData('users', key)
-        if (playerData) return playerData?.name
-    }
-
     return(
         <SafeAreaView style={styles.container}>
             <ChoosePlayerModal 
                 unchosen={unchosen}
                 isVisible={hasChosen}
                 setIsVisible={setHasChosen}
+                totalPlayers={totalPlayers}
                 code={code}
                 />
             <CancelGameModal 
@@ -100,7 +100,7 @@ export function WaitingScreen ({ route }) {
                     <ActivityIndicator size='large' />
                 </View>
             :
-            (players.size == 0 ?
+            (players.length == 0 ?
                 <View style={styles.waiting}>
                     <ActivityIndicator size='large' />
                     <Text style={styles.waitingText}>Waiting for Players to Join</Text>
@@ -109,7 +109,7 @@ export function WaitingScreen ({ route }) {
             <FlatList
                 data={players}
                 renderItem={({ item, index }) => (
-                    <Text>{}</Text>
+                    <PlayerRow key={index} player={item} />
                 )}
                 />
             )}

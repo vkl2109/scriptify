@@ -47,6 +47,40 @@ const categories = [
     },
 ]
 
+const friendCategory = [
+    {
+        id: '',
+        name: '',
+        choice: 'Joey',
+    },
+    {
+        id: '',
+        name: '',
+        choice: 'Monica',
+    },
+    {
+        id: '',
+        name: '',
+        choice: 'Chandler',
+    },
+    {
+        id: '',
+        name: '',
+        choice: 'Phoebe',
+    },
+    {
+        id: '',
+        name: '',
+        choice: 'Rachel',
+    },
+    {
+        id: '',
+        name: '',
+        choice: 'Ross',
+    },
+]
+
 export {
-    categories
+    categories,
+    friendCategory
 }
