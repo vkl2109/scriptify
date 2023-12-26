@@ -71,7 +71,7 @@ export function ChoosePlayerModal({ unchosen, isVisible, setIsVisible, code, tot
             }
             const sessionRef = doc(db, 'sessions', code)
             const newPlayerObject = {
-                id: deviceID,
+                deviceID: deviceID,
                 name: name == '' ? currentUser : name,
                 choice: choice,
             }

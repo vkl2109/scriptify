@@ -14,7 +14,8 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { 
     Divider,
     PrimaryButton,
-    CodeInput
+    CodeInput,
+    JoinGameModal,
 } from '../Components'
 import { useNavigation } from '@react-navigation/native';
 import { AuthContext } from '../Context/AuthContextProvider'
@@ -23,6 +24,7 @@ export function MainScreen () {
     const {height, width} = useWindowDimensions();
     const navigation = useNavigation();
     const [ code, setCode ] = useState('')
+    const [ joinGame, setJoinGame ] = useState(false)
     const { currentUser } = useContext(AuthContext)
 
     const handleStart = () => {
@@ -51,16 +53,22 @@ export function MainScreen () {
                         onPress={handleStart}
                         text={'Start Game'}
                         />
-                    <Divider text={'or'}/>
+                    {/* <Divider text={'or'}/> */}
                     {/* <Text style={styles.joinText}>Input Code to Join Game</Text> */}
-                    <CodeInput 
+                    {/* <CodeInput 
                         value={code}
                         setValue={setCode}
-                        />
-                    {code.length === 4 && <PrimaryButton
-                        onPress={handleJoin}
+                        /> */}
+                    <View style={{ height: 20 }} />
+                    <PrimaryButton
+                        variant="secondary"
+                        onPress={()=>setJoinGame(true)}
                         text={'Join Game'}
-                        />}
+                        />
+                      <JoinGameModal 
+                        isVisible={joinGame}
+                        setIsVisible={setJoinGame}
+                        />
                 </View>
             </KeyboardAvoidingView>
         </SafeAreaView>
@@ -72,7 +80,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#31304D',
     alignItems: 'center',
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-between',
+    paddingVertical: 50,
   },
   lowerHalf:(w) => ({
     width: w,

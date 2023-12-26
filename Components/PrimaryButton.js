@@ -2,6 +2,7 @@ import {
     StyleSheet,
     TouchableOpacity,
     Text,
+    View
 } from 'react-native'
 
 export function PrimaryButton ({ 
@@ -13,16 +14,20 @@ export function PrimaryButton ({
         <TouchableOpacity 
             onPress={onPress}
             style={[styles.buttonStart, {
-                backgroundColor: variant == "primary" ? '#F0ECE5' : '#31304D'
+                backgroundColor: variant == "primary" ? '#F0ECE5' : '#161A30'
             }]}
             >
-            <Text 
-                style={[styles.buttonText, {
-                    color: variant == "primary" ? '#161A30' : 'white'
-                }]}
-                >
-                {text}
-            </Text>
+            <View style={[styles.innerBtn, {
+                borderColor: variant == "primary" ? '#31304D' : '#F0ECE5'
+            }]}>
+                <Text 
+                    style={[styles.buttonText, {
+                        color: variant == "primary" ? '#161A30' : 'white'
+                    }]}
+                    >
+                    {text}
+                </Text>
+            </View>
         </TouchableOpacity>
     )
 }
@@ -31,13 +36,23 @@ const styles = StyleSheet.create({
     buttonStart: {
         width: '90%',
         height: 50,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 100,
+        borderRadius: 10,
+        padding: 3,
+        shadowColor: 'white',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.5,
+        shadowRadius: 0.75,
     },
     buttonText: {
         fontWeight: 'bold',
         fontSize: 24
     },
-
+    innerBtn: {
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10,
+        borderWidth: 2,
+    }
 })
