@@ -17,8 +17,8 @@ import {
 } from '../CodeInput'
 import { BlurView } from 'expo-blur'
 import {
-    BackButton
-} from '../Buttons/BackButton'
+    BackHeader
+} from '../Headers/BackHeader'
 import { useNavigation } from '@react-navigation/native';
 
 export function JoinGameModal ({ isVisible, setIsVisible }) {
@@ -36,10 +36,10 @@ export function JoinGameModal ({ isVisible, setIsVisible }) {
 
     const handleJoin = () => {
         if (code.length != 4) return
-        setIsVisible(false)
         navigation.navigate('Waiting', {
-          code: code,
+            code: code,
         })
+        setIsVisible(false)
         setCode('')
     }
 
@@ -60,11 +60,11 @@ export function JoinGameModal ({ isVisible, setIsVisible }) {
                 >
                 <KeyboardAvoidingView style={styles.wrapper} behavior='padding'>
                     <View style={styles.main}>
-                        <View style={styles.row}>
-                            <BackButton 
-                                onPress={handleClose}
-                                />
-                        </View>
+                        <BackHeader 
+                        title='Enter Code'
+                        primary={false}
+                        onPress={handleClose}
+                        />
                         <CodeInput 
                             value={code}
                             setValue={setCode}
@@ -90,7 +90,8 @@ const styles = StyleSheet.create({
     main: {
         backgroundColor: 'white',
         borderRadius: 20,
-        padding: 20,
+        paddingVertical: 20,
+        padding: 10,
         width: '100%',
         justifyContent: 'space-evenly',
         alignItems: 'center'

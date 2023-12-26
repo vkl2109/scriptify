@@ -7,18 +7,15 @@ import {
 import {
     BackButton
 } from '../Buttons/BackButton'
-import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
 
-export function BackHeader ({ title = '' }) {
-    const navigation = useNavigation()
+export function BackHeader ({ title = '', onPress, primary = true}) {
 
     return (
         <View style={styles.headerWrapper}>
             <BackButton 
-                onPress={navigation.goBack}
+                onPress={onPress}
                 />
-            <Text style={styles.title}>{title}</Text>
+            <Text style={[styles.title, { color: primary ? "#F0ECE5" : "#31304D"}]}>{title}</Text>
             <View style={{width: 70}} />
         </View>
     )
@@ -35,6 +32,5 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 30,
         fontWeight: 'bold',
-        color: 'white',
     },
 })

@@ -16,7 +16,8 @@ import {
     ChoosePlayerModal,
     CancelGameModal,
     PlayerRow,
-    CloseHeader
+    CloseHeader,
+    PrimaryButton
 } from '../Components'
 import { AuthContext } from '../Context/AuthContextProvider'
 import { useNavigation } from '@react-navigation/native'
@@ -70,6 +71,10 @@ export function WaitingScreen ({ route }) {
         }
     },[])
 
+    const handleStart = () => {
+        
+    }
+
     return(
         <SafeAreaView style={styles.container}>
             <ChoosePlayerModal 
@@ -87,13 +92,6 @@ export function WaitingScreen ({ route }) {
                 title={'Waiting Room'}
                 onPress={() => setCancel(true)}
                 />
-            {/* <View style={styles.topRow}>
-                <View style={{width: 75}} />
-                <Text style={styles.titleTxt}>Waiting</Text>
-                <CloseButton
-                    onPress={() => setCancel(true)}
-                    />
-            </View> */}
             <View style={styles.centerColumn}>
                 <Text style={styles.subText}>Session Code</Text>
                 <View style={styles.codeWrapper}>
@@ -119,6 +117,10 @@ export function WaitingScreen ({ route }) {
                 )}
                 />
             )}
+            <PrimaryButton 
+                text={'Start'}
+                onPress={handleStart}
+                />
         </SafeAreaView>
     )
 }

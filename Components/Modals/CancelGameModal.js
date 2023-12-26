@@ -8,6 +8,9 @@ import {
     FlatList,
     useWindowDimensions
 } from 'react-native'
+import {
+    PrimaryButton
+} from '../Buttons/PrimaryButton'
 import { useNavigation } from '@react-navigation/native';
 import { db } from '../../firebase'
 import { BlurView } from 'expo-blur'
@@ -33,19 +36,21 @@ export function CancelGameModal ({ showCancel, setCancel }) {
                 >
                 <View style={styles.main}>
                     <Text style={styles.cancelTxt}>Cancel Game?</Text>
+                    <View style={styles.greyDivider} />
                     <View style={styles.bottomRow}>
-                        <TouchableOpacity 
-                            style={styles.button('red')}
-                            onPress={() => setCancel(false)}
-                            >
-                            <Text style={styles.btnTxt}>No</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity 
-                            style={styles.button('green')}
-                            onPress={handleCancelGame}
-                            >
-                            <Text style={styles.btnTxt}>Yes</Text>
-                        </TouchableOpacity>
+                        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                            <PrimaryButton
+                                text={'No'}
+                                onPress={() => setCancel(false)}
+                                />
+                        </View>
+                        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                            <PrimaryButton
+                                text={'Yes'}
+                                variant='secondary'
+                                onPress={handleCancelGame}
+                                />
+                        </View>
                     </View>
                 </View>
             </BlurView>
@@ -81,19 +86,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '100%',
     },
-    button: (c) => ({
-        backgroundColor: c,
-        padding: 10,
-        margin: 10,
-        borderRadius: 20,
-        width: 100,
-        height: 50,
-        justifyContent: 'center',
-        alignItems: 'center'
-    }),
-    btnTxt: {
-        color: 'white',
-        fontSize: 20,
-        fontWeight: 'bold',
+    greyDivider: {
+        width: '100%',
+        height: 2,
+        marginBottom: 10,
+        backgroundColor: 'grey'
     }
 })

@@ -42,7 +42,10 @@ export function CategoryScreen ({ route }) {
 
     return(
         <SafeAreaView style={styles.container}>
-            <BackHeader title={title} />
+            <BackHeader 
+              title={title}
+              onPress={navigation.goBack}
+              />
             <FlatList
                 ListHeaderComponent={
                     <Text style={styles.subTitle}>Who's Playing?</Text>
