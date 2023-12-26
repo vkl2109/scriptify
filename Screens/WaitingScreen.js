@@ -15,7 +15,8 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import {
     ChoosePlayerModal,
     CancelGameModal,
-    PlayerRow
+    PlayerRow,
+    CloseButton
 } from '../Components'
 import { AuthContext } from '../Context/AuthContextProvider'
 import { useNavigation } from '@react-navigation/native'
@@ -83,12 +84,9 @@ export function WaitingScreen ({ route }) {
                 setCancel={setCancel}
                 />
             <View style={styles.topRow}>
-                <TouchableOpacity
-                    style={styles.closeButton}
+                <CloseButton
                     onPress={() => setCancel(true)}
-                    >
-                    <AntDesign name="close" size={24} color="white" />
-                </TouchableOpacity>
+                    />
             </View>
             <View style={styles.centerColumn}>
                 <Text style={styles.codeText}>{code}</Text>

@@ -19,7 +19,7 @@ export function BackHeader ({ title = '' }) {
                 onPress={navigation.goBack}
                 />
             <Text style={styles.title}>{title}</Text>
-            <View style={{width: 32}} />
+            <View style={{width: 70}} />
         </View>
     )
 }

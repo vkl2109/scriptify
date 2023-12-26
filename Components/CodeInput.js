@@ -61,6 +61,6 @@ const styles = StyleSheet.create({
         overflow: 'hidden'
     },
     focusCell: {
-        borderColor: '#31304DA',
+        borderColor: '#31304D',
     },
 })

@@ -14,9 +14,9 @@ import { categories } from '../constants'
 export function StartScreen () {
     return(
         <SafeAreaView style={styles.container}>
-            <BackHeader />
+            <BackHeader title='Categories'/>
             <FlatList 
-                ListHeaderComponent={<Text style={styles.title}>Choose A Category</Text>}
+                // ListHeaderComponent={<Text style={styles.title}>Choose A Category</Text>}
                 contentContainerStyle={styles.categories}
                 data={categories}
                 renderItem={({ item, index }) => (
@@ -43,6 +43,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    width: '100%',
+    maxWidth: '100%',
   }
 });
