@@ -16,7 +16,7 @@ import {
     ChoosePlayerModal,
     CancelGameModal,
     PlayerRow,
-    CloseButton
+    CloseHeader
 } from '../Components'
 import { AuthContext } from '../Context/AuthContextProvider'
 import { useNavigation } from '@react-navigation/native'
@@ -83,14 +83,22 @@ export function WaitingScreen ({ route }) {
                 showCancel={showCancel}
                 setCancel={setCancel}
                 />
-            <View style={styles.topRow}>
+            <CloseHeader
+                title={'Waiting Room'}
+                onPress={() => setCancel(true)}
+                />
+            {/* <View style={styles.topRow}>
+                <View style={{width: 75}} />
+                <Text style={styles.titleTxt}>Waiting</Text>
                 <CloseButton
                     onPress={() => setCancel(true)}
                     />
-            </View>
+            </View> */}
             <View style={styles.centerColumn}>
-                <Text style={styles.codeText}>{code}</Text>
                 <Text style={styles.subText}>Session Code</Text>
+                <View style={styles.codeWrapper}>
+                    <Text style={styles.codeText}>{code}</Text>
+                </View>
             </View>
             {host != '' && <Text style={styles.hostTxt}>Host: {host}</Text>}
             {!players ?
@@ -136,6 +144,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
+    titleTxt: {
+
+    },
     codeText: {
         color: 'white',
         fontSize: 50,
@@ -158,9 +169,19 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
+        width: '100%',
     },
     hostTxt: {
         color: 'white',
         fontSize: 20,
+    },
+    codeWrapper: {
+        width: '75%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 10,
+        margin: 10,
+        borderRadius: 50,
+        backgroundColor: '#161A30'
     }
 })

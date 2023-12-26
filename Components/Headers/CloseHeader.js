@@ -5,21 +5,18 @@ import {
     Text
 } from 'react-native'
 import {
-    BackButton
-} from './Buttons/BackButton'
-import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+    CloseButton
+} from '../Buttons/CloseButton'
 
-export function BackHeader ({ title = '' }) {
-    const navigation = useNavigation()
+export function CloseHeader ({ title = '', onPress }) {
 
     return (
         <View style={styles.headerWrapper}>
-            <BackButton 
-                onPress={navigation.goBack}
-                />
-            <Text style={styles.title}>{title}</Text>
             <View style={{width: 70}} />
+            <Text style={styles.title}>{title}</Text>
+            <CloseButton 
+                onPress={onPress}
+                />
         </View>
     )
 }
