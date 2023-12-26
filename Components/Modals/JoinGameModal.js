@@ -11,7 +11,8 @@ import {
 import { BlurView } from 'expo-blur'
 import {
     PrimaryButton
-} from '../PrimaryButton'
+} from '../Buttons/PrimaryButton'
+import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
 export function JoinGameModal ({ isVisible, setIsVisible }) {
@@ -28,6 +29,12 @@ export function JoinGameModal ({ isVisible, setIsVisible }) {
                 style={styles.wrapper}
                 intensity={10}
                 >
+                <TouchableOpacity
+                    onPress={navigation.goBack}
+                    style={styles.backBtn}
+                    >
+                    <Ionicons name="arrow-back" size={32} color="white" />
+                </TouchableOpacity>
                 <View style={styles.main}>
                     
                 </View>    
@@ -49,5 +56,14 @@ const styles = StyleSheet.create({
         padding: 20,
         justifyContent: 'space-between',
         alignItems: 'center'
+    },
+    backBtn: {
+        padding: 10,
+        borderRadius: 20,
+        backgroundColor: 'rbga(0, 0, 0, 0.75)',
+        margin: 10,
+        position: 'absolute',
+        left: 20,
+        top: 50,
     },
 })

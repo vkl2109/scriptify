@@ -15,7 +15,7 @@ import {
 import { BlurView } from 'expo-blur'
 import {
     PrimaryButton
-} from '../PrimaryButton'
+} from '../Buttons/PrimaryButton'
 import { db } from '../../firebase'
 import {
   doc,
