@@ -2,22 +2,45 @@ import {
     StyleSheet,
     Modal,
     View,
+    KeyboardAvoidingView,
     Text,
     TextInput,
     TouchableOpacity,
     FlatList,
-    useWindowDimensions
 } from 'react-native'
-import { BlurView } from 'expo-blur'
+import { useState, useEffect } from 'react'
 import {
     PrimaryButton
 } from '../Buttons/PrimaryButton'
-import { Ionicons } from '@expo/vector-icons';
+import {
+    CodeInput,
+} from '../CodeInput'
+import { BlurView } from 'expo-blur'
+import {
+    BackButton
+} from '../Buttons/BackButton'
 import { useNavigation } from '@react-navigation/native';
 
 export function JoinGameModal ({ isVisible, setIsVisible }) {
-    const { height, width } = useWindowDimensions()
-    const navigation = useNavigation()
+    const navigation = useNavigation();
+    const [ code, setCode ] = useState('')
+
+    useEffect(() => {
+        if (isVisible) {
+
+        }
+        else {
+
+        }
+    },[isVisible])
+
+    const handleJoin = () => {
+        if (code.length != 4) return
+        navigation.navigate('Waiting', {
+          code: code,
+        })
+        setCode('')
+    }
 
     return(
         <Modal
@@ -29,15 +52,24 @@ export function JoinGameModal ({ isVisible, setIsVisible }) {
                 style={styles.wrapper}
                 intensity={10}
                 >
-                <TouchableOpacity
-                    onPress={navigation.goBack}
-                    style={styles.backBtn}
-                    >
-                    <Ionicons name="arrow-back" size={32} color="white" />
-                </TouchableOpacity>
-                <View style={styles.main}>
-                    
-                </View>    
+                <KeyboardAvoidingView style={styles.wrapper} behavior='padding'>
+                    <View style={styles.main}>
+                        <View style={styles.row}>
+                            <BackButton 
+                                onPress={() => setIsVisible(false)}
+                                />
+                        </View>
+                        <CodeInput 
+                            value={code}
+                            setValue={setCode}
+                            />
+                        <PrimaryButton
+                            variant={code.length == 4 ? "secondary" : "primary"}
+                            text={"Join"}
+                            onPress={handleJoin}
+                            />
+                    </View>    
+                </KeyboardAvoidingView>
             </BlurView>
         </Modal>
     )
@@ -50,20 +82,17 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     main: {
-        position: 'absolute',
         backgroundColor: 'white',
         borderRadius: 20,
         padding: 20,
-        justifyContent: 'space-between',
+        width: '100%',
+        justifyContent: 'space-evenly',
         alignItems: 'center'
     },
-    backBtn: {
-        padding: 10,
-        borderRadius: 20,
-        backgroundColor: 'rbga(0, 0, 0, 0.75)',
-        margin: 10,
-        position: 'absolute',
-        left: 20,
-        top: 50,
-    },
+    row: {
+        justifyContent: 'flex-start',
+        width: '100%',
+        alignItems: 'center',
+        flexDirection: 'row',
+    }
 })

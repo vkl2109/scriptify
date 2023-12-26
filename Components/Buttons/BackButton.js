@@ -1,6 +1,7 @@
 import {
     StyleSheet,
     TouchableOpacity,
+    View
 } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
 
@@ -10,7 +11,9 @@ export function BackButton ({ onPress }) {
             style={styles.wrapper}
             onPress={onPress}
             >
-            <Ionicons name="arrow-back" size={32} color="grey" />
+            <View style={styles.innerWrapper}>
+                <Ionicons name="arrow-back" size={30} color="#B6BBC4" />
+            </View>
         </TouchableOpacity>
     )
 }
@@ -18,10 +21,23 @@ export function BackButton ({ onPress }) {
 const styles = StyleSheet.create({
     wrapper: {
         borderRadius: 1000,
-        width: 100,
-        height: 100,
+        width: 50,
+        height: 50,
         margin: 10,
-        padding: 10,
+        padding: 2,
         backgroundColor: '#F0ECE5',
+        shadowColor: '#B6BBC4',
+        shadowOffset: { width: 1, height: 2 },
+        shadowOpacity: 0.5,
+        shadowRadius: 0.75,
+    },
+    innerWrapper: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+        height: '100%',
+        borderRadius: 1000,
+        borderWidth: 1,
+        borderColor: '#B6BBC4'
     }
 })

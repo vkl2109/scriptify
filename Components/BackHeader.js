@@ -4,6 +4,9 @@ import {
     View,
     Text
 } from 'react-native'
+import {
+    BackButton
+} from './Buttons/BackButton'
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
@@ -12,9 +15,9 @@ export function BackHeader ({ title = '' }) {
 
     return (
         <View style={styles.headerWrapper}>
-            <TouchableOpacity onPress={navigation.goBack}>
-                <Ionicons name="arrow-back" size={32} color="white" />
-            </TouchableOpacity>
+            <BackButton 
+                onPress={navigation.goBack}
+                />
             <Text style={styles.title}>{title}</Text>
             <View style={{width: 32}} />
         </View>

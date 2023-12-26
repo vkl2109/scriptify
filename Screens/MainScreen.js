@@ -14,7 +14,6 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { 
     Divider,
     PrimaryButton,
-    CodeInput,
     JoinGameModal,
 } from '../Components'
 import { useNavigation } from '@react-navigation/native';
@@ -23,19 +22,11 @@ import { AuthContext } from '../Context/AuthContextProvider'
 export function MainScreen () {
     const {height, width} = useWindowDimensions();
     const navigation = useNavigation();
-    const [ code, setCode ] = useState('')
     const [ joinGame, setJoinGame ] = useState(false)
     const { currentUser } = useContext(AuthContext)
 
     const handleStart = () => {
         navigation.navigate('Start')
-    }
-
-    const handleJoin = () => {
-        navigation.navigate('Waiting', {
-          code: code,
-        })
-        setCode('')
     }
 
     return(
@@ -54,11 +45,6 @@ export function MainScreen () {
                         text={'Start Game'}
                         />
                     {/* <Divider text={'or'}/> */}
-                    {/* <Text style={styles.joinText}>Input Code to Join Game</Text> */}
-                    {/* <CodeInput 
-                        value={code}
-                        setValue={setCode}
-                        /> */}
                     <View style={{ height: 20 }} />
                     <PrimaryButton
                         variant="secondary"
