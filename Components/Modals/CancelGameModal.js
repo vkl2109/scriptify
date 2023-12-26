@@ -9,7 +9,7 @@ import {
     useWindowDimensions
 } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
-import { db } from '../firebase'
+import { db } from '../../firebase'
 import { BlurView } from 'expo-blur'
 
 export function CancelGameModal ({ showCancel, setCancel }) {

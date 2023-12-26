@@ -15,16 +15,16 @@ import {
 import { BlurView } from 'expo-blur'
 import {
     PrimaryButton
-} from './PrimaryButton'
-import { db } from '../firebase'
+} from '../PrimaryButton'
+import { db } from '../../firebase'
 import {
   doc,
   updateDoc,
 } from "firebase/firestore";
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
-import { AuthContext } from '../Context/AuthContextProvider'
-import { friendCategory } from '../constants'
+import { AuthContext } from '../../Context/AuthContextProvider'
+import { friendCategory } from '../../constants'
 
 function ChoicePlayer ({ player, selected }) {
     const { height, width } = useWindowDimensions()

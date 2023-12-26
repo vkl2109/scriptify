@@ -11,7 +11,7 @@ import {
 import { BlurView } from 'expo-blur'
 import {
     PrimaryButton
-} from './PrimaryButton'
+} from '../PrimaryButton'
 import { useNavigation } from '@react-navigation/native';
 
 export function JoinGameModal ({ isVisible, setIsVisible }) {
