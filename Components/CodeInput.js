@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
         fontSize: 30,
         borderWidth: 2,
         marginHorizontal: 10,
-        borderColor: '#00000030',
+        borderColor: '#B6BBC4',
         borderRadius: 10,
         textAlign: 'center',
         alignItems: 'center',
@@ -61,6 +61,6 @@ const styles = StyleSheet.create({
         overflow: 'hidden'
     },
     focusCell: {
-        borderColor: '#000',
+        borderColor: '#31304DA',
     },
 })

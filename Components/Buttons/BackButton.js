@@ -12,7 +12,7 @@ export function BackButton ({ onPress }) {
             onPress={onPress}
             >
             <View style={styles.innerWrapper}>
-                <Ionicons name="arrow-back" size={30} color="#B6BBC4" />
+                <Ionicons name="arrow-back" size={30} color="#31304D" />
             </View>
         </TouchableOpacity>
     )
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         borderRadius: 1000,
-        borderWidth: 1,
-        borderColor: '#B6BBC4'
+        borderWidth: 2,
+        borderColor: '#31304D'
     }
 })

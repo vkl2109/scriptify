@@ -36,9 +36,15 @@ export function JoinGameModal ({ isVisible, setIsVisible }) {
 
     const handleJoin = () => {
         if (code.length != 4) return
+        setIsVisible(false)
         navigation.navigate('Waiting', {
           code: code,
         })
+        setCode('')
+    }
+
+    const handleClose = () => {
+        setIsVisible(false)
         setCode('')
     }
 
@@ -56,7 +62,7 @@ export function JoinGameModal ({ isVisible, setIsVisible }) {
                     <View style={styles.main}>
                         <View style={styles.row}>
                             <BackButton 
-                                onPress={() => setIsVisible(false)}
+                                onPress={handleClose}
                                 />
                         </View>
                         <CodeInput 
