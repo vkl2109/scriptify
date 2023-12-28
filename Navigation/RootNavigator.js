@@ -29,7 +29,7 @@ export function RootNavigator () {
                 <Stack.Screen name="Waiting" component={WaitingScreen} options={{gestureEnabled: false}}/>
             </Stack.Group>
             :
-            <Stack.Screen name="Auth" component={AuthScreen} />
+            <Stack.Screen name="Auth" component={AuthScreen} options={{ presentation: 'modal' }}/>
             }
         </Stack.Navigator>
     )
