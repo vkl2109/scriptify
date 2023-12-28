@@ -16,6 +16,9 @@ import { BlurView } from 'expo-blur'
 import {
     PrimaryButton
 } from '../Buttons/PrimaryButton'
+import {
+    BackHeader
+} from '../Headers/BackHeader'
 import { db } from '../../firebase'
 import {
   doc,
@@ -31,25 +34,32 @@ function ChoicePlayer ({ player, selected }) {
 
     return(
         <View style={[choiceStyles.wrapper, {
-            backgroundColor: selected ? 'grey' : 'white',
+            backgroundColor: selected ? '#161A30' : '#F0ECE5',
             width: width * 0.5
         }]}>
-            <Text>{player}</Text>
+            <Text style={[choiceStyles.playerTxt, {
+                color: selected ? '#F0ECE5' : '#31304D',
+            }]}>{player}</Text>
         </View>
     )
 }
 
 const choiceStyles = StyleSheet.create({
     wrapper: {
-        height: 30,
         margin: 5,
-        padding: 5,
-        borderWidth: 1,
-        borderRadius: 20,
-        borderColor: 'grey',
+        paddingHorizontal: 5,
+        borderRadius: 5,
+        borderColor: '#B6BBC4',
         justifyContent: 'center',
-        alignItems: 'center'
-    }
+        alignItems: 'center',
+        shadowColor: '#B6BBC4',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.5,
+        shadowRadius: 0.75,
+    },
+    playerTxt: {
+        marginVertical: 5,
+    },
 })
 
 export function ChoosePlayerModal({ unchosen, isVisible, setIsVisible, code, totalPlayers }) {
@@ -118,27 +128,14 @@ export function ChoosePlayerModal({ unchosen, isVisible, setIsVisible, code, tot
                 style={styles.wrapper}
                 intensity={10}
                 >
-                <TouchableOpacity
+                <BackHeader 
                     onPress={navigation.goBack}
-                    style={styles.backBtn}
-                    >
-                    <Ionicons name="arrow-back" size={32} color="white" />
-                </TouchableOpacity>
+                    />
                 <View style={styles.main}>
-                    {currentUser
-                    ?
                     <Text style={styles.name}>{currentUser}</Text>
-                    :
-                    <TextInput 
-                        value={name}
-                        onChangeText={setName}
-                        style={styles.nameInput}
-                        maxLength={12}
-                        placeholder='name'
-                        />}
-                    {/* <Text>Enter Your Name</Text> */}
+                    <View style={styles.greyDivider} />
                     <FlatList
-                        data={unchosen}
+                        data={friendCategory}
                         contentContainerStyle={styles.flatlist}
                         renderItem={({ item, index }) => (
                             <TouchableOpacity 
@@ -148,7 +145,6 @@ export function ChoosePlayerModal({ unchosen, isVisible, setIsVisible, code, tot
                                 <ChoicePlayer player={item?.choice} selected={choice == item?.choice}/>
                             </TouchableOpacity>
                         )}
-                        // ListFooterComponent={<Text>Choose Character</Text>}
                         />
                     <Text style={styles.errorText}>{error}</Text>
                     <PrimaryButton 
@@ -157,6 +153,7 @@ export function ChoosePlayerModal({ unchosen, isVisible, setIsVisible, code, tot
                         variant={"secondary"}
                         />
                 </View>
+                <View style={{height: 100}} />
             </BlurView>
         </Modal>
     )
@@ -167,7 +164,8 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         flex: 1,
-        justifyContent: 'center',
+        justifyContent: 'space-between',
+        paddingVertical: 50,
         alignItems: 'center'
     },
     main: {
@@ -214,6 +212,12 @@ const styles = StyleSheet.create({
     errorText: {
         color: 'red',
         fontSize: 15,
+        margin: 5,
+    },
+    greyDivider: {
+        width: '90%',
+        height: 1,
+        backgroundColor: '#31304D',
         margin: 5,
     }
 })

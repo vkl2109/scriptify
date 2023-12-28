@@ -49,32 +49,32 @@ const categories = [
 
 const friendCategory = [
     {
-        id: '',
-        name: '',
+        deviceID: '',
+        name: 'Trevy',
         choice: 'Joey',
     },
     {
-        id: '',
-        name: '',
+        deviceID: '',
+        name: 'Alexia',
         choice: 'Monica',
     },
     {
-        id: '',
-        name: '',
+        deviceID: '',
+        name: 'Vinni',
         choice: 'Chandler',
     },
     {
-        id: '',
+        deviceID: '',
         name: '',
         choice: 'Phoebe',
     },
     {
-        id: '',
+        deviceID: '',
         name: '',
         choice: 'Rachel',
     },
     {
-        id: '',
+        deviceID: '',
         name: '',
         choice: 'Ross',
     },

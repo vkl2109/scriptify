@@ -4,7 +4,8 @@ import {
     Text,
     TouchableOpacity,
     ActivityIndicator,
-    FlatList
+    FlatList,
+    useWindowDimensions
 } from 'react-native'
 import { 
     useState, 
@@ -30,6 +31,7 @@ import {
 } from "firebase/firestore";
 import { fetchDoc } from '../Hooks'
 import { db } from '../firebase'
+import { friendCategory } from '../constants'
 
 export function WaitingScreen ({ route }) {
     const { category, code } = route.params
@@ -41,6 +43,7 @@ export function WaitingScreen ({ route }) {
     const [ totalPlayers, setTotalPlayers ] = useState([])
     const [ host, setHost ] = useState('')
     const navigation = useNavigation()
+    const { height, width } = useWindowDimensions()
 
     useEffect(() => {
         const sessionRef = doc(db, "sessions", code);
@@ -65,6 +68,9 @@ export function WaitingScreen ({ route }) {
                 setUnchosen(newChosen)
                 setPlayers(newPlayers)
             }
+        },
+        (error) => {
+            console.log(error)
         })
         return () => {
             unsubscribe()
@@ -112,6 +118,7 @@ export function WaitingScreen ({ route }) {
             :
             <FlatList
                 data={players}
+                contentContainerStyle={styles.flatlist(width)}
                 renderItem={({ item, index }) => (
                     <PlayerRow key={index} player={item} />
                 )}
@@ -128,6 +135,8 @@ export function WaitingScreen ({ route }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        width: '100%',
+        height: '100%',
         backgroundColor: '#31304D',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -185,5 +194,11 @@ const styles = StyleSheet.create({
         margin: 10,
         borderRadius: 50,
         backgroundColor: '#161A30'
-    }
+    },
+    flatlist: (w) => ({
+        width: w * 0.9,
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+    })
 })

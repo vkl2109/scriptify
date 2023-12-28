@@ -3,6 +3,7 @@ import {
     View,
     Text, 
     TextInput,
+    Image,
     KeyboardAvoidingView,
     useWindowDimensions
 } from 'react-native';
@@ -18,6 +19,7 @@ import {
 } from '../Components'
 import { useNavigation } from '@react-navigation/native';
 import { AuthContext } from '../Context/AuthContextProvider'
+import logo from '../assets/logo.png'
 
 export function MainScreen () {
     const {height, width} = useWindowDimensions();
@@ -32,7 +34,10 @@ export function MainScreen () {
     return(
         <SafeAreaView style={styles.container}>
             <KeyboardAvoidingView style={styles.container} behavior='padding'>
-                <Text style={styles.title}>Scriptify</Text>
+                <Image 
+                  source={logo}
+                  style={styles.logoImg}
+                  />
                 {currentUser && 
                   <View style={styles.welcomeBlock}>
                     <Text style={styles.welcomeBackTxt}>Welcome Back</Text>
@@ -95,5 +100,10 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: 'bold',
     color: 'white',
+  },
+  logoImg: {
+    width: 300,
+    height: 100,
+    resizeMode: 'contain',
   }
 });
