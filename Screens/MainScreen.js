@@ -79,8 +79,8 @@ const styles = StyleSheet.create({
     margin: 5,
   },
   logoImg: (w) => ({
-    width: w * 0.75,
-    height: w * 0.25,
+    width: w * 0.8,
+    height: w * 0.3,
     resizeMode: 'contain',
   })
 });
