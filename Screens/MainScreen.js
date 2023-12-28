@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import { 
   useState,
-  useContext,
 } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { 
@@ -18,14 +17,12 @@ import {
     JoinGameModal,
 } from '../Components'
 import { useNavigation } from '@react-navigation/native';
-import { AuthContext } from '../Context/AuthContextProvider'
 import logo from '../assets/logo.png'
 
 export function MainScreen () {
     const {height, width} = useWindowDimensions();
     const navigation = useNavigation();
     const [ joinGame, setJoinGame ] = useState(false)
-    const { currentUser } = useContext(AuthContext)
 
     const handleStart = () => {
         navigation.navigate('Start')
@@ -36,20 +33,14 @@ export function MainScreen () {
             <KeyboardAvoidingView style={styles.container} behavior='padding'>
                 <Image 
                   source={logo}
-                  style={styles.logoImg}
+                  style={styles.logoImg(width)}
                   />
-                {currentUser && 
-                  <View style={styles.welcomeBlock}>
-                    <Text style={styles.welcomeBackTxt}>Welcome Back</Text>
-                    <Text style={styles.nameTxt}>{currentUser}</Text>
-                  </View>
-                }
+                
                 <View style={styles.lowerHalf(width)}>
                     <PrimaryButton
                         onPress={handleStart}
                         text={'Start Game'}
                         />
-                    {/* <Divider text={'or'}/> */}
                     <View style={{ height: 20 }} />
                     <PrimaryButton
                         variant="secondary"
@@ -87,23 +78,9 @@ const styles = StyleSheet.create({
   joinText: {
     margin: 5,
   },
-  welcomeBlock: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  welcomeBackTxt: {
-    fontStyle: 'italic',
-    fontSize: 20,
-    color: 'white',
-  },
-  nameTxt: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    color: 'white',
-  },
-  logoImg: {
-    width: 300,
-    height: 100,
+  logoImg: (w) => ({
+    width: w * 0.75,
+    height: w * 0.25,
     resizeMode: 'contain',
-  }
+  })
 });

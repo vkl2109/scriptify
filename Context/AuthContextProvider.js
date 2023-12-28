@@ -11,69 +11,70 @@ import { db } from "../firebase";
 const AuthContext = createContext();
 
 const AuthContextProvider = ({ children }) => {
-    const [ deviceID, setDeviceID ] = useState(null)
+    // const [ deviceID, setDeviceID ] = useState(null)
     const [ currentUser, setCurrentUser ] = useState(null)
 
-    useEffect(() => {
-        const initializeDeviceID = async () => {
-            let deviceKey = await checkID();
-            if (!deviceKey) {
-                let newDeviceKey = await setNewID();
-                if (newDeviceKey) {
-                    setDeviceID(newDeviceKey);
-                    checkUser(newDeviceKey)
-                }
-            } else {
-                setDeviceID(deviceKey);
-                checkUser(deviceKey)
-            }
-        };
+    // useEffect(() => {
+    //     const initializeDeviceID = async () => {
+    //         let deviceKey = await checkID();
+    //         if (!deviceKey) {
+    //             let newDeviceKey = await setNewID();
+    //             if (newDeviceKey) {
+    //                 setDeviceID(newDeviceKey);
+    //                 checkUser(newDeviceKey)
+    //             }
+    //         } else {
+    //             setDeviceID(deviceKey);
+    //             checkUser(deviceKey)
+    //         }
+    //     };
 
-        initializeDeviceID();
-    },[])
+    //     initializeDeviceID();
+    // },[])
 
-    const checkUser = async (key) => {
-        try {
-            const userRef = doc(db, "users", key);
-            const userDoc = await getDoc(userRef);
-            if (userDoc.exists()) {
-                const userData = userDoc.data()
-                setCurrentUser(userData?.name)
-            }
-        }
-        catch (e) {
-            console.log(e)
-        }
-    }
+    // const checkUser = async (key) => {
+    //     try {
+    //         const userRef = doc(db, "users", key);
+    //         const userDoc = await getDoc(userRef);
+    //         if (userDoc.exists()) {
+    //             const userData = userDoc.data()
+    //             setCurrentUser(userData?.name)
+    //         }
+    //     }
+    //     catch (e) {
+    //         console.log(e)
+    //     }
+    // }
 
-    const setNewID = async () => {
-        try {
-            let newKey = uuidv4();
-            await SecureStore.setItemAsync('Scriptify', newKey)
-            return newKey;
-        }
-        catch (e) {
-            console.log(e)
-            return false;
-        }
-    }
+    // const setNewID = async () => {
+    //     try {
+    //         let newKey = uuidv4();
+    //         await SecureStore.setItemAsync('Scriptify', newKey)
+    //         return newKey;
+    //     }
+    //     catch (e) {
+    //         console.log(e)
+    //         return false;
+    //     }
+    // }
 
-    const checkID = async () => {
-        try {
-            let result = await SecureStore.getItemAsync('Scriptify')
-            return result
-        }
-        catch (e) {
-            console.log(e)
-            return false
-        }
-    }
+    // const checkID = async () => {
+    //     try {
+    //         let result = await SecureStore.getItemAsync('Scriptify')
+    //         return result
+    //     }
+    //     catch (e) {
+    //         console.log(e)
+    //         return false
+    //     }
+    // }
 
     return(
         <AuthContext.Provider
             value={{
-                deviceID,
+                // deviceID,
                 currentUser,
+                setCurrentUser,
             }}
             >
             { children }
