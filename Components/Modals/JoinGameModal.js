@@ -3,12 +3,13 @@ import {
     Modal,
     View,
     KeyboardAvoidingView,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    FlatList,
+    Animated
 } from 'react-native'
-import { useState, useEffect } from 'react'
+import { 
+    useState, 
+    useEffect,
+    useRef,
+} from 'react'
 import {
     PrimaryButton
 } from '../Buttons/PrimaryButton'
@@ -24,13 +25,22 @@ import { useNavigation } from '@react-navigation/native';
 export function JoinGameModal ({ isVisible, setIsVisible }) {
     const navigation = useNavigation();
     const [ code, setCode ] = useState('')
+    const heightAnim = useRef(new Animated.Value(0)).current;
 
     useEffect(() => {
         if (isVisible) {
-
+            Animated.timing(heightAnim, {
+                toValue: 250,
+                duration: 500,
+                useNativeDriver: false,
+            }).start();
         }
         else {
-
+            Animated.timing(heightAnim, {
+                toValue: 0,
+                duration: 500,
+                useNativeDriver: false,
+            }).start();
         }
     },[isVisible])
 
@@ -59,7 +69,9 @@ export function JoinGameModal ({ isVisible, setIsVisible }) {
                 intensity={10}
                 >
                 <KeyboardAvoidingView style={styles.wrapper} behavior='padding'>
-                    <View style={styles.main}>
+                    <Animated.View style={[styles.main, {
+                        height: heightAnim,
+                    }]}>
                         <BackHeader 
                         title='Enter Code'
                         primary={false}
@@ -74,7 +86,7 @@ export function JoinGameModal ({ isVisible, setIsVisible }) {
                             text={"Join"}
                             onPress={handleJoin}
                             />
-                    </View>    
+                    </Animated.View>    
                 </KeyboardAvoidingView>
             </BlurView>
         </Modal>
