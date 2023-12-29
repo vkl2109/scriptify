@@ -9,20 +9,25 @@ import {
 } from 'react-native';
 import { 
   useState,
+  useContext
 } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { 
     Divider,
     PrimaryButton,
     JoinGameModal,
+    AuthModal,
 } from '../Components'
 import { useNavigation } from '@react-navigation/native';
 import logo from '../assets/logo.png'
+import { AuthContext } from '../Context/AuthContextProvider';
 
 export function MainScreen () {
     const {height, width} = useWindowDimensions();
     const navigation = useNavigation();
     const [ joinGame, setJoinGame ] = useState(false)
+    const { currentUser } = useContext(AuthContext)
+    const [ isAuth, setIsAuth ] = useState(currentUser == null)
 
     const handleStart = () => {
         navigation.navigate('Start')
@@ -47,9 +52,13 @@ export function MainScreen () {
                         onPress={()=>setJoinGame(true)}
                         text={'Join Game'}
                         />
-                      <JoinGameModal 
+                    <JoinGameModal 
                         isVisible={joinGame}
                         setIsVisible={setJoinGame}
+                        />
+                    <AuthModal
+                        isVisible={isAuth}
+                        setIsVisible={setIsAuth}
                         />
                 </View>
             </KeyboardAvoidingView>
