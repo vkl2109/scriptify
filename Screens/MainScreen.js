@@ -33,33 +33,31 @@ export function MainScreen () {
 
     return(
         <SafeAreaView style={styles.container}>
-            <KeyboardAvoidingView style={styles.container} behavior='padding'>
-                <Image 
-                  source={logo}
-                  style={styles.logoImg(width)}
-                  />
-                <MainCarousel />
-                <View style={styles.lowerHalf(width)}>
-                    <PrimaryButton
-                        onPress={handleStart}
-                        text={'Start Game'}
-                        />
-                    <View style={{ height: 20 }} />
-                    <PrimaryButton
-                        variant="secondary"
-                        onPress={()=>setJoinGame(true)}
-                        text={'Join Game'}
-                        />
-                    <JoinGameModal 
-                        isVisible={joinGame}
-                        setIsVisible={setJoinGame}
-                        />
-                    <AuthModal
-                        isVisible={isAuth}
-                        setIsVisible={setIsAuth}
-                        />
-                </View>
-            </KeyboardAvoidingView>
+            <Image 
+              source={logo}
+              style={styles.logoImg(width)}
+              />
+            <MainCarousel />
+            <View style={styles.lowerHalf(width)}>
+                <PrimaryButton
+                    onPress={handleStart}
+                    text={'Start Game'}
+                    />
+                <View style={{ height: 20 }} />
+                <PrimaryButton
+                    variant="secondary"
+                    onPress={()=>setJoinGame(true)}
+                    text={'Join Game'}
+                    />
+                <JoinGameModal 
+                    isVisible={joinGame}
+                    setIsVisible={setJoinGame}
+                    />
+                <AuthModal
+                    isVisible={isAuth}
+                    setIsVisible={setIsAuth}
+                    />
+            </View>
         </SafeAreaView>
     )
 }
@@ -70,7 +68,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#31304D',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 50,
+    paddingVertical: 25,
   },
   lowerHalf:(w) => ({
     width: w,

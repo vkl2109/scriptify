@@ -31,7 +31,7 @@ export function JoinGameModal ({ isVisible, setIsVisible }) {
         if (isVisible) {
             Animated.timing(heightAnim, {
                 toValue: 0,
-                duration: 1000,
+                duration: 300,
                 useNativeDriver: false,
             }).start();
         }
@@ -49,7 +49,7 @@ export function JoinGameModal ({ isVisible, setIsVisible }) {
     const handleClose = () => {
         Animated.timing(heightAnim, {
             toValue: -300,
-            duration: 1000,
+            duration: 300,
             useNativeDriver: false,
         }).start(({finished}) => {
             setIsVisible(false)

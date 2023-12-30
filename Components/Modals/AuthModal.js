@@ -31,14 +31,7 @@ export function AuthModal ({ isVisible, setIsVisible }) {
         if (isVisible) {
             Animated.timing(heightAnim, {
                 toValue: 0,
-                duration: 1000,
-                useNativeDriver: false,
-            }).start();
-        }
-        else {
-            Animated.timing(heightAnim, {
-                toValue: -500,
-                duration: 1000,
+                duration: 500,
                 useNativeDriver: false,
             }).start();
         }
@@ -50,9 +43,15 @@ export function AuthModal ({ isVisible, setIsVisible }) {
             setError('Enter Username')
             return
         }
-        setCurrentUser(username)
-        setError('')
-        setIsVisible(false)
+        Animated.timing(heightAnim, {
+            toValue: -500,
+            duration: 500,
+            useNativeDriver: false,
+        }).start(({finished}) => {
+            setCurrentUser(username)
+            setError('')
+            setIsVisible(false)
+        });
     }
     
     return(
