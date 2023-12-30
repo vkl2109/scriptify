@@ -17,4 +17,8 @@ const introImages = {
     fun,
 }
 
-export default images
+export {
+    images,
+    introImages,
+}
+    

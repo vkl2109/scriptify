@@ -7,7 +7,7 @@ import {
     useWindowDimensions,
 } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import images from '../assets'
+import { images } from '../assets'
 
 export function CategoryCard ({ category }) {
     const navigation = useNavigation();
