@@ -5,6 +5,8 @@ export * from './Headers/CloseHeader'
 export * from './CategoryCard'
 export * from './PlayerCheck'
 export * from './PlayerRow'
+export * from './MainCarousel'
+
 export * from './Modals/ChoosePlayerModal'
 export * from './Modals/CancelGameModal'
 export * from './Modals/JoinGameModal'

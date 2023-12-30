@@ -1,8 +1,6 @@
 import { 
     StyleSheet, 
     View,
-    Text, 
-    TextInput,
     Image,
     KeyboardAvoidingView,
     useWindowDimensions
@@ -13,10 +11,10 @@ import {
 } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { 
-    Divider,
     PrimaryButton,
     JoinGameModal,
     AuthModal,
+    MainCarousel,
 } from '../Components'
 import { useNavigation } from '@react-navigation/native';
 import logo from '../assets/logo.png'
@@ -40,7 +38,7 @@ export function MainScreen () {
                   source={logo}
                   style={styles.logoImg(width)}
                   />
-                
+                <MainCarousel />
                 <View style={styles.lowerHalf(width)}>
                     <PrimaryButton
                         onPress={handleStart}
