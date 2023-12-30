@@ -18,7 +18,8 @@ import {
     CancelGameModal,
     PlayerRow,
     CloseHeader,
-    PrimaryButton
+    PrimaryButton,
+    HostRow,
 } from '../Components'
 import { AuthContext } from '../Context/AuthContextProvider'
 import { useNavigation } from '@react-navigation/native'
@@ -104,7 +105,7 @@ export function WaitingScreen ({ route }) {
                     <Text style={styles.codeText}>{code}</Text>
                 </View>
             </View>
-            {host != '' && <Text style={styles.hostTxt}>Host: {host}</Text>}
+            <HostRow host={host} />
             {!players ?
                 <View style={styles.waiting}>
                     <ActivityIndicator size='large' />
@@ -197,8 +198,9 @@ const styles = StyleSheet.create({
     },
     flatlist: (w) => ({
         width: w * 0.9,
-        height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
+        margin: 10,
+        padding: 10,
     })
 })

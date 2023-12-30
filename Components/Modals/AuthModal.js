@@ -21,7 +21,7 @@ import { PrimaryButton } from '../Buttons/PrimaryButton'
 import { AuthContext } from '../../Context/AuthContextProvider'
 
 export function AuthModal ({ isVisible, setIsVisible }) {
-    const { setCurrentUser } = useContext(AuthContext)
+    const { currentUser, updateUsername } = useContext(AuthContext)
     const [ username, setUsername ] = useState('')
     const [ error, setError ] = useState('')
     const heightAnim = useRef(new Animated.Value(-300)).current;
@@ -37,7 +37,6 @@ export function AuthModal ({ isVisible, setIsVisible }) {
         }
     },[isVisible])
 
-
     const handleSubmit = () => {
         if (username.length == 0) {
             setError('Enter Username')
@@ -47,8 +46,8 @@ export function AuthModal ({ isVisible, setIsVisible }) {
             toValue: -300,
             duration: 500,
             useNativeDriver: false,
-        }).start(({finished}) => {
-            setCurrentUser(username)
+        }).start(async ({finished}) => {
+            await updateUsername(username)
             setError('')
             setIsVisible(false)
         });

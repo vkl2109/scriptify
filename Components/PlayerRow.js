@@ -20,6 +20,9 @@ export function PlayerRow ({ player }) {
             <LinearGradient
                 // Background Linear Gradient
                 colors={['#B6BBC4', '#161A30']}
+                start={[0.0, 0.5]} 
+                end={[1.0, 0.5]} 
+                locations={[0.0, 1.0]}
                 style={styles.wrapper}
             >
                 <View style={{flex: 1}}>
@@ -40,6 +43,10 @@ const styles = StyleSheet.create({
     rowWrapper:(w) => ({
         margin: 5,
         width: w * 0.9,
+        shadowColor: '#B6BBC4',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.75,
+        shadowRadius: 5,
     }),
     middleTxt: {
         color: '#B6BBC4',

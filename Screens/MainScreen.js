@@ -7,7 +7,8 @@ import {
 } from 'react-native';
 import { 
   useState,
-  useContext
+  useContext,
+  useEffect
 } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { 
@@ -25,11 +26,15 @@ export function MainScreen () {
     const navigation = useNavigation();
     const [ joinGame, setJoinGame ] = useState(false)
     const { currentUser } = useContext(AuthContext)
-    const [ isAuth, setIsAuth ] = useState(currentUser == null)
+    const [ isAuth, setIsAuth ] = useState(false)
 
     const handleStart = () => {
         navigation.navigate('Start')
     }
+
+    useEffect(() => {
+        if (currentUser == '') setIsAuth(true)
+    },[currentUser])
 
     return(
         <SafeAreaView style={styles.container}>
