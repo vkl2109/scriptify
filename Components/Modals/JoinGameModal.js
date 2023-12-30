@@ -25,20 +25,13 @@ import { useNavigation } from '@react-navigation/native';
 export function JoinGameModal ({ isVisible, setIsVisible }) {
     const navigation = useNavigation();
     const [ code, setCode ] = useState('')
-    const heightAnim = useRef(new Animated.Value(0)).current;
+    const heightAnim = useRef(new Animated.Value(-300)).current;
 
     useEffect(() => {
         if (isVisible) {
             Animated.timing(heightAnim, {
-                toValue: 250,
-                duration: 500,
-                useNativeDriver: false,
-            }).start();
-        }
-        else {
-            Animated.timing(heightAnim, {
                 toValue: 0,
-                duration: 500,
+                duration: 1000,
                 useNativeDriver: false,
             }).start();
         }
@@ -54,8 +47,14 @@ export function JoinGameModal ({ isVisible, setIsVisible }) {
     }
 
     const handleClose = () => {
-        setIsVisible(false)
-        setCode('')
+        Animated.timing(heightAnim, {
+            toValue: -300,
+            duration: 1000,
+            useNativeDriver: false,
+        }).start(({finished}) => {
+            setIsVisible(false)
+            setCode('')
+        });
     }
 
     return(
@@ -70,7 +69,7 @@ export function JoinGameModal ({ isVisible, setIsVisible }) {
                 >
                 <KeyboardAvoidingView style={styles.wrapper} behavior='padding'>
                     <Animated.View style={[styles.main, {
-                        height: heightAnim,
+                        top: heightAnim,
                     }]}>
                         <BackHeader 
                         title='Enter Code'
@@ -106,7 +105,9 @@ const styles = StyleSheet.create({
         padding: 10,
         width: '100%',
         justifyContent: 'space-evenly',
-        alignItems: 'center'
+        alignItems: 'center',
+        position: 'absolute',
+        left: 0,
     },
     row: {
         justifyContent: 'flex-start',
