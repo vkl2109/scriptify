@@ -24,21 +24,21 @@ export function AuthModal ({ isVisible, setIsVisible }) {
     const { setCurrentUser } = useContext(AuthContext)
     const [ username, setUsername ] = useState('')
     const [ error, setError ] = useState('')
-    const heightAnim = useRef(new Animated.Value(0)).current;
+    const heightAnim = useRef(new Animated.Value(-500)).current;
     const { height, width } = useWindowDimensions()
 
     useEffect(() => {
         if (isVisible) {
             Animated.timing(heightAnim, {
-                toValue: height * 0.25,
-                duration: 500,
+                toValue: 0,
+                duration: 1000,
                 useNativeDriver: false,
             }).start();
         }
         else {
             Animated.timing(heightAnim, {
-                toValue: 0,
-                duration: 500,
+                toValue: -500,
+                duration: 1000,
                 useNativeDriver: false,
             }).start();
         }
@@ -71,7 +71,7 @@ export function AuthModal ({ isVisible, setIsVisible }) {
                     behavior="padding"
                     >
                     <Animated.View style={[styles.main, {
-                        height: heightAnim
+                        bottom: heightAnim
                     }]}>
                         <TextInput
                             value={username}
@@ -79,13 +79,14 @@ export function AuthModal ({ isVisible, setIsVisible }) {
                             placeholder={'Enter Name'}
                             placeholderTextColor={'#F0ECE5'}
                             style={styles.usernameWrapper}
+                            autoFocus
                             />
                         <Text style={styles.error}>{error}</Text>
                         <View style={styles.btnWrapper}>
                             <PrimaryButton
                                 onPress={handleSubmit}
                                 variant='secondary'
-                                text={'Submit'}
+                                text={'Enter'}
                                 />
                         </View>
                     </Animated.View>
@@ -110,7 +111,9 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         padding: 20,
         justifyContent: 'flex-start',
-        alignItems: 'center'
+        alignItems: 'center',
+        position: 'absolute',
+        left: 0,
     },
     error: {
         color: 'red',
