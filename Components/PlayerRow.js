@@ -47,6 +47,8 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.75,
         shadowRadius: 5,
+        backgroundColor: '#31304D',
+        borderRadius: 10,
     }),
     middleTxt: {
         color: '#B6BBC4',
