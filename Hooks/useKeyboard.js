@@ -13,8 +13,8 @@ export const useKeyboard = () => {
       setKeyboardHeight(0);
     }
 
-    const showSubscription = Keyboard.addListener('keyboardDidShow', onKeyboardDidShow);
-    const hideSubscription = Keyboard.addListener('keyboardDidHide', onKeyboardDidHide);
+    const showSubscription = Keyboard.addListener('keyboardWillShow', onKeyboardDidShow);
+    const hideSubscription = Keyboard.addListener('keyboardWillHide', onKeyboardDidHide);
     return () => {
       showSubscription.remove();
       hideSubscription.remove();

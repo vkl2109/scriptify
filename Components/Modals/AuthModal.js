@@ -24,7 +24,7 @@ export function AuthModal ({ isVisible, setIsVisible }) {
     const { setCurrentUser } = useContext(AuthContext)
     const [ username, setUsername ] = useState('')
     const [ error, setError ] = useState('')
-    const heightAnim = useRef(new Animated.Value(-500)).current;
+    const heightAnim = useRef(new Animated.Value(-300)).current;
     const { height, width } = useWindowDimensions()
 
     useEffect(() => {
@@ -44,7 +44,7 @@ export function AuthModal ({ isVisible, setIsVisible }) {
             return
         }
         Animated.timing(heightAnim, {
-            toValue: -500,
+            toValue: -300,
             duration: 500,
             useNativeDriver: false,
         }).start(({finished}) => {
@@ -70,7 +70,7 @@ export function AuthModal ({ isVisible, setIsVisible }) {
                     behavior="padding"
                     >
                     <Animated.View style={[styles.main, {
-                        bottom: heightAnim
+                        top: heightAnim
                     }]}>
                         <TextInput
                             value={username}
