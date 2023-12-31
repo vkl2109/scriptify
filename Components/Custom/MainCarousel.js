@@ -6,7 +6,7 @@ import {
     useWindowDimensions
 } from 'react-native'
 import Carousel from "react-native-reanimated-carousel";
-import { introImages } from '../assets'
+import { introImages } from '../../assets'
 
 export function MainCarousel () {
     const { height, width } = useWindowDimensions()

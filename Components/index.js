@@ -1,12 +1,14 @@
-export * from './Divider'
-export * from './CodeInput'
+export * from './Custom/Divider'
+export * from './Custom/CodeInput'
+export * from './Custom/MainCarousel'
+
 export * from './Headers/BackHeader'
 export * from './Headers/CloseHeader'
-export * from './CategoryCard'
-export * from './PlayerCheck'
-export * from './PlayerRow'
-export * from './MainCarousel'
-export * from './HostRow'
+
+export * from './Cards/CategoryCard'
+export * from './Cards/PlayerCheck'
+export * from './Cards/PlayerRow'
+export * from './Cards/HostRow'
 
 export * from './Modals/ChoosePlayerModal'
 export * from './Modals/CancelGameModal'

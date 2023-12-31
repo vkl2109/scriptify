@@ -15,7 +15,7 @@ import {
 } from '../Buttons/PrimaryButton'
 import {
     CodeInput,
-} from '../CodeInput'
+} from '../Custom/CodeInput'
 import { BlurView } from 'expo-blur'
 import {
     BackHeader

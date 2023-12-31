@@ -125,6 +125,8 @@ export function WaitingScreen ({ route }) {
                 )}
                 />
             )}
+            <View style={styles.divider} />
+            <Text style={styles.subText}>Rounds?</Text>
             <PrimaryButton 
                 text={'Start'}
                 onPress={handleStart}
@@ -202,5 +204,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         margin: 10,
         padding: 10,
-    })
+    }),
+    divider: {
+        borderWidth: 1,
+        width: '90%',
+        borderColor: '#F0ECE5',
+        margin: 10,
+    }
 })

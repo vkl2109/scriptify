@@ -4,7 +4,7 @@ import {
     Text
 } from 'react-native'
 
-export function Divider ({ text }) {
+export function Divider ({ text = '' }) {
     return(
         <View style={styles.dividerWrapper}>
             <View style={styles.line} />

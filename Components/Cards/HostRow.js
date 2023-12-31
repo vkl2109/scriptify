@@ -9,7 +9,7 @@ import {
     useEffect,
     useRef
 } from 'react'
-import { fetchDoc } from '../Hooks'
+import { fetchDoc } from '../../Hooks'
 
 export function HostRow ({ host }) {
     const [ hostName, setHostName ] = useState('')
@@ -20,13 +20,7 @@ export function HostRow ({ host }) {
             try {
                 let hostData = await fetchDoc('users', host)
                 if (hostData) {
-                    Animated.timing(heightAnim, {
-                        toValue: 50,
-                        duration: 500,
-                        useNativeDriver: false,
-                    }).start(({finished}) => {
-                        setHostName(hostData?.name)
-                    });
+                    setHostName(hostData?.name)
                 }
             }
             catch (e) {
@@ -36,6 +30,16 @@ export function HostRow ({ host }) {
 
         if (host != '') getHostName()
     },[host])
+
+    useEffect(() => {
+        if (hostName != '') {
+            Animated.timing(heightAnim, {
+                toValue: 75,
+                duration: 500,
+                useNativeDriver: false,
+            }).start();
+        }
+    },[hostName])
 
     return(
         <Animated.View style={[styles.wrapper, {
@@ -52,12 +56,15 @@ const styles = StyleSheet.create({
     wrapper: {
         borderTopRightRadius: 20,
         borderTopLeftRadius: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
         backgroundColor: '#161A30',
     },
     text: {
-        fontSize: 20,
+        fontSize: 30,
+        lineHeight: 50,
         color: 'white',
         fontWeight: 'bold',
-        margin: 15,
+        marginHorizontal: 20,
     }
 })

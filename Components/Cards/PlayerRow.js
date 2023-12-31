@@ -8,7 +8,7 @@ import {
     useState,
     useEffect
 } from 'react'
-import { fetchDoc } from '../Hooks'
+import { fetchDoc } from '../../Hooks'
 import { LinearGradient } from 'expo-linear-gradient';
 
 export function PlayerRow ({ player }) {
