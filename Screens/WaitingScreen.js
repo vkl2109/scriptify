@@ -127,6 +127,7 @@ export function WaitingScreen ({ route }) {
                 )}
                 />
             )}
+            <Text style={styles.subText}>Waiting for {unchosen.length} more players...</Text>
             <View style={styles.divider} />
             <Text style={styles.subText}>Rounds?</Text>
             <SegmentControl 
