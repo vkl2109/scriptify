@@ -20,6 +20,7 @@ import {
     CloseHeader,
     PrimaryButton,
     HostRow,
+    SegmentControl,
 } from '../Components'
 import { AuthContext } from '../Context/AuthContextProvider'
 import { useNavigation } from '@react-navigation/native'
@@ -32,7 +33,7 @@ import {
 } from "firebase/firestore";
 import { fetchDoc } from '../Hooks'
 import { db } from '../firebase'
-import { friendCategory } from '../constants'
+import { friendCategory, roundsData } from '../constants'
 
 export function WaitingScreen ({ route }) {
     const { category, code } = route.params
@@ -43,6 +44,7 @@ export function WaitingScreen ({ route }) {
     const [ hasChosen, setHasChosen ] = useState(false)
     const [ totalPlayers, setTotalPlayers ] = useState([])
     const [ host, setHost ] = useState('')
+    const [ rounds, setRounds ] = useState(roundsData[0].label)
     const navigation = useNavigation()
     const { height, width } = useWindowDimensions()
 
@@ -127,6 +129,11 @@ export function WaitingScreen ({ route }) {
             )}
             <View style={styles.divider} />
             <Text style={styles.subText}>Rounds?</Text>
+            <SegmentControl 
+                data={roundsData}
+                selected={rounds}
+                setSelected={setRounds}
+                />
             <PrimaryButton 
                 text={'Start'}
                 onPress={handleStart}

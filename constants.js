@@ -80,7 +80,27 @@ const friendCategory = [
     },
 ]
 
+const roundsData = [
+    {
+        index: 0,
+        label: 5,
+    },
+    {
+        index: 1,
+        label: 7,
+    }, 
+    {
+        index: 2,
+        label: 10,
+    },
+    {
+        index: 3,
+        label: '∞'
+    }
+]
+
 export {
     categories,
-    friendCategory
+    friendCategory,
+    roundsData
 }
