@@ -3,25 +3,13 @@ import {
     Modal,
     View,
     Text,
-    TextInput,
-    TouchableOpacity,
-    FlatList,
-    useWindowDimensions
 } from 'react-native'
 import {
     PrimaryButton
 } from '../Buttons/PrimaryButton'
-import { useNavigation } from '@react-navigation/native';
-import { db } from '../../firebase'
 import { BlurView } from 'expo-blur'
 
-export function CancelGameModal ({ showCancel, setCancel }) {
-    
-    const navigation = useNavigation()
-
-    const handleCancelGame = () => {
-        navigation.navigate('Main')
-    }
+export function CancelGameModal ({ showCancel, setCancel, isHost, handleCancel }) {
     
     return (
         <Modal
@@ -35,7 +23,7 @@ export function CancelGameModal ({ showCancel, setCancel }) {
                 intensity={10}
                 >
                 <View style={styles.main}>
-                    <Text style={styles.cancelTxt}>Cancel Game?</Text>
+                    <Text style={styles.cancelTxt}>{isHost ? 'Cancel' : 'Leave'} Game?</Text>
                     <View style={styles.greyDivider} />
                     <View style={styles.bottomRow}>
                         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -48,7 +36,7 @@ export function CancelGameModal ({ showCancel, setCancel }) {
                             <PrimaryButton
                                 text={'Yes'}
                                 variant='secondary'
-                                onPress={handleCancelGame}
+                                onPress={handleCancel}
                                 />
                         </View>
                     </View>

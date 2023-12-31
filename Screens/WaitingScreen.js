@@ -47,6 +47,7 @@ export function WaitingScreen ({ route }) {
     const [ rounds, setRounds ] = useState(roundsData[0].label)
     const navigation = useNavigation()
     const { height, width } = useWindowDimensions()
+    const isHost = host == deviceID
 
     useEffect(() => {
         const sessionRef = doc(db, "sessions", code);
@@ -84,6 +85,39 @@ export function WaitingScreen ({ route }) {
         
     }
 
+    const handleCancel = async () => {
+        try {
+            if (isHost) {
+
+            }
+            else {
+                const sessionRef = doc(db, 'sessions', code)
+                const newPlayersArray = []
+                for (const player of totalPlayers) {
+                    if (player?.deviceID == deviceID) {
+                        newPlayersArray.push({
+                            deviceID: '',
+                            name: '',
+                            choice: player.choice,
+                        })
+                    }
+                    else {
+                        newPlayersArray.push(player)
+                    }
+                }
+                await updateDoc(sessionRef, {
+                    players: newPlayersArray
+                })
+            }
+        }
+        catch (e) {
+            console.log(e)
+        }
+        finally {
+            navigation.navigate('Main')
+        }
+    }
+
     return(
         <SafeAreaView style={styles.container}>
             <ChoosePlayerModal 
@@ -96,16 +130,16 @@ export function WaitingScreen ({ route }) {
             <CancelGameModal 
                 showCancel={showCancel}
                 setCancel={setCancel}
+                isHost={isHost}
+                handleCancel={handleCancel}
                 />
             <CloseHeader
                 title={'Waiting Room'}
                 onPress={() => setCancel(true)}
                 />
-            <View style={styles.centerColumn}>
-                <Text style={styles.subText}>Session Code</Text>
-                <View style={styles.codeWrapper}>
-                    <Text style={styles.codeText}>{code}</Text>
-                </View>
+            <Text style={styles.subText}>Session Code</Text>
+            <View style={styles.codeWrapper}>
+                <Text style={styles.codeText}>{code}</Text>
             </View>
             <HostRow host={host} />
             {!players ?
@@ -127,18 +161,30 @@ export function WaitingScreen ({ route }) {
                 )}
                 />
             )}
-            <Text style={styles.subText}>Waiting for {unchosen.length} more players...</Text>
-            <View style={styles.divider} />
-            <Text style={styles.subText}>Rounds?</Text>
-            <SegmentControl 
-                data={roundsData}
-                selected={rounds}
-                setSelected={setRounds}
-                />
-            <PrimaryButton 
-                text={'Start'}
-                onPress={handleStart}
-                />
+            {unchosen.length > 0 ?
+                <Text style={styles.subText}>
+                    Waiting for {unchosen.length} more players...
+                </Text>
+            :
+                <Text style={styles.subText}>
+                    Waiting for Host to Start
+                </Text>
+            }
+            {isHost &&
+                <>
+                    <View style={styles.divider} />
+                    <Text style={styles.subText}>Rounds?</Text>
+                    <SegmentControl 
+                        data={roundsData}
+                        selected={rounds}
+                        setSelected={setRounds}
+                        />
+                    <PrimaryButton 
+                        text={'Start'}
+                        onPress={handleStart}
+                        />
+                </>
+            }
         </SafeAreaView>
     )
 }
@@ -166,9 +212,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
-    titleTxt: {
-
-    },
     codeText: {
         color: 'white',
         fontSize: 50,
@@ -186,12 +229,6 @@ const styles = StyleSheet.create({
     waitingText: {
         color: 'white',
         margin: 10,
-    },
-    centerColumn: {
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%',
     },
     hostTxt: {
         color: 'white',

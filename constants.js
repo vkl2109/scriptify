@@ -83,19 +83,19 @@ const friendCategory = [
 const roundsData = [
     {
         index: 0,
-        label: 5,
+        label: 3,
     },
     {
         index: 1,
-        label: 7,
+        label: 5,
     }, 
     {
         index: 2,
-        label: 10,
+        label: 7,
     },
     {
         index: 3,
-        label: '∞'
+        label: 9,
     }
 ]
 
