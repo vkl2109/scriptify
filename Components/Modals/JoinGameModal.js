@@ -1,7 +1,7 @@
 import {
     StyleSheet,
     Modal,
-    View,
+    Text,
     KeyboardAvoidingView,
     Animated
 } from 'react-native'
@@ -21,10 +21,12 @@ import {
     BackHeader
 } from '../Headers/BackHeader'
 import { useNavigation } from '@react-navigation/native';
+import { fetchDoc } from '../../Hooks'
 
 export function JoinGameModal ({ isVisible, setIsVisible }) {
     const navigation = useNavigation();
     const [ code, setCode ] = useState('')
+    const [ error, setError ] = useState('')
     const heightAnim = useRef(new Animated.Value(-300)).current;
 
     useEffect(() => {
@@ -37,13 +39,23 @@ export function JoinGameModal ({ isVisible, setIsVisible }) {
         }
     },[isVisible])
 
-    const handleJoin = () => {
+    const handleJoin = async () => {
         if (code.length != 4) return
-        navigation.navigate('Waiting', {
-            code: code,
-        })
-        setIsVisible(false)
-        setCode('')
+        try {
+            const checkSessionDB = await fetchDoc('sessions', code)
+            if (!checkSessionDB) {
+                setError('Invalid Session Code')
+                return
+            }
+            handleClose()
+            navigation.navigate('Waiting', {
+                code: code,
+            })
+        }
+        catch (e) {
+            console.log(e)
+            setError('Please Try Again')
+        }
     }
 
     const handleClose = () => {
@@ -54,6 +66,7 @@ export function JoinGameModal ({ isVisible, setIsVisible }) {
         }).start(({finished}) => {
             setIsVisible(false)
             setCode('')
+            setError('')
         });
     }
 
@@ -80,6 +93,7 @@ export function JoinGameModal ({ isVisible, setIsVisible }) {
                             value={code}
                             setValue={setCode}
                             />
+                        {error != '' && <Text style={styles.errorText}>{error}</Text>}
                         <PrimaryButton
                             variant={code.length == 4 ? "secondary" : "primary"}
                             text={"Join"}
@@ -101,6 +115,7 @@ const styles = StyleSheet.create({
     main: {
         backgroundColor: 'white',
         borderRadius: 20,
+        paddingTop: 30,
         paddingVertical: 20,
         padding: 10,
         width: '100%',
@@ -114,5 +129,10 @@ const styles = StyleSheet.create({
         width: '100%',
         alignItems: 'center',
         flexDirection: 'row',
+    },
+    errorText: {
+        color: 'red',
+        fontSize: 20,
+        marginBottom: 15,
     }
 })
