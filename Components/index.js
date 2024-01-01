@@ -15,6 +15,8 @@ export * from './Modals/ChoosePlayerModal'
 export * from './Modals/CancelGameModal'
 export * from './Modals/JoinGameModal'
 export * from './Modals/AuthModal'
+export * from './Modals/LoadingModal'
+
 export * from './Buttons/PrimaryButton'
 export * from './Buttons/BackButton'
 export * from './Buttons/CloseButton'

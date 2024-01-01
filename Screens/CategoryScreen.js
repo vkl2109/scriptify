@@ -11,6 +11,7 @@ import {
     BackHeader,
     PlayerCheck,
     PrimaryButton,
+    LoadingModal
 } from '../Components'
 import { useNavigation } from '@react-navigation/native'
 
@@ -19,6 +20,7 @@ export function CategoryScreen ({ route }) {
     const { category } = route.params
     const { title, players } = category
     const [ selected, setSelected ] = useState(new Set(players))
+    const [ startLoading, setStartLoading ] = useState(false)
 
     const toggleSelected = (player) => {
         if (selected.has(player)) {
@@ -34,10 +36,11 @@ export function CategoryScreen ({ route }) {
     }
 
     const handleStart = () => {
-        navigation.navigate('Waiting', {
-            code: 'AAAA',
-            category: category,
-        })
+        // navigation.navigate('Waiting', {
+        //     code: 'AAAA',
+        //     category: category,
+        // })
+        setStartLoading(true)
     }
 
     return(
@@ -46,6 +49,10 @@ export function CategoryScreen ({ route }) {
               title={title}
               onPress={navigation.goBack}
               />
+            <LoadingModal
+            isVisible={startLoading}
+            setIsVisible={setStartLoading}
+            />
             <FlatList
                 ListHeaderComponent={
                     <Text style={styles.subTitle}>Who's Playing?</Text>
@@ -64,7 +71,7 @@ export function CategoryScreen ({ route }) {
                 />
             {selected.size > 0 
             ?
-                <PrimaryButton text={'START'} onPress={handleStart} />
+                <PrimaryButton text={'CREATE GAME'} onPress={handleStart} />
             :
                 <Text style={styles.errorTxt}>Must Select At Least One Player</Text>
             }
