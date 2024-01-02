@@ -2,33 +2,16 @@ import {
     StyleSheet,
     Modal,
     View,
-    Text
+    Text,
+    Animated
 } from 'react-native'
-import {
-     useState,
-     useEffect
-} from 'react'
 import {
     CloseHeader
 } from '../Headers/CloseHeader'
 import { BlurView } from 'expo-blur'
-import * as Progress from 'react-native-progress';
+import CircularProgress from 'react-native-circular-progress-indicator';
 
 export function LoadingModal ({ isVisible, setIsVisible, handleLoading }) {
-    const [ loading, setLoading ] = useState(0)
-
-    useEffect(() => {
-        const load = async () => {
-            try {
-
-            }
-            catch (e) {
-                console.log(e)
-            }
-        }
-
-        load()
-    },[])
 
     return(
         <Modal
@@ -45,8 +28,17 @@ export function LoadingModal ({ isVisible, setIsVisible, handleLoading }) {
                     <CloseHeader
                         onPress={() => setIsVisible(false)}
                         />
-                    <Progress.Pie size={200} indeterminate color={'#F0ECE5'}/>
-                    <Text style={styles.creatingTxt}>Loading...</Text>
+                    <CircularProgress
+                        value={100}
+                        activeStrokeColor={'#F0ECE5'}
+                        inActiveStrokeColor={'#F0ECE5'}
+                        inActiveStrokeOpacity={0.2}
+                        progressValueColor={'#F0ECE5'}
+                        valueSuffix={'%'}
+                        duration={2000}
+                        // onAnimationComplete={handleLoading}
+                        />
+                    <View />
                 </View>
             </BlurView>
         </Modal>
@@ -63,8 +55,11 @@ const styles = StyleSheet.create({
     },
     main: {
         flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center'
+        paddingVertical: 60,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: '100%',
+        height: '100%',
     },
     creatingTxt: {
         fontSize: 40,

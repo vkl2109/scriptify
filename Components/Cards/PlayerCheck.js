@@ -4,6 +4,7 @@ import {
     Text,
     useWindowDimensions
 } from 'react-native'
+import { AntDesign, Entypo } from '@expo/vector-icons';
 
 export function PlayerCheck ({ player, selected }) {
     const { height, width } = useWindowDimensions()
@@ -11,10 +12,15 @@ export function PlayerCheck ({ player, selected }) {
     return (
         <View style={[styles.playerWrapper, 
             { 
-                backgroundColor: selected ? 'rgba(0,0,0, 0.5)' : 'transparent',
+                backgroundColor: selected ? '#161A30' : 'transparent',
                 width: 0.75 * width,
             }
             ]}>
+            {selected ?
+            <Entypo name="check" size={24} color="white" />
+            :
+            <AntDesign name="close" size={24} color="white" />
+            }
             <Text style={styles.playerText}>{player}</Text>
         </View>
     )
@@ -23,13 +29,15 @@ export function PlayerCheck ({ player, selected }) {
 const styles = StyleSheet.create({
     playerWrapper: {
         height: 50,
-        borderRadius: 20,
         margin: 20,
         padding: 10,
-        justifyContent: 'center',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         alignItems: 'center',
-        borderWidth: 0.5,
+        borderBottomWidth: 0.5,
         borderColor: 'white',
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
     },
     playerText: {
         color: 'white',

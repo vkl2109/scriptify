@@ -36,11 +36,19 @@ export function CategoryScreen ({ route }) {
     }
 
     const handleStart = () => {
-        // navigation.navigate('Waiting', {
-        //     code: 'AAAA',
-        //     category: category,
-        // })
         setStartLoading(true)
+    }
+
+    const createGame = async () => {
+        try {
+            navigation.navigate('Waiting', {
+                code: 'AAAA',
+                category: category,
+            })
+        }
+        catch (e) {
+            console.log(e)
+        }
     }
 
     return(
@@ -52,11 +60,12 @@ export function CategoryScreen ({ route }) {
             <LoadingModal
             isVisible={startLoading}
             setIsVisible={setStartLoading}
+            handleLoading={createGame}
             />
+            <View style={styles.wrapperTxt}>
+                <Text style={styles.subTitle}>Who's Playing?</Text>
+            </View>
             <FlatList
-                ListHeaderComponent={
-                    <Text style={styles.subTitle}>Who's Playing?</Text>
-                }
                 contentContainerStyle={styles.players}
                 data={players}
                 renderItem={({ item, index }) => (
@@ -65,10 +74,10 @@ export function CategoryScreen ({ route }) {
                         <PlayerCheck player={item} key={index} selected={selected.has(item)}/>
                     </TouchableOpacity>
                 )}
-                ListFooterComponent={
-                    <Text style={styles.subTitle}>✅ {selected.size}</Text>
-                }
                 />
+            <View style={styles.wrapperTxt}>
+                <Text style={styles.subTitle}>{selected.size} players selected</Text>
+            </View>
             {selected.size > 0 
             ?
                 <PrimaryButton text={'CREATE GAME'} onPress={handleStart} />
@@ -89,6 +98,12 @@ const styles = StyleSheet.create({
     subTitle: {
         color: 'white',
         fontSize: 20,
+    },
+    wrapperTxt: {
+        padding: 15,
+        margin: 20,
+        borderRadius: 15,
+        backgroundColor: '#161A30'
     },
     players: {
         flex: 1,
