@@ -14,6 +14,7 @@ import {
     LoadingModal
 } from '../Components'
 import { useNavigation } from '@react-navigation/native'
+import { generateCode } from '../Hooks'
 
 export function CategoryScreen ({ route }) {
     const navigation = useNavigation()
@@ -41,10 +42,13 @@ export function CategoryScreen ({ route }) {
 
     const createGame = async () => {
         try {
-            navigation.navigate('Waiting', {
-                code: 'AAAA',
-                category: category,
-            })
+            const newCode = await generateCode()
+            if (!newCode) throw new Error('Code Check Failed')
+            alert(newCode)
+            // navigation.navigate('Waiting', {
+            //     code: newCode,
+            //     category: category,
+            // })
         }
         catch (e) {
             console.log(e)

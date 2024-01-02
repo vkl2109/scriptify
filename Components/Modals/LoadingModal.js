@@ -36,7 +36,7 @@ export function LoadingModal ({ isVisible, setIsVisible, handleLoading }) {
                         progressValueColor={'#F0ECE5'}
                         valueSuffix={'%'}
                         duration={2000}
-                        // onAnimationComplete={handleLoading}
+                        onAnimationComplete={handleLoading}
                         />
                     <View />
                 </View>
