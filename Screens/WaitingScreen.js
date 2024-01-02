@@ -28,7 +28,7 @@ import { AntDesign } from '@expo/vector-icons';
 import {
   doc,
   onSnapshot,
-  getDoc,
+  deleteDoc,
   updateDoc,
 } from "firebase/firestore";
 import { fetchDoc } from '../Hooks'
@@ -86,12 +86,12 @@ export function WaitingScreen ({ route }) {
     }
 
     const handleCancel = async () => {
+        const sessionRef = doc(db, 'sessions', code)
         try {
             if (isHost) {
-
+                await deleteDoc(sessionRef)
             }
             else {
-                const sessionRef = doc(db, 'sessions', code)
                 const newPlayersArray = []
                 for (const player of totalPlayers) {
                     if (player?.deviceID == deviceID) {
@@ -147,20 +147,19 @@ export function WaitingScreen ({ route }) {
                     <ActivityIndicator size='large' />
                 </View>
             :
-            (players.length == 0 ?
-                <View style={styles.waiting}>
-                    <ActivityIndicator size='large' />
-                    <Text style={styles.waitingText}>Waiting for Players to Join</Text>
-                </View>
-            :
             <FlatList
                 data={players}
                 contentContainerStyle={styles.flatlist(width)}
                 renderItem={({ item, index }) => (
                     <PlayerRow key={index} player={item} />
                 )}
+                ListEmptyComponent={
+                    <View style={styles.waiting}>
+                        <ActivityIndicator size='large' />
+                    </View>
+                }
                 />
-            )}
+            }
             {unchosen.length > 0 ?
                 <Text style={styles.subText}>
                     Waiting for {unchosen.length} more players...

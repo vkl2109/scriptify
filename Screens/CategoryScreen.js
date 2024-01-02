@@ -5,7 +5,10 @@ import {
     FlatList,
     TouchableOpacity
 } from 'react-native'
-import { useState } from 'react'
+import { 
+    useState,
+    useContext
+} from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import {
     BackHeader,
@@ -13,8 +16,16 @@ import {
     PrimaryButton,
     LoadingModal
 } from '../Components'
+import {
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
 import { useNavigation } from '@react-navigation/native'
 import { generateCode } from '../Hooks'
+import { db } from "../firebase";
+import { AuthContext } from '../Context/AuthContextProvider'
 
 export function CategoryScreen ({ route }) {
     const navigation = useNavigation()
@@ -22,6 +33,7 @@ export function CategoryScreen ({ route }) {
     const { title, players } = category
     const [ selected, setSelected ] = useState(new Set(players))
     const [ startLoading, setStartLoading ] = useState(false)
+    const { deviceID } = useContext(AuthContext)
 
     const toggleSelected = (player) => {
         if (selected.has(player)) {
@@ -44,11 +56,24 @@ export function CategoryScreen ({ route }) {
         try {
             const newCode = await generateCode()
             if (!newCode) throw new Error('Code Check Failed')
-            alert(newCode)
-            // navigation.navigate('Waiting', {
-            //     code: newCode,
-            //     category: category,
-            // })
+            let newPlayers = []
+            for (const value of selected) {
+                newPlayers.push({
+                    name: '',
+                    deviceID: '',
+                    choice: value
+                })
+            }
+            await setDoc(doc(db, "sessions", newCode), {
+                category: title,
+                host: deviceID,
+                players: newPlayers,
+            })
+            setStartLoading(false)
+            navigation.navigate('Waiting', {
+                code: newCode,
+                category: category,
+            })
         }
         catch (e) {
             console.log(e)
