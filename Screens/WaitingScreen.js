@@ -67,7 +67,7 @@ export function WaitingScreen ({ route }) {
                     }
                     playerIDs.add(player?.deviceID)
                 }
-                if (!playerIDs.has(deviceID)) setHasChosen(true)
+                if (!playerIDs.has(deviceID) && unchosen.size() > 0) setHasChosen(true)
                 setHost(sessionData?.host)
                 setUnchosen(newChosen)
                 setPlayers(newPlayers)
@@ -179,7 +179,7 @@ export function WaitingScreen ({ route }) {
                         setSelected={setRounds}
                         />
                     <PrimaryButton 
-                        text={'Start'}
+                        text={'Start Game'}
                         onPress={handleStart}
                         />
                 </>

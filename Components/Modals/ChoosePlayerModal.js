@@ -10,7 +10,8 @@ import {
 } from 'react-native'
 import { 
     useState,
-    useContext
+    useContext,
+    useEffect,
 } from 'react'
 import { BlurView } from 'expo-blur'
 import {
@@ -25,6 +26,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { useNavigation } from '@react-navigation/native';
+import { fetchDoc } from '../../Hooks'
 import { Ionicons } from '@expo/vector-icons';
 import { AuthContext } from '../../Context/AuthContextProvider'
 import { friendCategory } from '../../constants'
@@ -66,8 +68,22 @@ export function ChoosePlayerModal({ unchosen, isVisible, setIsVisible, code, tot
     const [ name, setName ] = useState('')
     const [ error, setError ] = useState('')
     const [ choice, setChoice ] = useState()
+    const [ availableChoices, setAvailableChoices ] = useState([])
     const navigation = useNavigation()
     const { currentUser, deviceID } = useContext(AuthContext)
+
+    // useEffect(() => {
+    //     const fetchChoices = async () => {
+    //         try {
+    //             const sessionData = await fetchDoc('sessions', code)
+    //         }
+    //         catch (e) {
+    //             console.log(e)
+    //         }
+    //     }
+
+    //     fetchChoices()
+    // },[])
 
     const handlePlay = async () => {
         try {
@@ -135,7 +151,7 @@ export function ChoosePlayerModal({ unchosen, isVisible, setIsVisible, code, tot
                     <Text style={styles.name}>{currentUser}</Text>
                     <View style={styles.greyDivider} />
                     <FlatList
-                        data={friendCategory}
+                        data={unchosen}
                         contentContainerStyle={styles.flatlist}
                         renderItem={({ item, index }) => (
                             <TouchableOpacity 

@@ -46,8 +46,9 @@ const styles = StyleSheet.create({
   },
   categories: {
     flex: 1,
-    justifyContent: 'space-evenly',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     maxWidth: '100%',
+    backgroundColor: '#31304D',
   }
 });

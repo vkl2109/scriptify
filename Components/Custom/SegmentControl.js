@@ -20,7 +20,7 @@ export function SegmentControl ({ data, selected, setSelected }) {
     useEffect(() => {
         Animated.timing(leftAnim, {
             toValue: index * width * 0.9 / 4,
-            duration: 500,
+            duration: 250,
             useNativeDriver: false
         }).start(({ finished })=> {
             setSelected(data[index].label)
