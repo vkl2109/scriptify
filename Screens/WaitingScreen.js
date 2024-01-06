@@ -50,9 +50,9 @@ export function WaitingScreen ({ route }) {
     const navigation = useNavigation()
     const { height, width } = useWindowDimensions()
     const isHost = host == deviceID
+    const sessionRef = doc(db, 'sessions', code)
 
     useEffect(() => {
-        const sessionRef = doc(db, "sessions", code);
         const unsubscribe = onSnapshot(sessionRef, async (doc) => {
             if (doc.exists()) {
                 const sessionData = doc.data()
@@ -84,12 +84,22 @@ export function WaitingScreen ({ route }) {
         }
     },[])
 
-    const handleStart = () => {
-        
+    const handleStart = async () => {
+        try {
+            await updateDoc(sessionRef, {
+                hasStarted: true
+            })
+            navigation.navigate(
+                "Game",
+                { code: code }
+            )
+        }
+        catch (e) {
+            console.log(e)
+        }
     }
 
     const handleCancel = async () => {
-        const sessionRef = doc(db, 'sessions', code)
         try {
             if (isHost) {
                 await deleteDoc(sessionRef)

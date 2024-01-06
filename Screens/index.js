@@ -2,3 +2,6 @@ export * from './MainScreen'
 export * from './StartScreen'
 export * from './CategoryScreen'
 export * from './WaitingScreen'
+
+export * from './GameScreens/IntroGameScreen'
+export * from './GameScreens/CharacterCardScreen'

@@ -5,6 +5,9 @@ import {
     CategoryScreen,
     WaitingScreen
 } from '../Screens'
+import {
+    GameNavigator
+} from './GameNavigator'
 
 const Stack = createNativeStackNavigator();
 
@@ -19,6 +22,7 @@ export function RootNavigator () {
             <Stack.Screen name="Start" component={StartScreen} />
             <Stack.Screen name="Category" component={CategoryScreen} />
             <Stack.Screen name="Waiting" component={WaitingScreen} options={{gestureEnabled: false}}/>
+            <Stack.Screen name="Game" component={GameNavigator} />
         </Stack.Navigator>
     )
 }
