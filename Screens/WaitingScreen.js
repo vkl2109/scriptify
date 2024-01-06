@@ -69,8 +69,8 @@ export function WaitingScreen ({ route }) {
                     }
                     playerIDs.add(player?.deviceID)
                 }
-                if (!playerIDs.has(deviceID) && unchosen.size > 0) setHasChosen(true)
-                if (unchosen.size == 0) setIsFull(true)
+                if (!playerIDs.has(deviceID) && newChosen.length > 0) setHasChosen(true)
+                if (newChosen.length == 0) setIsFull(true)
                 setHost(sessionData?.host)
                 setUnchosen(newChosen)
                 setPlayers(newPlayers)

@@ -48,9 +48,16 @@ export function JoinGameModal ({ isVisible, setIsVisible }) {
                 return
             }
             handleClose()
-            navigation.navigate('Waiting', {
-                code: code,
-            })
+            if (checkSessionDB.hasStarted) {
+                navigation.navigate('Game', {
+                    code: code,
+                })
+            }
+            else {
+                navigation.navigate('Waiting', {
+                    code: code,
+                })
+            }
         }
         catch (e) {
             console.log(e)
