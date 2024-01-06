@@ -16,6 +16,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import {
     ChoosePlayerModal,
     CancelGameModal,
+    MessageModal,
     PlayerRow,
     CloseHeader,
     PrimaryButton,
@@ -42,6 +43,7 @@ export function WaitingScreen ({ route }) {
     const [ unchosen, setUnchosen] = useState(new Set())
     const [ showCancel, setCancel ] = useState(false)
     const [ hasChosen, setHasChosen ] = useState(false)
+    const [ isFull, setIsFull ] = useState(false)
     const [ totalPlayers, setTotalPlayers ] = useState([])
     const [ host, setHost ] = useState('')
     const [ rounds, setRounds ] = useState(roundsData[0].label)
@@ -67,7 +69,8 @@ export function WaitingScreen ({ route }) {
                     }
                     playerIDs.add(player?.deviceID)
                 }
-                if (!playerIDs.has(deviceID) && unchosen.size() > 0) setHasChosen(true)
+                if (!playerIDs.has(deviceID) && unchosen.size > 0) setHasChosen(true)
+                if (unchosen.size == 0) setIsFull(true)
                 setHost(sessionData?.host)
                 setUnchosen(newChosen)
                 setPlayers(newPlayers)
@@ -132,6 +135,11 @@ export function WaitingScreen ({ route }) {
                 setCancel={setCancel}
                 isHost={isHost}
                 handleCancel={handleCancel}
+                />
+            <MessageModal
+                isVisible={isFull}
+                setIsVisible={setIsFull}
+                message={"Game is Full"}
                 />
             <CloseHeader
                 title={'Waiting Room'}
