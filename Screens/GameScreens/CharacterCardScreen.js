@@ -5,7 +5,8 @@ import {
 } from 'react-native'
 import {
     MainCard,
-    BackHeader
+    BackHeader,
+    Avatar
 } from '../../Components'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
@@ -18,7 +19,9 @@ export function CharacterCardScreen ({ route, navigation }) {
                 />
             <MainCard>
                 <View style={styles.innerCard}>
-
+                    <Avatar />
+                    <View style={styles.divider} />
+                    <Text style={styles.characterTxt}>Anonymous</Text>
                 </View>
             </MainCard>
             <View />
@@ -40,6 +43,19 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         alignItems: 'center',
-        justifyContent: 'space-evenly',
+        justifyContent: 'flex-start',
+        padding: 10,
+    },
+    divider: {
+        width: '100%',
+        height: 5,
+        backgroundColor: '#F0ECE5',
+        borderRadius: 10,
+        margin: 20,
+    },
+    characterTxt: {
+        color: '#F0ECE5',
+        fontSize: 30,
+        fontWeight: 'bold',
     }
 })

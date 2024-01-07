@@ -13,6 +13,7 @@ export * from './Rows/PlayerCheck'
 export * from './Cards/CategoryCard'
 export * from './Cards/Pill'
 export * from './Cards/MainCard'
+export * from './Cards/Avatar'
 
 export * from './Modals/ChoosePlayerModal'
 export * from './Modals/CancelGameModal'
