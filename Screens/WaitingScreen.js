@@ -262,10 +262,14 @@ const styles = StyleSheet.create({
     },
     flatlist: (w) => ({
         width: w * 0.9,
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         alignItems: 'center',
         margin: 10,
         padding: 10,
+        flex: 1,
+        borderWidth: 2.5,
+        borderColor: '#F0ECE5',
+        borderRadius: 20,
     }),
     divider: {
         borderWidth: 1,

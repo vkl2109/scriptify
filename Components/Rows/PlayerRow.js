@@ -17,14 +17,15 @@ export function PlayerRow ({ player }) {
 
     return(
         <View style={styles.rowWrapper(width)}>
-            <LinearGradient
+            {/* <LinearGradient
                 // Background Linear Gradient
                 colors={['#B6BBC4', '#161A30']}
                 start={[0.0, 0.5]} 
                 end={[1.0, 0.5]} 
                 locations={[0.0, 1.0]}
                 style={styles.wrapper}
-            >
+            > */}
+            <View style={styles.wrapper}>
                 <View style={{flex: 1}}>
                     <Text style={styles.choiceTxt}>{name}</Text>
                 </View>
@@ -34,21 +35,18 @@ export function PlayerRow ({ player }) {
                 <View style={{flex: 1, alignItems: 'flex-end'}}>
                     <Text style={styles.choiceTxt}>{choice}</Text>
                 </View>
-            </LinearGradient>
+            </View>
+            {/* </LinearGradient> */}
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     rowWrapper:(w) => ({
-        margin: 5,
-        width: w * 0.9,
-        shadowColor: '#B6BBC4',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.75,
-        shadowRadius: 5,
+        width: '100%',
         backgroundColor: '#31304D',
-        borderRadius: 10,
+        borderBottomWidth: 2.5,
+        borderColor: '#F0ECE5'
     }),
     middleTxt: {
         color: '#B6BBC4',
