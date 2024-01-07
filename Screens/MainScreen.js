@@ -19,7 +19,7 @@ import {
 } from '../Components'
 import { useNavigation } from '@react-navigation/native';
 import logo from '../assets/logo.png'
-import { AuthContext } from '../Context/AuthContextProvider';
+import { AuthContext } from '../Context';
 
 export function MainScreen () {
     const {height, width} = useWindowDimensions();

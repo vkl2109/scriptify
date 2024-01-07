@@ -28,7 +28,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { fetchDoc } from '../../Hooks'
 import { Ionicons } from '@expo/vector-icons';
-import { AuthContext } from '../../Context/AuthContextProvider'
+import { AuthContext } from '../../Context'
 import { friendCategory } from '../../constants'
 
 function ChoicePlayer ({ player, selected }) {

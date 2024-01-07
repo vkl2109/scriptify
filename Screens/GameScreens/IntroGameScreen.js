@@ -28,6 +28,7 @@ export function IntroGameScreen ({ route, navigation }) {
     const { code } = route.params
     const { height, width } = useWindowDimensions()
     const [ categoryData, setCategoryData ] = useState({})
+    const [ loadingCharBtn, setLoadingCharBtn ] = useState(false)
     const widthAnim = useSharedValue(0);
     const spin = useSharedValue(0);
 
@@ -53,6 +54,21 @@ export function IntroGameScreen ({ route, navigation }) {
         };
     }, []);
 
+    const handleNavigate = async () => {
+        try {
+            setLoadingCharBtn(true)
+            navigation.navigate("Character", {
+                characterData: characterData
+            })
+        }
+        catch (e) {
+            console.log(e)
+        }
+        finally {
+            setLoadingCharBtn(false)
+        }
+    }
+
     useEffect(() => {
         const setUpGame = async () => {
             try {
@@ -63,10 +79,10 @@ export function IntroGameScreen ({ route, navigation }) {
                 setCategoryData(infoData)
                 widthAnim.value = withTiming(width * 0.5, {
                     toValue: width * 0.5,
-                    duration: 1000,
+                    duration: 500,
                     easing: Easing.inOut(Easing.quad),
                 });
-                spin.value = withDelay(1000, withTiming(1));
+                spin.value = withDelay(500, withTiming(1));
             }
             catch (e) {
                 console.log(e)
@@ -115,7 +131,8 @@ export function IntroGameScreen ({ route, navigation }) {
                         })}
                         <PrimaryButton 
                             text="View Character"
-                            onPress={() => navigation.navigate("Character")}
+                            onPress={handleNavigate}
+                            loading={loadingCharBtn}
                             />
                     </View>
                 </Animated.View>

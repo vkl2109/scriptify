@@ -18,7 +18,7 @@ import {
 } from 'react'
 import { BlurView } from 'expo-blur'
 import { PrimaryButton } from '../Buttons/PrimaryButton'
-import { AuthContext } from '../../Context/AuthContextProvider'
+import { AuthContext } from '../../Context'
 
 export function AuthModal ({ isVisible, setIsVisible }) {
     const { currentUser, updateUsername } = useContext(AuthContext)

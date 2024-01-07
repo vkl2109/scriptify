@@ -25,7 +25,7 @@ import {
 import { useNavigation } from '@react-navigation/native'
 import { generateCode } from '../Hooks'
 import { db } from "../firebase";
-import { AuthContext } from '../Context/AuthContextProvider'
+import { AuthContext } from '../Context'
 
 export function CategoryScreen ({ route }) {
     const navigation = useNavigation()

@@ -2,13 +2,15 @@ import {
     StyleSheet,
     TouchableOpacity,
     Text,
-    View
+    View,
+    ActivityIndicator
 } from 'react-native'
 
 export function PrimaryButton ({ 
     text, 
     onPress,
-    variant = "primary"
+    variant = "primary",
+    loading = false,
 }) {
     return(
         <TouchableOpacity 
@@ -20,13 +22,16 @@ export function PrimaryButton ({
             <View style={[styles.innerBtn, {
                 borderColor: variant == "primary" ? '#31304D' : '#F0ECE5'
             }]}>
+                {loading ?
+                <ActivityIndicator size="small" />
+                :
                 <Text 
                     style={[styles.buttonText, {
                         color: variant == "primary" ? '#161A30' : 'white'
                     }]}
                     >
                     {text}
-                </Text>
+                </Text>}
             </View>
         </TouchableOpacity>
     )

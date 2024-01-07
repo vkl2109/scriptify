@@ -23,7 +23,7 @@ import {
     HostRow,
     SegmentControl,
 } from '../Components'
-import { AuthContext } from '../Context/AuthContextProvider'
+import { AuthContext } from '../Context'
 import { useNavigation } from '@react-navigation/native'
 import { AntDesign } from '@expo/vector-icons';
 import {
