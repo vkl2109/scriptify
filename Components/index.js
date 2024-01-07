@@ -10,6 +10,7 @@ export * from './Cards/CategoryCard'
 export * from './Cards/PlayerCheck'
 export * from './Cards/PlayerRow'
 export * from './Cards/HostRow'
+export * from './Cards/Pill'
 
 export * from './Modals/ChoosePlayerModal'
 export * from './Modals/CancelGameModal'

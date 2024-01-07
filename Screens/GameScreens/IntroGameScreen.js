@@ -18,7 +18,8 @@ import {
 } from 'react'
 import {
     BackHeader,
-    PrimaryButton
+    PrimaryButton,
+    Pill
 } from '../../Components'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { fetchDoc } from '../../Hooks'
@@ -101,13 +102,9 @@ export function IntroGameScreen ({ route, navigation }) {
                         <Text style={styles.titleTxt}>{categoryData?.title}</Text>
                         <View style={styles.divider} />
                         <Text style={styles.bodyTxt}>{categoryData?.body}</Text>
-                        <View style={styles.objectiveWrapper}>
-                            <Text style={styles.objectiveTxt}>OBJECTIVE</Text>
-                        </View>
+                        <Pill title="OBJECTIVE" />
                         <Text style={styles.findMurderTxt}>Find the Murderer</Text>
-                        <View style={styles.objectiveWrapper}>
-                            <Text style={styles.objectiveTxt}>RULES</Text>
-                        </View>
+                        <Pill title="RULES" />
                         {rules.map((rule, index) => {
                             return(
                             <View key={index} style={styles.ruleWrapper}>
@@ -116,7 +113,6 @@ export function IntroGameScreen ({ route, navigation }) {
                             </View>
                             )
                         })}
-                        <View style={{ height: 10 }}/>
                         <PrimaryButton 
                             text="View Character"
                             onPress={() => navigation.navigate("Character")}
@@ -147,8 +143,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     cardView: (w, h) => ({
-        height: h * 0.75,
-        width: w * 0.75,
+        minHeight: h * 0.75,
+        width: w * 0.9,
         borderRadius: 20,
         backgroundColor: '#161A30',
         alignItems: "center",
@@ -174,7 +170,8 @@ const styles = StyleSheet.create({
         borderWidth: 3,
         borderColor: '#F0ECE5',
         borderRadius: 10,
-        padding: 20,
+        paddingVertical: 10,
+        paddingHorizontal: 15,
     },
     mainCard: {
         justifyContent: 'space-evenly',
@@ -190,7 +187,7 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         borderWidth: 1,
         borderColor: '#F0ECE5',
-        margin: 10,
+        overflow: 'hidden',
     }),
     innerPill: {
         height: 30,
@@ -207,40 +204,24 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontStyle: "italic",
         textAlign: 'center',
-        margin: 10,
     },
     divider: {
         width: '100%',
         height: 5,
         backgroundColor: '#F0ECE5',
         borderRadius: 10,
-        margin: 10,
-    },
-    objectiveWrapper: {
-        padding: 10,
-        paddingHorizontal: 20,
-        backgroundColor: '#F0ECE5',
-        borderRadius: 100,
-        margin: 10,
-    },
-    objectiveTxt: {
-        color: '#31304D',
-        fontSize: 30,
-        fontWeight: 'bold',
     },
     findMurderTxt: {
         fontWeight: 'bold',
         color: '#F0ECE5',
         fontSize: 25,
         textAlign: 'center',
-        margin: 5,
     },
     ruleWrapper: {
-        width: '80%',
+        width: '65%',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        margin: 10,
     },
     ruleTxt: {
         color: '#F0ECE5',
