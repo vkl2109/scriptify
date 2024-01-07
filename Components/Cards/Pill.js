@@ -21,10 +21,10 @@ const styles = StyleSheet.create({
         borderRadius: 100,
     },
     innerWrapper: {
-        padding: 10,
-        paddingHorizontal: 20,
-        borderWidth: 2.5,
-        borderColor: '#31304D',
+        padding: 5,
+        paddingHorizontal: 15,
+        // borderWidth: 2.5,
+        // borderColor: '#31304D',
         borderRadius: 100,
     },
     mainTxt: {

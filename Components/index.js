@@ -6,11 +6,13 @@ export * from './Custom/SegmentControl'
 export * from './Headers/BackHeader'
 export * from './Headers/CloseHeader'
 
+export * from './Rows/PlayerRow'
+export * from './Rows/HostRow'
+export * from './Rows/PlayerCheck'
+
 export * from './Cards/CategoryCard'
-export * from './Cards/PlayerCheck'
-export * from './Cards/PlayerRow'
-export * from './Cards/HostRow'
 export * from './Cards/Pill'
+export * from './Cards/MainCard'
 
 export * from './Modals/ChoosePlayerModal'
 export * from './Modals/CancelGameModal'

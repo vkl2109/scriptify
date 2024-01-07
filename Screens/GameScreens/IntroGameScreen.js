@@ -141,6 +141,7 @@ const styles = StyleSheet.create({
     centerView: {
         justifyContent: 'center',
         alignItems: 'center',
+        position: 'relative',
     },
     cardView: (w, h) => ({
         minHeight: h * 0.75,
@@ -149,7 +150,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#161A30',
         alignItems: "center",
         justifyContent: 'center',
-        position: 'relative',
         padding: 10,
         position: "absolute",
         shadowColor: '#B6BBC4',
