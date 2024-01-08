@@ -3,20 +3,24 @@ import {
     TouchableOpacity,
     View,
     Text,
+    Image,
     ImageBackground,
     useWindowDimensions,
 } from 'react-native'
+import { CategoryModal } from '../Modals/CategoryModal';
+import {
+    useState
+} from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { images } from '../../assets'
 
 export function CategoryCard ({ category }) {
     const navigation = useNavigation();
     const { height, width } = useWindowDimensions();
+    const [ isModal, setIsModal ] = useState(false)
 
     const handleCategory = () => {
-        navigation.navigate('Category', {
-            category: category
-        })
+        setIsModal(true)
     }
 
     return(
@@ -24,23 +28,22 @@ export function CategoryCard ({ category }) {
             onPress={handleCategory}
             style={styles.cardWrapper(width)}
             >
-            <View style={styles.innerWrapper}>
-                <ImageBackground 
-                    source={images[category.image]}
-                    style={styles.image}
-                    resizeMode='cover'
-                    >
-                    <View style={styles.topRow}>
-                        <View style={styles.textWrapper}>
-                            <Text style={styles.title}>{category.title}</Text>
-                        </View>
-                    </View>
-                    <View style={styles.bottomRow}>
-                        <View style={styles.textWrapper}>
-                            <Text style={styles.title}>{category.count} players</Text>
-                        </View>
-                    </View>
-                </ImageBackground>
+            <CategoryModal 
+                isVisible={isModal}
+                setIsVisible={setIsModal}
+                category={category}
+                />
+            <View style={styles.wrapper}>
+                <View style={styles.innerWrapper}>
+                    <Image 
+                        source={images[category.image]}
+                        style={styles.image}
+                        resizeMode='cover'
+                        />
+                        <Text style={styles.title(20)}>{category.title}</Text>
+                        <View style={styles.divider} />
+                        <Text style={styles.title(15)}>{category.count} players</Text>
+                </View>
             </View>
         </TouchableOpacity>
     )
@@ -49,58 +52,52 @@ export function CategoryCard ({ category }) {
 const styles = StyleSheet.create({
     cardWrapper: (w) => ({
         margin: 20, 
-        width: w * 0.9,
-        height: 100,
-        overflow: 'hidden',
-        borderRadius: 10,
+        width: w * 0.4,
+        height: 200,
         backgroundColor: '#31304D',
-        padding: 5,
-        
     }),
-    innerWrapper: {
+    wrapper: {
+        justifyContent: 'center',
+        alignItems: 'center',
         width: '100%',
         height: '100%',
-        padding: 5,
         backgroundColor: '#161A30',
-        borderRadius: 10,
+        borderRadius: 15,
+        padding: 5,
         shadowColor: '#F0ECE5',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.5,
         shadowRadius: 0.75,
     },
-    topRow: {
-        width: '100%',
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        padding: 15,
-    },
-    title: {
-        color: 'white',
-        fontSize: 16,
-    },
-    bottomRow: {
-        width: '100%',
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-        paddingBottom: 10,
-        paddingRight: 10,
-    },
-    image: {
+    innerWrapper: {
         width: '100%',
         height: '100%',
+        padding: 5,
+        borderRadius: 10,
+        borderColor: 'white',
+        borderWidth: 2.5,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    divider: {
+        width: '90%',
+        height: 2.5,
+        borderRadius: 10,
+        backgroundColor: '#F0ECE5'
+    },
+    title: (s) => ({
+        color: 'white',
+        fontSize: s,
+        margin: 5,
+        fontWeight: 'bold',
+    }),
+    image: {
+        width: '100%',
+        height: 100,
         flexDirection: 'column',
         justifyContent: 'space-evenly',
         alignItems: 'center',
         borderRadius: 5,
         overflow: 'hidden',
-        // borderColor: 'white',
-        // borderWidth: 1,
     },
-    textWrapper: {
-        backgroundColor: 'rgba(0,0,0,0.5)',
-        padding: 5,
-        borderRadius: 20,
-    }
 })

@@ -23,6 +23,8 @@ export function StartScreen () {
             <FlatList 
                 // ListHeaderComponent={<Text style={styles.title}>Choose A Category</Text>}
                 contentContainerStyle={styles.categories}
+                horizontal={false}
+                numColumns={2}
                 data={categories}
                 renderItem={({ item, index }) => (
                     <CategoryCard category={item} key={index} />
@@ -47,7 +49,7 @@ const styles = StyleSheet.create({
   categories: {
     flex: 1,
     justifyContent: 'flex-start',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     maxWidth: '100%',
     backgroundColor: '#31304D',
   }
