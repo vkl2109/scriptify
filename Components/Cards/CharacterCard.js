@@ -24,6 +24,7 @@ export function CharacterCard ({ characterData, handleNav }) {
                         </View>
                     )
                 })}
+                <Text style={styles.traitTxt}>{characterData?.quote}</Text>
                 <PrimaryButton 
                     text='Enter Game'
                     onPress={handleNav}
