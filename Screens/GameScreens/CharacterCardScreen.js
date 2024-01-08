@@ -5,18 +5,31 @@ import {
 } from 'react-native'
 import {
     BackHeader,
+    CharacterCard,
     AnonymousCard
 } from '../../Components'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 export function CharacterCardScreen ({ route, navigation }) {
+    const { characterData } = route.params
+
+    const handleNav = () => {
+
+    }
 
     return(
         <SafeAreaView style={styles.container}>
             <BackHeader 
                 onPress={navigation.goBack}
                 />
-            <AnonymousCard handleNav={() => {}}/>
+            {characterData?.name ?
+            <CharacterCard 
+                characterData={characterData}
+                handleNav={handleNav}
+                />
+            :
+            <AnonymousCard handleNav={handleNav}/>
+            }
             <View />
         </SafeAreaView>
     )

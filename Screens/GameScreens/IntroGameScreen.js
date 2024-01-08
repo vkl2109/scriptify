@@ -15,7 +15,12 @@ import Animated, {
 import {
     useState,
     useEffect,
+    useContext
 } from 'react'
+import {
+    AuthContext,
+    GameContext
+} from '../../Context'
 import {
     BackHeader,
     PrimaryButton,
@@ -27,6 +32,8 @@ import { fetchDoc } from '../../Hooks'
 export function IntroGameScreen ({ route, navigation }) {
     const { code } = route.params
     const { height, width } = useWindowDimensions()
+    const { sessionData, setSessionData } = useContext(GameContext)
+    const { deviceID } = useContext(AuthContext)
     const [ categoryData, setCategoryData ] = useState({})
     const [ loadingCharBtn, setLoadingCharBtn ] = useState(false)
     const widthAnim = useSharedValue(0);
@@ -57,8 +64,15 @@ export function IntroGameScreen ({ route, navigation }) {
     const handleNavigate = async () => {
         try {
             setLoadingCharBtn(true)
+            let character, characterData = null
+            for (let player of sessionData?.players) {
+                if (player?.deviceID == deviceID) {
+                    character = player?.choice
+                }
+            }
+            if (character) characterData = categoryData[character]
             navigation.navigate("Character", {
-                characterData: characterData
+                characterData: characterData || {}
             })
         }
         catch (e) {
@@ -74,6 +88,7 @@ export function IntroGameScreen ({ route, navigation }) {
             try {
                 const gameData = await fetchDoc('sessions', code)
                 if (!gameData) throw new Error('invalid game code')
+                setSessionData(gameData)
                 const infoData = await fetchDoc('info', gameData?.category)
                 if (!infoData) throw new Error('invalid category')
                 setCategoryData(infoData)
@@ -130,7 +145,7 @@ export function IntroGameScreen ({ route, navigation }) {
                             )
                         })}
                         <PrimaryButton 
-                            text="View Character"
+                            text="Your Character"
                             onPress={handleNavigate}
                             loading={loadingCharBtn}
                             />
