@@ -139,7 +139,6 @@ export function IntroGameScreen ({ route, navigation }) {
                         {rules.map((rule, index) => {
                             return(
                             <View key={index} style={styles.ruleWrapper}>
-                                <Text style={styles.ruleTxt}>{index + 1}.</Text>
                                 <Text style={styles.ruleTxt}>{rule}</Text>
                             </View>
                             )
@@ -252,12 +251,12 @@ const styles = StyleSheet.create({
     ruleWrapper: {
         width: '65%',
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         alignItems: 'center',
     },
     ruleTxt: {
         color: '#F0ECE5',
         fontWeight: 100,
-        fontSize: 20,
+        fontSize: 25,
     }
 })
