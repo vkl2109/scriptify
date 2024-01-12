@@ -3,7 +3,8 @@ import {
     MainScreen,
     StartScreen,
     CategoryScreen,
-    WaitingScreen
+    WaitingScreen,
+    GameScreen
 } from '../Screens'
 import {
     GameNavigator
@@ -22,7 +23,7 @@ export function RootNavigator () {
             <Stack.Screen name="Start" component={StartScreen} />
             <Stack.Screen name="Category" component={CategoryScreen} />
             <Stack.Screen name="Waiting" component={WaitingScreen} options={{gestureEnabled: false}}/>
-            <Stack.Screen name="Game" component={GameNavigator} />
+            <Stack.Screen name="Game" component={GameScreen} />
         </Stack.Navigator>
     )
 }

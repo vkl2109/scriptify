@@ -9,7 +9,7 @@ import {
 } from '../Buttons/PrimaryButton'
 import { BlurView } from 'expo-blur'
 
-export function CancelGameModal ({ showCancel, setCancel, isHost, handleCancel }) {
+export function CancelGameModal ({ showCancel, setCancel, isHost = true, handleCancel }) {
     
     return (
         <Modal

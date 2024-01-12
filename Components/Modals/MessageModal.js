@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
         fontSize: 30,
         fontWeight: 'bold',
         margin: 10,
+        textAlign: 'center',
     },
     greyDivider: {
         width: '100%',
