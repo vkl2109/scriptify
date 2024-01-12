@@ -16,6 +16,7 @@ export * from './Cards/MainCard'
 export * from './Cards/Avatar'
 export * from './Cards/AnonymousCard'
 export * from './Cards/CharacterCard'
+export * from './Cards/InfoGameCard'
 
 export * from './Modals/ChoosePlayerModal'
 export * from './Modals/CancelGameModal'

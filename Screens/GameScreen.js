@@ -16,6 +16,7 @@ import {
     CloseButton,
     CancelGameModal,
     MessageModal,
+    InfoGameCard,
 } from '../Components'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Entypo, Ionicons } from '@expo/vector-icons';
@@ -23,34 +24,16 @@ import CircularProgress from 'react-native-circular-progress-indicator';
 import {
   doc,
   onSnapshot,
-  deleteDoc,
-  updateDoc,
 } from "firebase/firestore";
 import { db } from '../firebase'
-
-function GameRenderer ({ currentCard, gameData }) {
-    if (!gameData) {
-        return (
-            <View style={styles.center}>
-                <ActivityIndicator size="large" />
-            </View>
-        )
-    }
-    switch (currentCard) {
-        case "info":
-            return <Text>Info</Text>
-        case "character":
-            return <Text>Character</Text>
-        default:
-            return <Text>Info</Text>
-    }
-}
+import { fetchDoc } from '../Hooks'
 
 export function GameScreen ({ route, navigation }) {
     const { code } = route.params
     const [ currentCard, setCurrentCard ] = useState("info")
     const [ closeGame, setCloseGame ] = useState(false)
     const [ gameData, setGameData ] = useState(null)
+    const [ categoryData, setCategoryData ] = useState(null)
     const [ loading, setLoading ] = useState(true)
     const [ error, setError ] = useState(false)
     const sessionRef = doc(db, 'sessions', code)
@@ -60,12 +43,30 @@ export function GameScreen ({ route, navigation }) {
         if (loading) setError(true)
     }
 
+    const fetchCategoryData = async (category) => {
+        try {
+            const infoData = await fetchDoc('info', category)
+            if (!infoData) throw new Error('invalid category')
+            setCategoryData(infoData)
+            setLoading(false)
+        }
+        catch (e) {
+            console.log(e)
+            setError(true)
+        }
+    }
+
     useEffect(() => {
         const unsubscribe = onSnapshot(sessionRef, async (doc) => {
             if (doc.exists()) {
                 const sessionData = doc.data()
                 setGameData(sessionData)
-                setLoading(false)
+                if (!categoryData) {
+                    fetchCategoryData(sessionData?.category)
+                }
+                else {
+                    setLoading(false)
+                }
             }
             else {
                 setError(true)
@@ -82,6 +83,28 @@ export function GameScreen ({ route, navigation }) {
 
     const handleCancel = () => {
         navigation.navigate("Main")
+    }
+
+    function GameRenderer () {
+        if (!gameData) {
+            return (
+                <View style={styles.center}>
+                    <ActivityIndicator size="large" />
+                </View>
+            )
+        }
+        switch (currentCard) {
+            case "info":
+                if (!categoryData) {
+                    fetchCategoryData(gameData?.category)
+                    return
+                }
+                return <InfoGameCard categoryData={categoryData} handleNav={() => setCurrentCard("character")}/>
+            case "character":
+                return <Text>Character</Text>
+            default:
+                return <Text>Info</Text>
+        }
     }
 
     return(
@@ -126,12 +149,12 @@ export function GameScreen ({ route, navigation }) {
                     inActiveStrokeOpacity={0.2}
                     progressValueColor={'#F0ECE5'}
                     valueSuffix={'%'}
-                    duration={2000}
+                    duration={5000}
                     onAnimationComplete={checkError}
                     />
             </View>
             :
-            <GameRenderer currentCard={currentCard} gameData={gameData} />
+            <GameRenderer />
             }
         </SafeAreaView>
     )
