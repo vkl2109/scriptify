@@ -4,11 +4,11 @@ import {
     useWindowDimensions
 } from 'react-native'
 
-export function MainCard ({ children }) {
+export function MainCard ({ children, scale = 1 }) {
     const { height, width } = useWindowDimensions()
 
     return(
-        <View style={styles.wrapper(width, height)}>
+        <View style={styles.wrapper(width, height * scale)}>
             <View style={styles.innerWrapper}>
                 {children}
             </View>

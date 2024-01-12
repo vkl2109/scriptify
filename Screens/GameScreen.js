@@ -22,7 +22,8 @@ import {
     MessageModal,
     InfoGameCard,
     AnonymousCard,
-    CharacterCard
+    CharacterCard,
+    PlayGameCard,
 } from '../Components'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Entypo, Ionicons } from '@expo/vector-icons';
@@ -91,46 +92,39 @@ export function GameScreen ({ route, navigation }) {
         navigation.navigate("Main")
     }
 
+    function LoadingView () {
+        return(
+            <View style={styles.center}>
+                <ActivityIndicator size="large" />
+            </View>
+        )
+    }
+
     function GameRenderer () {
-        if (!gameData) {
-            return (
-                <View style={styles.center}>
-                    <ActivityIndicator size="large" />
-                </View>
-            )
-        }
+        if (!gameData) return <LoadingView />
         if (!categoryData) {
             fetchCategoryData(gameData?.category)
-            return (
-                <View style={styles.center}>
-                    <ActivityIndicator size="large" />
-                </View>
-            )
+            return <LoadingView />
         }
         switch (currentCard) {
             case "info":
                 return <InfoGameCard categoryData={categoryData} handleNav={() => setCurrentCard("character")}/>
             case "character":
-                let character, characterData = null
+                let character = null
                 for (let player of gameData?.players) {
-                    if (player?.deviceID == deviceID) {
-                        character = player?.choice
-                    }
+                    if (player?.deviceID == deviceID) character = player?.choice
                 }
                 if (!character) return <AnonymousCard />
-                characterData = categoryData[character]
                 return (
                     <CharacterCard 
-                        characterData={characterData}
-                        handleNav={() => setCurrentCard("game")}
+                        characterData={categoryData[character]}
+                        handleNav={() => setCurrentCard("play")}
                         />
                 )
+            case "play":
+                return <PlayGameCard gameData={gameData} />
             default:
-                return (
-                <View style={styles.center}>
-                    <ActivityIndicator size="large" />
-                </View>
-            )
+                return <LoadingView />
         }
     }
 
