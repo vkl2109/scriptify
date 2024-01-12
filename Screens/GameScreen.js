@@ -9,14 +9,20 @@ import {
     useWindowDimensions,
 } from 'react-native'
 import {
-     useState,
-     useEffect,
+    useState,
+    useEffect,
+    useContext
 } from 'react'
+import {
+    AuthContext,
+} from '../Context'
 import {
     CloseButton,
     CancelGameModal,
     MessageModal,
     InfoGameCard,
+    AnonymousCard,
+    CharacterCard
 } from '../Components'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Entypo, Ionicons } from '@expo/vector-icons';
@@ -36,8 +42,8 @@ export function GameScreen ({ route, navigation }) {
     const [ categoryData, setCategoryData ] = useState(null)
     const [ loading, setLoading ] = useState(true)
     const [ error, setError ] = useState(false)
+    const { deviceID } = useContext(AuthContext)
     const sessionRef = doc(db, 'sessions', code)
-    const isHost = false
 
     const checkError = () => {
         if (loading) setError(true)
@@ -93,17 +99,38 @@ export function GameScreen ({ route, navigation }) {
                 </View>
             )
         }
+        if (!categoryData) {
+            fetchCategoryData(gameData?.category)
+            return (
+                <View style={styles.center}>
+                    <ActivityIndicator size="large" />
+                </View>
+            )
+        }
         switch (currentCard) {
             case "info":
-                if (!categoryData) {
-                    fetchCategoryData(gameData?.category)
-                    return
-                }
                 return <InfoGameCard categoryData={categoryData} handleNav={() => setCurrentCard("character")}/>
             case "character":
-                return <Text>Character</Text>
+                let character, characterData = null
+                for (let player of gameData?.players) {
+                    if (player?.deviceID == deviceID) {
+                        character = player?.choice
+                    }
+                }
+                if (!character) return <AnonymousCard />
+                characterData = categoryData[character]
+                return (
+                    <CharacterCard 
+                        characterData={characterData}
+                        handleNav={() => setCurrentCard("game")}
+                        />
+                )
             default:
-                return <Text>Info</Text>
+                return (
+                <View style={styles.center}>
+                    <ActivityIndicator size="large" />
+                </View>
+            )
         }
     }
 
@@ -112,7 +139,7 @@ export function GameScreen ({ route, navigation }) {
             <CancelGameModal 
                 showCancel={closeGame}
                 setCancel={setCloseGame}
-                isHost={isHost}
+                isHost={false}
                 handleCancel={handleCancel}
                 />
             <MessageModal
