@@ -8,6 +8,16 @@ import {
     ImageBackground,
     useWindowDimensions,
 } from 'react-native'
+import Animated, { 
+    SlideInRight,
+    SlideInLeft,
+    SlideInUp,
+    SlideInDown,
+    SlideOutRight,
+    SlideOutLeft,
+    SlideOutUp,
+    SlideOutDown
+} from 'react-native-reanimated';
 import {
     useState,
     useEffect,
@@ -108,21 +118,35 @@ export function GameScreen ({ route, navigation }) {
         }
         switch (currentCard) {
             case "info":
-                return <InfoGameCard categoryData={categoryData} handleNav={() => setCurrentCard("character")}/>
+                return (
+                    <Animated.View entering={SlideInDown.duration(500)} exiting={SlideOutLeft.duration(500)}>
+                        <InfoGameCard categoryData={categoryData} handleNav={() => setCurrentCard("character")}/>
+                    </Animated.View>
+                )
             case "character":
                 let character = null
                 for (let player of gameData?.players) {
                     if (player?.deviceID == deviceID) character = player?.choice
                 }
-                if (!character) return <AnonymousCard />
+                if (!character) return (
+                    <Animated.View entering={SlideInDown.duration(500)} exiting={SlideOutLeft.duration(500)}>
+                        <AnonymousCard />
+                    </Animated.View>
+                )
                 return (
-                    <CharacterCard 
-                        characterData={categoryData[character]}
-                        handleNav={() => setCurrentCard("play")}
-                        />
+                    <Animated.View entering={SlideInDown.duration(500)} exiting={SlideOutLeft.duration(500)}>
+                        <CharacterCard 
+                            characterData={categoryData[character]}
+                            handleNav={() => setCurrentCard("play")}
+                            />
+                    </Animated.View>
                 )
             case "play":
-                return <PlayGameCard gameData={gameData} />
+                return (
+                    <Animated.View entering={SlideInDown.duration(500)} exiting={SlideOutLeft.duration(500)}>
+                        <PlayGameCard gameData={gameData} />
+                    </Animated.View>
+                )
             default:
                 return <LoadingView />
         }
