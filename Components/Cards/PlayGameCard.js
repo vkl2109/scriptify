@@ -78,9 +78,7 @@ export function PlayGameCard ({ code }) {
                 message={"Failed to Connect: Check Connection"}
                 />
             <RoundStepper 
-                round={1}
-                turn={2}
-                total={3}
+                gameData={currentGameData || {}}
                 />
             <View style={{height: 50 }} />
             <TurnRenderer />

@@ -4,17 +4,21 @@ import {
     Text,
     useWindowDimensions
 } from 'react-native'
+import { AntDesign } from '@expo/vector-icons';
 
-export function RoundStepper ({ round, turn, total }) {
+export function RoundStepper ({ gameData }) {
+    const { currentRound, totalRounds, players } = gameData
+    const turn = 1
+    const numRounds = players?.length || 0
     const { height, width } = useWindowDimensions()
 
     return(
         <View style={styles.wrapper(width)}>
             <View style={styles.innerWrapper}>
-                <Text style={styles.roundTxt}>Round {round}</Text>
+                <Text style={styles.roundTxt}>Round {currentRound}</Text>
                 <View style={styles.divider} />
                 <View style={styles.iconsWrapper}>
-                    {Array(total).fill(null).map(( _, index) => {
+                    {Array(numRounds).fill(null).map(( _, index) => {
                         return(
                             <View 
                                 style={[styles.iconWrapper, 
@@ -29,6 +33,11 @@ export function RoundStepper ({ round, turn, total }) {
                             </View>
                         )
                     })}
+                    {turn == numRounds + 1 ?
+                    <AntDesign name="checkcircle" size={50} color="#F0ECE5" />
+                    :
+                    <AntDesign name="checkcircleo" size={50} color="#B6BBC4" />
+                    }
                 </View>
             </View>
         </View>
@@ -82,7 +91,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 100,
-        borderWidth: 5,
+        borderWidth: 4,
     },
     iconText: {
         fontSize: 25,
