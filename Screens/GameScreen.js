@@ -21,7 +21,8 @@ import Animated, {
 import {
     useState,
     useEffect,
-    useContext
+    useContext,
+    useCallback,
 } from 'react'
 import {
     AuthContext,
@@ -38,11 +39,6 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Entypo, Ionicons } from '@expo/vector-icons';
 import CircularProgress from 'react-native-circular-progress-indicator';
-import {
-  doc,
-  onSnapshot,
-} from "firebase/firestore";
-import { db } from '../firebase'
 import { fetchDoc } from '../Hooks'
 
 export function GameScreen ({ route, navigation }) {
@@ -54,7 +50,6 @@ export function GameScreen ({ route, navigation }) {
     const [ loading, setLoading ] = useState(true)
     const [ error, setError ] = useState(false)
     const { deviceID } = useContext(AuthContext)
-    const sessionRef = doc(db, 'sessions', code)
 
     const checkError = () => {
         if (loading) setError(true)
@@ -74,28 +69,22 @@ export function GameScreen ({ route, navigation }) {
     }
 
     useEffect(() => {
-        const unsubscribe = onSnapshot(sessionRef, async (doc) => {
-            if (doc.exists()) {
-                const sessionData = doc.data()
+        const startGame = async () => {
+            try {
+                const sessionData = await fetchDoc('sessions', code)
+                if (!sessionData) throw new Error ("failed to fetch sessionData")
                 setGameData(sessionData)
-                if (!categoryData) {
-                    fetchCategoryData(sessionData?.category)
-                }
-                else {
-                    setLoading(false)
-                }
+                const infoData = await fetchDoc('info', sessionData?.category)
+                if (!infoData) throw new Error('invalid category')
+                setCategoryData(infoData)
+                setLoading(false)
             }
-            else {
+            catch (e) {
+                console.log(e)
                 setError(true)
             }
-        },
-        (error) => {
-            console.log(error)
-            setError(true)
-        })
-        return () => {
-            unsubscribe()
         }
+        startGame()
     },[code])
 
     const handleCancel = () => {
@@ -110,7 +99,7 @@ export function GameScreen ({ route, navigation }) {
         )
     }
 
-    function GameRenderer () {
+    const GameRenderer = useCallback(() => {
         if (!gameData) return <LoadingView />
         if (!categoryData) {
             fetchCategoryData(gameData?.category)
@@ -144,13 +133,13 @@ export function GameScreen ({ route, navigation }) {
             case "play":
                 return (
                     <Animated.View entering={SlideInDown.duration(500)} exiting={SlideOutLeft.duration(500)}>
-                        <PlayGameCard gameData={gameData} />
+                        <PlayGameCard code={code} />
                     </Animated.View>
                 )
             default:
                 return <LoadingView />
         }
-    }
+    }, [currentCard, gameData, categoryData])
 
     return(
         <SafeAreaView style={styles.container}>
