@@ -5,54 +5,88 @@ import {
     Image,
     useWindowDimensions
 } from 'react-native'
-import Carousel from "react-native-reanimated-carousel";
+import Animated, { 
+    SlideInRight,
+    SlideInLeft,
+    SlideInUp,
+    SlideInDown,
+    SlideOutRight,
+    SlideOutLeft,
+    SlideOutUp,
+    SlideOutDown,
+    RollInRight, 
+    RollInLeft,
+    RollOutRight,
+    RollOutLeft,
+    ZoomInRight,
+    ZoomOutLeft,
+} from 'react-native-reanimated';
+import {
+    useState,
+    useEffect,
+    useCallback,
+} from 'react'
 import { introImages } from '../../assets'
+
+const carouselData = [
+    {
+        id: 1,
+        image: 'theater',
+        caption: 'Play With Friends!'
+    },
+    {
+        id: 2, 
+        image: 'suspect',
+        caption: 'Find the Suspect!'
+    },
+    {
+        id: 3,
+        image: 'fun',
+        caption: 'Fun for All Ages!'
+    }
+]
 
 export function MainCarousel () {
     const { height, width } = useWindowDimensions()
+    const [ index, setIndex ] = useState(0)
 
-    const carouselData = [
-        {
-            id: 1,
-            image: 'theater',
-            caption: 'Play With Friends!'
-        },
-        {
-            id: 2, 
-            image: 'suspect',
-            caption: 'Find the Suspect!'
-        },
-        {
-            id: 3,
-            image: 'fun',
-            caption: 'Fun for All Ages!'
-        }
-    ]
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+        setIndex((prevIndex) => (prevIndex + 1) % 3);
+        }, 1500);
+
+        // Cleanup the interval on component unmount
+        return () => clearInterval(intervalId);
+    }, []);
+
+    function IndivSlide ({ item }) {
+        return(
+            <View style={styles.item(width)}>
+                <View style={styles.inner}>
+                    <Image
+                        source={introImages[item.image]}
+                        style={styles.image}
+                        />
+                    <View style={styles.divider} />
+                    <Text style={styles.caption}>
+                        {item.caption}
+                    </Text>
+                </View>
+            </View>
+        )
+    }
+
+    const RenderSlide = useCallback(() => {
+        return(
+            <Animated.View entering={ZoomInRight.springify().damping(15)} exiting={ZoomOutLeft.springify().damping(15)}>
+                <IndivSlide item={carouselData[index]} />
+            </Animated.View>
+        )
+    },[index])
 
     return(
         <View style={styles.wrapper}>
-            <Carousel
-                  loop
-                  width={width}
-                  height={width}
-                  autoPlay
-                  data={carouselData}
-                  scrollAnimationDuration={2000}
-                  renderItem={({ item }) => (
-                    <View style={styles.item}>
-                        <View style={styles.inner}>
-                            <Image
-                                source={introImages[item.image]}
-                                style={styles.image}
-                                />
-                            <View style={styles.divider} />
-                            <Text style={styles.caption}>
-                                {item.caption}
-                            </Text>
-                        </View>
-                    </View>
-                  )}
-                />
+            <RenderSlide />
         </View>
     )
 }
@@ -65,9 +99,9 @@ const styles = StyleSheet.create({
         flex: 1,
         width: "100%",
     },
-    item: {
-        width: '80%',
-        height: '80%',
+    item:(w) => ({
+        width: w * 0.8,
+        height: w * 0.8,
         borderRadius: 20,
         backgroundColor: '#161A30',
         alignSelf: 'center',
@@ -78,7 +112,7 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 4, height: 4 },
         shadowOpacity: 0.75,
         shadowRadius: 0.75,
-    },
+    }),
     inner: {
         width: '100%',
         height: '100%',
