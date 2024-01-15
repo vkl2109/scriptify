@@ -108,7 +108,7 @@ export function GameScreen ({ route, navigation }) {
         switch (currentCard) {
             case "info":
                 return (
-                    <Animated.View entering={SlideInDown.duration(500)} exiting={SlideOutLeft.duration(500)}>
+                    <Animated.View entering={SlideInDown.springify().damping(15)} exiting={SlideOutLeft.springify().damping(15)}>
                         <InfoGameCard categoryData={categoryData} handleNav={() => setCurrentCard("character")}/>
                     </Animated.View>
                 )
@@ -118,12 +118,12 @@ export function GameScreen ({ route, navigation }) {
                     if (player?.deviceID == deviceID) character = player?.choice
                 }
                 if (!character) return (
-                    <Animated.View entering={SlideInDown.duration(500)} exiting={SlideOutLeft.duration(500)}>
+                    <Animated.View entering={SlideInDown.springify().damping(15)} exiting={SlideOutLeft.springify().damping(15)}>
                         <AnonymousCard />
                     </Animated.View>
                 )
                 return (
-                    <Animated.View entering={SlideInDown.duration(500)} exiting={SlideOutLeft.duration(500)}>
+                    <Animated.View entering={SlideInDown.springify().damping(15)} exiting={SlideOutLeft.springify().damping(15)}>
                         <CharacterCard 
                             characterData={categoryData[character]}
                             handleNav={() => setCurrentCard("play")}
@@ -132,7 +132,7 @@ export function GameScreen ({ route, navigation }) {
                 )
             case "play":
                 return (
-                    <Animated.View entering={SlideInDown.duration(500)} exiting={SlideOutLeft.duration(500)}>
+                    <Animated.View entering={SlideInDown.springify().damping(15)} exiting={SlideOutLeft.springify().damping(15)}>
                         <PlayGameCard code={code} />
                     </Animated.View>
                 )

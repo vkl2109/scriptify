@@ -8,28 +8,47 @@ import {
     PrimaryButton
 } from '../Buttons/PrimaryButton'
 import { BlurView } from 'expo-blur'
+import Animated, { 
+    SlideInRight,
+    SlideInLeft,
+    SlideInUp,
+    SlideInDown,
+    SlideOutRight,
+    SlideOutLeft,
+    SlideOutUp,
+    SlideOutDown
+} from 'react-native-reanimated';
+import {
+    useState
+} from 'react'
 
 export function CancelGameModal ({ showCancel, setCancel, isHost = true, handleCancel }) {
-    
+
+    const handleClose = () => {
+        setCancel(false)
+    }
+
     return (
         <Modal
             animationType='fade'
             visible={showCancel}
             transparent
-            onRequestClose={() => setCancel(false)}
+            onRequestClose={handleClose}
             >
             <BlurView
                 style={styles.wrapper}
                 intensity={10}
                 >
-                <View style={styles.main}>
+                <Animated.View 
+                    entering={SlideInDown.springify().damping(15)} exiting={SlideOutDown.duration(500)}
+                    style={styles.main}>
                     <Text style={styles.cancelTxt}>{isHost ? 'Cancel' : 'Leave'} Game?</Text>
                     <View style={styles.greyDivider} />
                     <View style={styles.bottomRow}>
                         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                             <PrimaryButton
                                 text={'No'}
-                                onPress={() => setCancel(false)}
+                                onPress={handleClose}
                                 />
                         </View>
                         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -40,7 +59,7 @@ export function CancelGameModal ({ showCancel, setCancel, isHost = true, handleC
                                 />
                         </View>
                     </View>
-                </View>
+                </Animated.View>
             </BlurView>
         </Modal>
     )
