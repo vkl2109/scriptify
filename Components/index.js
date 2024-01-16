@@ -2,6 +2,7 @@ export * from './Custom/Divider'
 export * from './Custom/CodeInput'
 export * from './Custom/MainCarousel'
 export * from './Custom/SegmentControl'
+export * from './Custom/LoadingPie'
 
 export * from './Headers/BackHeader'
 export * from './Headers/CloseHeader'

@@ -35,6 +35,7 @@ import {
     AnonymousCard,
     CharacterCard,
     PlayGameCard,
+    LoadingPie,
 } from '../Components'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Entypo, Ionicons } from '@expo/vector-icons';
@@ -88,22 +89,14 @@ export function GameScreen ({ route, navigation }) {
     },[code])
 
     const handleCancel = () => {
-        navigation.navigate("Main")
-    }
-
-    function LoadingView () {
-        return(
-            <View style={styles.center}>
-                <ActivityIndicator size="large" />
-            </View>
-        )
+        navigation.navigate("Landing")
     }
 
     const GameRenderer = useCallback(() => {
-        if (!gameData) return <LoadingView />
+        if (!gameData) return <LoadingPie externalError={error} />
         if (!categoryData) {
             fetchCategoryData(gameData?.category)
-            return <LoadingView />
+            return <LoadingPie externalError={error} />
         }
         switch (currentCard) {
             case "info":
@@ -137,7 +130,7 @@ export function GameScreen ({ route, navigation }) {
                     </Animated.View>
                 )
             default:
-                return <LoadingView />
+                return <LoadingPie externalError={error} />
         }
     }, [currentCard, gameData, categoryData])
 
@@ -175,18 +168,7 @@ export function GameScreen ({ route, navigation }) {
                 />
             </View>
             {loading ?
-            <View style={styles.center}>
-                <CircularProgress
-                    value={99}
-                    activeStrokeColor={'#F0ECE5'}
-                    inActiveStrokeColor={'#F0ECE5'}
-                    inActiveStrokeOpacity={0.2}
-                    progressValueColor={'#F0ECE5'}
-                    valueSuffix={'%'}
-                    duration={5000}
-                    onAnimationComplete={checkError}
-                    />
-            </View>
+            <LoadingPie externalError={error} />
             :
             <GameRenderer />
             }
