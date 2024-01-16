@@ -43,6 +43,7 @@ export function CategoryModal ({ isVisible, setIsVisible, category }) {
     const cardHeight = useSharedValue(height);
     const { deviceID } = useContext(AuthContext)
     const [ error, setError ] = useState(false)
+    const [ loading, setLoading ] = useState(false)
 
     const handleClose = () => {
         cardHeight.value = withSpring(height, {
@@ -81,6 +82,7 @@ export function CategoryModal ({ isVisible, setIsVisible, category }) {
 
     const handlePlay = async () => {
         try {
+            setLoading(true)
             const newCode = await generateCode()
             if (!newCode) throw new Error('Code Check Failed')
             let newPlayers = []
@@ -118,6 +120,9 @@ export function CategoryModal ({ isVisible, setIsVisible, category }) {
         catch (e) {
             console.log(e)
             setError(true)
+        }
+        finally {
+            setLoading(false)
         }
     }
 
@@ -164,6 +169,7 @@ export function CategoryModal ({ isVisible, setIsVisible, category }) {
                         <PrimaryButton 
                             text="Play"
                             onPress={handlePlay}
+                            loading={loading}
                             />
                     </View>
                 </Animated.View>

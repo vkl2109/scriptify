@@ -69,7 +69,7 @@ export function CategoriesScreen () {
                 numColumns={2}
                 data={categories}
                 renderItem={({ item, index }) => (
-                  <Animated.View key={index} entering={FlipInEasyY.springify().delay(200 * (index + 1))}>
+                  <Animated.View key={index} entering={FlipInEasyY.springify().delay(200 * (index))}>
                     <CategoryCard category={item} />
                   </Animated.View>
                 )}
