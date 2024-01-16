@@ -15,6 +15,7 @@ import { PrimaryButton } from '../Buttons/PrimaryButton'
 import Animated, { 
     useSharedValue,
     withTiming,
+    withSpring,
     withDelay,
     Easing,
     interpolate,
@@ -28,25 +29,37 @@ export function CategoryModal ({ isVisible, setIsVisible, category }) {
     const cardHeight = useSharedValue(height);
 
     const handleClose = () => {
-        cardHeight.value = withTiming(height, {
-            toValue: height,
-            duration: 500,
-            easing: Easing.inOut(Easing.quad),
+        cardHeight.value = withSpring(height, {
+            mass: 1,
+            damping: 15,
+            stiffness: 100,
+            overshootClamping: false,
+            restDisplacementThreshold: 0.01,
+            restSpeedThreshold: 0.01,
+            // toValue: height,
+            // duration: 500,
+            // easing: Easing.inOut(Easing.quad),
         },)
         setTimeout(() => setIsVisible(false), 500)
     }
 
     useEffect(() => {
-        if (isVisible) cardHeight.value = withTiming(0, {
-            toValue: 0,
-            duration: 500,
-            easing: Easing.inOut(Easing.quad),
+        if (isVisible) cardHeight.value = withSpring(height * 0.2, {
+            mass: 1,
+            damping: 12.5,
+            stiffness: 100,
+            overshootClamping: false,
+            restDisplacementThreshold: 0.01,
+            restSpeedThreshold: 0.01,
+            // toValue: 0,
+            // duration: 500,
+            // easing: Easing.inOut(Easing.quad),
         })
     },[isVisible])
 
     const cardAnimatedStyle = useAnimatedStyle(() => {
         return {
-                marginTop: cardHeight.value
+                top: cardHeight.value
         };
     }, []);
 
@@ -107,11 +120,13 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'space-between',
         paddingVertical: 65,
-        alignItems: 'center'
+        alignItems: 'center',
+        position: 'relative',
     },
     main:(h, w) => ({
         width: w * 0.8,
         height: h * 0.75,
+        position: 'absolute',
         borderRadius: 20,
         backgroundColor: '#161A30',
         padding: 10,

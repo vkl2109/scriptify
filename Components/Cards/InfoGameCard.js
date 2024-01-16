@@ -24,7 +24,7 @@ export function InfoGameCard ({ categoryData, handleNav }) {
                 <View style={styles.divider} />
                 <Text style={styles.bodyTxt}>{categoryData?.body}</Text>
                 <Pill title="OBJECTIVE" />
-                <Text style={styles.findMurderTxt}>Find the Murderer</Text>
+                <Text style={styles.findMurderTxt}>Find the Suspect</Text>
                 <Pill title="RULES" />
                 {rules.map((rule, index) => {
                     return(

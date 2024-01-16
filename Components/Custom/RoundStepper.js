@@ -11,6 +11,7 @@ import { AntDesign } from '@expo/vector-icons'
 import Animated, { 
     useSharedValue,
     useAnimatedStyle,
+    interpolate,
     interpolateColor,
     withRepeat,
     withTiming,
@@ -23,15 +24,20 @@ export function RoundStepper ({ gameData }) {
     const colorAnim = useSharedValue(0)
 
     useEffect(() => {
-        colorAnim.value = withRepeat(withTiming(1 - colorAnim.value, { duration: 1500 }), 0);
+        colorAnim.value = withRepeat(withTiming(1 - colorAnim.value, { duration: 1000 }), 0);
     },[])
 
     const backgroundAnimatedStyle = useAnimatedStyle(() => {
         return {
-            backgroundColor: interpolateColor(
+            borderColor: interpolateColor(
                 colorAnim.value,
                 [0, 1],
-                ['#F0ECE5', '#31304D']
+                ['#B6BBC4', '#F0ECE5']
+            ),
+            shadowRadius: interpolate(
+                colorAnim.value,
+                [0, 1],
+                [0.1, 5]
             ),
         }
     })
@@ -41,15 +47,31 @@ export function RoundStepper ({ gameData }) {
             color: interpolateColor(
                 colorAnim.value,
                 [0, 1],
-                ['#31304D', '#F0ECE5']
+                ['#B6BBC4', '#F0ECE5']
             ),
         }
     })
 
+    function CheckRenderer () {
+        if (currentRound > totalRounds) return <AntDesign name="checkcircle" size={50} color="#F0ECE5" />
+        else if (currentTurn == numRounds) return(
+            <Animated.View style={[styles.selectedIcon, backgroundAnimatedStyle]}>
+                <AnimatedCheck name="checkcircleo" size={50} style={colorAnimatedStyle} />
+            </Animated.View>
+        )
+        else return <AntDesign name="checkcircleo" size={50} color="#B6BBC4" />
+    }
+
+    const AnimatedCheck = Animated.createAnimatedComponent(AntDesign)
+
     return(
         <View style={styles.wrapper(width)}>
             <View style={styles.innerWrapper}>
-                <Text style={styles.roundTxt}>Round {currentRound || "?"}</Text>
+                {currentRound && currentRound > totalRounds ?
+                    <Text style={styles.roundTxt}>Game Complete!</Text>
+                :
+                    <Text style={styles.roundTxt}>Round {currentRound || "?"}</Text>
+                }
                 <View style={styles.divider} />
                 <View style={styles.iconsWrapper}>
                     {Array(numRounds).fill(null).map(( _, index) => {
@@ -77,11 +99,7 @@ export function RoundStepper ({ gameData }) {
                         )
                     })}
                     <View style={{ margin: 10 }}>
-                        {currentTurn == numRounds + 1 ?
-                        <AntDesign name="checkcircle" size={50} color="#F0ECE5" />
-                        :
-                        <AntDesign name="checkcircleo" size={50} color="#B6BBC4" />
-                        }
+                        <CheckRenderer />
                     </View>
                 </View>
             </View>
@@ -141,7 +159,11 @@ const styles = StyleSheet.create({
         margin: 10,
     },
     selectedIcon: {
-        borderColor: '#F0ECE5'
+        backgroundColor: '#161A30',
+        shadowColor: '#B6BBC4',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.9,
+        borderRadius: 100,
     },
     iconText: {
         fontSize: 25,
