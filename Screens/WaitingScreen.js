@@ -86,8 +86,20 @@ export function WaitingScreen ({ route }) {
 
     const handleStart = async () => {
         try {
+            const newPlayersArray = []
+            totalPlayers.map((player) => {
+                if (player?.deviceID != '') {
+                    newPlayersArray.push(player)
+                }
+            })
             await updateDoc(sessionRef, {
-                hasStarted: true
+                hasStarted: true,
+                players: newPlayersArray,
+                currentRound: 1,
+                currentTurn: 0,
+                totalRounds: rounds,
+                hasFinished: false,
+                suspect: Math.floor(Math.random() * newPlayersArray.length)
             })
             navigation.navigate(
                 "Game",
@@ -127,7 +139,7 @@ export function WaitingScreen ({ route }) {
             console.log(e)
         }
         finally {
-            navigation.navigate('Main')
+            navigation.navigate('Landing')
         }
     }
 

@@ -9,7 +9,9 @@ import {
 import { BlurView } from 'expo-blur'
 import { CloseHeader } from '../Headers/CloseHeader';
 import {
-    useEffect
+    useState,
+    useEffect,
+    useContext,
 } from 'react'
 import { PrimaryButton } from '../Buttons/PrimaryButton'
 import Animated, { 
@@ -23,10 +25,24 @@ import Animated, {
     runOnJS
 } from 'react-native-reanimated';
 import { images } from '../../assets'
+import {
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
+import { useNavigation } from '@react-navigation/native'
+import { generateCode } from '../../Hooks'
+import { db } from "../../firebase";
+import { MessageModal } from './MessageModal'
+import { AuthContext } from '../../Context'
 
 export function CategoryModal ({ isVisible, setIsVisible, category }) {
     const { height, width } = useWindowDimensions()
+    const navigation = useNavigation()
     const cardHeight = useSharedValue(height);
+    const { deviceID } = useContext(AuthContext)
+    const [ error, setError ] = useState(false)
 
     const handleClose = () => {
         cardHeight.value = withSpring(height, {
@@ -63,8 +79,46 @@ export function CategoryModal ({ isVisible, setIsVisible, category }) {
         };
     }, []);
 
-    const handlePlay = () => {
-
+    const handlePlay = async () => {
+        try {
+            const newCode = await generateCode()
+            if (!newCode) throw new Error('Code Check Failed')
+            let newPlayers = []
+            category.players.map((player) => {
+                newPlayers.push({
+                    name: '',
+                    deviceID: '',
+                    choice: player
+                })
+            })
+            await setDoc(doc(db, "sessions", newCode), {
+                category: category.title,
+                host: deviceID,
+                players: newPlayers,
+            })
+            cardHeight.value = withSpring(height, {
+                mass: 1,
+                damping: 15,
+                stiffness: 100,
+                overshootClamping: false,
+                restDisplacementThreshold: 0.01,
+                restSpeedThreshold: 0.01,
+                // toValue: height,
+                // duration: 500,
+                // easing: Easing.inOut(Easing.quad),
+            },)
+            setTimeout(() => {
+                setIsVisible(false)
+                navigation.navigate('Waiting', {
+                    code: newCode,
+                    category: category,
+                })
+            }, 500)
+        }
+        catch (e) {
+            console.log(e)
+            setError(true)
+        }
     }
 
     return(
@@ -80,6 +134,11 @@ export function CategoryModal ({ isVisible, setIsVisible, category }) {
                 >
                 <CloseHeader 
                     onPress={handleClose}
+                    />
+                <MessageModal
+                    isVisible={error}
+                    setIsVisible={setError}
+                    message={"Failed to Connect: Check Connection"}
                     />
                 <Animated.View style={[styles.main(height, width), cardAnimatedStyle]}>
                     <View style={styles.innerWrapper}>
@@ -179,6 +238,7 @@ const styles = StyleSheet.create({
     },
     playerPill: {
         padding: 10,
+        paddingHorizontal: 15,
         borderRadius: 100,
         backgroundColor: '#F0ECE5',
         margin: 5, 
@@ -186,6 +246,6 @@ const styles = StyleSheet.create({
     playerTxt: {
         fontWeight: 'bold',
         color: '#31304D',
-        fontSize: 20,
+        fontSize: 15,
     }
 })

@@ -58,7 +58,7 @@ export function GameScreen ({ route, navigation }) {
 
     const fetchCategoryData = async (category) => {
         try {
-            const infoData = await fetchDoc('info', category)
+            const infoData = await fetchDoc('categories', category)
             if (!infoData) throw new Error('invalid category')
             setCategoryData(infoData)
             setLoading(false)
@@ -75,7 +75,7 @@ export function GameScreen ({ route, navigation }) {
                 const sessionData = await fetchDoc('sessions', code)
                 if (!sessionData) throw new Error ("failed to fetch sessionData")
                 setGameData(sessionData)
-                const infoData = await fetchDoc('info', sessionData?.category)
+                const infoData = await fetchDoc('categories', sessionData?.category)
                 if (!infoData) throw new Error('invalid category')
                 setCategoryData(infoData)
                 setLoading(false)

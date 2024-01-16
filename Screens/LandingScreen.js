@@ -4,22 +4,29 @@ import {
     Image,
     KeyboardAvoidingView,
     useWindowDimensions
-} from 'react-native';
+} from "react-native";
 import { 
   useState,
   useContext,
   useEffect
-} from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
+} from "react"
+import { SafeAreaView } from "react-native-safe-area-context"
 import { 
     PrimaryButton,
     JoinGameModal,
     AuthModal,
     MainCarousel,
-} from '../Components'
-import { useNavigation } from '@react-navigation/native';
-import logo from '../assets/logo.png'
-import { AuthContext } from '../Context';
+} from "../Components"
+import { useNavigation } from "@react-navigation/native";
+import logo from "../assets/logo.png"
+import { AuthContext } from "../Context";
+import {
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
+import { db } from "../firebase";
 
 export function LandingScreen () {
     const {height, width} = useWindowDimensions();
@@ -28,12 +35,19 @@ export function LandingScreen () {
     const { currentUser } = useContext(AuthContext)
     const [ isAuth, setIsAuth ] = useState(false)
 
-    const handleStart = () => {
-        navigation.navigate('Categories')
+    const handleStart = async () => {
+        navigation.navigate("Categories")
+        // testing only hehehehe
+        // try { 
+          
+        // }
+        // catch (e) {
+        //   console.log(e)
+        // }
     }
 
     useEffect(() => {
-        if (currentUser == '') setIsAuth(true)
+        if (currentUser == "") setIsAuth(true)
     },[currentUser])
 
     return(
@@ -46,13 +60,13 @@ export function LandingScreen () {
             <View style={styles.lowerHalf(width)}>
                 <PrimaryButton
                     onPress={handleStart}
-                    text={'Start Game'}
+                    text={"Start Game"}
                     />
                 <View style={{ height: 20 }} />
                 <PrimaryButton
                     variant="secondary"
                     onPress={()=>setJoinGame(true)}
-                    text={'Join Game'}
+                    text={"Join Game"}
                     />
                 <JoinGameModal 
                     isVisible={joinGame}
@@ -70,20 +84,20 @@ export function LandingScreen () {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#31304D',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    backgroundColor: "#31304D",
+    alignItems: "center",
+    justifyContent: "space-between",
     paddingVertical: 25,
   },
   lowerHalf:(w) => ({
     width: w,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   }),
   title: {
     fontSize: 50,
-    fontWeight: 'bold',
-    color: 'white',
+    fontWeight: "bold",
+    color: "white",
   },
   joinText: {
     margin: 5,
@@ -91,6 +105,6 @@ const styles = StyleSheet.create({
   logoImg: (w) => ({
     width: w * 0.8,
     height: w * 0.3,
-    resizeMode: 'contain',
+    resizeMode: "contain",
   })
 });
