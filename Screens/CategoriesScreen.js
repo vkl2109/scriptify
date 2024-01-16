@@ -15,7 +15,7 @@ import Animated, {
     FlipInEasyY
 } from 'react-native-reanimated';
 
-export function StartScreen () {
+export function CategoriesScreen () {
     const navigation = useNavigation()
     return(
         <SafeAreaView style={styles.container}>

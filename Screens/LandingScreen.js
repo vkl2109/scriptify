@@ -21,7 +21,7 @@ import { useNavigation } from '@react-navigation/native';
 import logo from '../assets/logo.png'
 import { AuthContext } from '../Context';
 
-export function MainScreen () {
+export function LandingScreen () {
     const {height, width} = useWindowDimensions();
     const navigation = useNavigation();
     const [ joinGame, setJoinGame ] = useState(false)
@@ -29,7 +29,7 @@ export function MainScreen () {
     const [ isAuth, setIsAuth ] = useState(false)
 
     const handleStart = () => {
-        navigation.navigate('Start')
+        navigation.navigate('Categories')
     }
 
     useEffect(() => {
