@@ -22,10 +22,15 @@ export function RoundStepper ({ gameData }) {
     const numRounds = players?.length || 0
     const { height, width } = useWindowDimensions()
     const colorAnim = useSharedValue(0)
+    const widthAnim = useSharedValue(0)
 
     useEffect(() => {
         colorAnim.value = withRepeat(withTiming(1 - colorAnim.value, { duration: 1000 }), 0);
     },[])
+
+    useEffect(() => {
+        widthAnim.value = withTiming((width * 0.75) * (currentTurn + 1) / (numRounds + 1))
+    },[currentTurn])
 
     const backgroundAnimatedStyle = useAnimatedStyle(() => {
         return {
@@ -72,7 +77,11 @@ export function RoundStepper ({ gameData }) {
                 :
                     <Text style={styles.roundTxt}>Round {currentRound || "?"}</Text>
                 }
-                <View style={styles.divider} />
+                <View style={styles.divider(width)}>
+                    <Animated.View style={[styles.innerPill, {
+                        width: widthAnim
+                    }]} />
+                </View>
                 <View style={styles.iconsWrapper}>
                     {Array(numRounds).fill(null).map(( _, index) => {
                         return(currentTurn == index ?
@@ -134,12 +143,19 @@ const styles = StyleSheet.create({
         fontSize: 30,
         fontWeight: 'bold',
     },
-    divider: {
-        height: 5,
-        width: '90%',
+    divider: (w) => ({
+        height: 30,
+        width: w * 0.75,
         margin: 10,
+        overflow: 'hidden',
+        borderWidth: 1,
+        borderColor: '#F0ECE5',
         borderRadius: 20,
-        backgroundColor: '#F0ECE5'
+    }),
+    innerPill: {
+        height: 30,
+        borderRadius: 30,
+        backgroundColor: '#F0ECE5',
     },
     iconsWrapper: {
         flexDirection: 'row',

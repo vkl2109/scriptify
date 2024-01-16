@@ -11,6 +11,9 @@ import {
 } from '../Components'
 import { categories } from '../constants'
 import { useNavigation } from '@react-navigation/native';
+import Animated, { 
+    FlipInEasyY
+} from 'react-native-reanimated';
 
 export function StartScreen () {
     const navigation = useNavigation()
@@ -27,7 +30,9 @@ export function StartScreen () {
                 numColumns={2}
                 data={categories}
                 renderItem={({ item, index }) => (
-                    <CategoryCard category={item} key={index} />
+                  <Animated.View key={index} entering={FlipInEasyY.springify().delay(200 * (index + 1))}>
+                    <CategoryCard category={item} />
+                  </Animated.View>
                 )}
                 />
         </SafeAreaView>
