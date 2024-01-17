@@ -12,8 +12,8 @@ import {
     useCallback,
 } from 'react'
 import { MessageModal } from '../Modals/MessageModal'
-import { PrimaryButton } from '../Buttons/PrimaryButton'
 import { ChameleonCard } from './ChameleonCard'
+import { IndivGameCard } from './IndivGameCard'
 import CircularProgress from 'react-native-circular-progress-indicator';
 import {
   doc,
@@ -120,19 +120,10 @@ export function PlayGameCard ({ code }) {
         )
         else return (
             <Animated.View entering={SlideInRight.duration(500)} exiting={SlideOutLeft.duration(500)}>
-                <MainCard scale={.5}>
-                    <View style={styles.innerWrapper}>
-                        <View style={styles.mainTxtWrapper}>
-                            <Text style={styles.choiceTxt}>{currentGameData?.players[currentGameData?.currentTurn]?.choice || "Test"}</Text>
-                            <View style={styles.divider} />
-                            <Text style={styles.quoteTxt}>"Quote"</Text>
-                        </View>
-                        <PrimaryButton 
-                            text="Next"
-                            onPress={handleNextTurn}
-                            />
-                    </View>
-                </MainCard>
+                <IndivGameCard 
+                    currentPlayer={currentGameData?.players[currentGameData?.currentTurn]}
+                    handleNext={handleNextTurn}
+                    />
             </Animated.View>
         )
     }, [currentGameData])
@@ -161,38 +152,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-start',
         paddingVertical: 25,
-    },
-    innerWrapper: {
-        width: '100%',
-        height: '100%',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: 20,
-    },
-    mainTxtWrapper: {
-        flex: 1,
-        width: '100%',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-    },
-    choiceTxt: {
-        color: '#F0ECE5',
-        fontSize: 30,
-        fontWeight: 'bold',
-    },
-    divider: {
-        width: '90%',
-        height: 5,
-        borderRadius: 10,
-        backgroundColor: '#F0ECE5',
-        margin: 10,
-    },
-    quoteTxt: {
-        color: '#F0ECE5',
-        fontSize: 30,
-        fontWeight: '100',
-        fontStyle: "italic",
-        textAlign: 'center',
     },
     center: {
         flex: 1,
