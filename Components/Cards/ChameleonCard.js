@@ -3,10 +3,16 @@ import {
     View,
     Text
 } from 'react-native'
+import {
+    useState
+} from 'react'
 import { MainCard } from "./MainCard"
 import { PrimaryButton } from '../Buttons/PrimaryButton'
 
 export function ChameleonCard ({ code, handleNextTurn }) {
+    const [ showGame, setShowGame ] = useState(false)
+
+
     return(
         <MainCard scale={.5}>
             <View style={styles.innerWrapper}>
@@ -17,7 +23,7 @@ export function ChameleonCard ({ code, handleNextTurn }) {
                 </View>
                 <PrimaryButton 
                     text="Play"
-                    onPress={handleNextTurn}
+                    onPress={() => setShowGame(true)}
                     />
             </View>
         </MainCard>
