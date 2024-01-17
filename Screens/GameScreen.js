@@ -112,7 +112,9 @@ export function GameScreen ({ route, navigation }) {
                 }
                 if (!character) return (
                     <Animated.View entering={SlideInDown.springify().damping(15)} exiting={SlideOutLeft.springify().damping(15)}>
-                        <AnonymousCard />
+                        <AnonymousCard 
+                            handleNav={() => setCurrentCard("play")}
+                            />
                     </Animated.View>
                 )
                 return (

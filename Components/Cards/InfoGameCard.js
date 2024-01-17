@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     ruleWrapper: {
-        width: '65%',
+        width: '80%',
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
@@ -84,5 +84,6 @@ const styles = StyleSheet.create({
         color: '#F0ECE5',
         fontWeight: 100,
         fontSize: 25,
+        textAlign: 'center',
     }
 })
