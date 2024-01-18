@@ -10,10 +10,12 @@ import {
     useState,
     useEffect,
     useCallback,
+    useContext,
 } from 'react'
 import { MessageModal } from '../Modals/MessageModal'
 import { ChameleonCard } from './ChameleonCard'
 import { IndivGameCard } from './IndivGameCard'
+import { RateGameCard } from './RateGameCard'
 import CircularProgress from 'react-native-circular-progress-indicator';
 import {
   doc,
@@ -31,11 +33,15 @@ import Animated, {
     SlideOutUp,
     SlideOutDown
 } from 'react-native-reanimated';
+import {
+    AuthContext,
+} from '../../Context'
 
 export function PlayGameCard ({ code }) {
     const [ currentGameData, setCurrentGameData ] = useState(null)
     const [ error, setError ] = useState(false)
     const sessionRef = doc(db, 'sessions', code)
+    const { deviceID: authDeviceID } = useContext(AuthContext)
 
     const checkError = () => {
         if (!currentGameData) setError(true)
@@ -108,7 +114,9 @@ export function PlayGameCard ({ code }) {
 
     const TurnRenderer = useCallback(() => {
         if (!currentGameData) return <LoadingView />
-        else if (currentGameData?.hasFinished) return (
+        const currentPlayer = currentGameData?.players[currentGameData?.currentTurn]
+        const { deviceID: playerDeviceID } = currentPlayer
+        if (currentGameData?.hasFinished) return (
             <Animated.View entering={SlideInRight.duration(500)} exiting={SlideOutLeft.duration(500)}>
                 
             </Animated.View>
@@ -120,10 +128,17 @@ export function PlayGameCard ({ code }) {
         )
         else return (
             <Animated.View entering={SlideInRight.duration(500)} exiting={SlideOutLeft.duration(500)}>
+                {playerDeviceID == authDeviceID ?
                 <IndivGameCard 
                     currentPlayer={currentGameData?.players[currentGameData?.currentTurn]}
                     handleNext={handleNextTurn}
                     />
+                :
+                <RateGameCard
+                    currentPlayer={currentPlayer}
+                    code={code}
+                    />
+                }
             </Animated.View>
         )
     }, [currentGameData])
