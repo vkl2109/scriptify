@@ -82,7 +82,7 @@ export function RoundStepper ({ gameData }) {
                         width: widthAnim
                     }]} />
                 </View>
-                <View style={styles.iconsWrapper}>
+                {/* <View style={styles.iconsWrapper}>
                     {Array(numRounds).fill(null).map(( _, index) => {
                         return(currentTurn == index ?
                             <Animated.View 
@@ -110,7 +110,7 @@ export function RoundStepper ({ gameData }) {
                     <View style={{ margin: 10 }}>
                         <CheckRenderer />
                     </View>
-                </View>
+                </View> */}
             </View>
         </View>
     )

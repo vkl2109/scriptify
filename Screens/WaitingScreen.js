@@ -177,18 +177,22 @@ export function WaitingScreen ({ route }) {
                     <ActivityIndicator size='large' />
                 </View>
             :
-            <FlatList
-                data={players}
-                contentContainerStyle={styles.flatlist(width)}
-                renderItem={({ item, index }) => (
-                    <PlayerRow key={index} player={item} />
-                )}
-                ListEmptyComponent={
-                    <View style={styles.waiting}>
-                        <ActivityIndicator size='large' />
-                    </View>
-                }
-                />
+            <View style={styles.flatlistWrapper(width)}>
+                <View style={styles.flatlistInnerWrapper}>
+                    <FlatList
+                        data={players}
+                        contentContainerStyle={styles.flatlist}
+                        renderItem={({ item, index }) => (
+                            <PlayerRow key={index} player={item} />
+                        )}
+                        ListEmptyComponent={
+                            <View style={styles.waiting}>
+                                <ActivityIndicator size='large' />
+                            </View>
+                        }
+                        />
+                </View>
+            </View>
             }
             {unchosen.length > 0 ?
                 <Text style={styles.subText}>
@@ -226,6 +230,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#31304D',
         alignItems: 'center',
         justifyContent: 'space-between',
+        paddingVertical: 10,
     },
     topRow: {
         width: '100%',
@@ -270,19 +275,49 @@ const styles = StyleSheet.create({
         padding: 10,
         margin: 10,
         borderRadius: 50,
-        backgroundColor: '#161A30'
+        backgroundColor: '#161A30',
+        shadowColor: '#B6BBC4',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 5,
+        shadowRadius: 2.5,
     },
-    flatlist: (w) => ({
+    flatlist: {
+        width: '100%',
+        height: '100%',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        padding: 10,
+        flex: 1,
+        backgroundColor: '#161A30',
+        borderRadius: 17.5,
+        overflow: 'hidden',
+    },
+    flatlistWrapper: (w) => ({
         width: w * 0.9,
         justifyContent: 'flex-start',
         alignItems: 'center',
-        margin: 10,
-        padding: 10,
+        flex: 1,
+        padding: 5,
+        backgroundColor: '#161A30',
+        borderRadius: 20,
+        shadowColor: '#B6BBC4',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 2.5,
+        shadowRadius: 2,
+        marginBottom: 10,
+    }),
+    flatlistInnerWrapper: {
+        width: '100%',
+        height: '100%',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
         flex: 1,
         borderWidth: 2.5,
+        backgroundColor: '#161A30',
         borderColor: '#F0ECE5',
-        borderRadius: 20,
-    }),
+        borderRadius: 17.5,
+        overflow: 'hidden',
+    },
     divider: {
         borderWidth: 1,
         width: '90%',

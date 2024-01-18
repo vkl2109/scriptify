@@ -45,9 +45,11 @@ export function HostRow ({ host }) {
         <Animated.View style={[styles.wrapper, {
             height: heightAnim
         }]}>
-            <Text style={styles.text}>
-                Host: {hostName}
-            </Text>
+            <View style={styles.innerWrapper}>
+                <Text style={styles.text}>
+                    Host: {hostName}
+                </Text>
+            </View>
         </Animated.View>
     )
 }
@@ -59,6 +61,25 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#161A30',
+        paddingTop: 5,
+        paddingHorizontal: 5,
+        borderBottomWidth: 0,
+        shadowColor: '#B6BBC4',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 5,
+        shadowRadius: 2.5,
+    },
+    innerWrapper: {
+        borderTopRightRadius: 17.5,
+        borderTopLeftRadius: 17.5,
+        width: '100%',
+        height: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#161A30',
+        borderColor: '#F0ECE5',
+        borderWidth: 2.5,
+        borderBottomWidth: 0,
     },
     text: {
         fontSize: 30,

@@ -21,7 +21,7 @@ export function IndivGameCard ({
     const { choice, name, deviceID: playerDeviceID, quote } = currentPlayer
 
     return(
-        <MainCard scale={.5}>
+        <MainCard scale={.75}>
             <View style={styles.innerWrapper}>
                 <View style={styles.mainTxtWrapper}>
                     <Text style={styles.choiceTxt}>{choice || "Test"}</Text>

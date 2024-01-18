@@ -25,7 +25,7 @@ export function CodeInput ({ value, setValue }) {
             onChangeText={setValue}
             cellCount={4}
             rootStyle={styles.codeFieldRoot}
-            keyboardType="number-pad"
+            keyboardType="default"
             textContentType="oneTimeCode"
             autoFocus
             autoComplete={"one-time-code"}

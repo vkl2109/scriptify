@@ -44,7 +44,7 @@ export function PlayerRow ({ player }) {
 const styles = StyleSheet.create({
     rowWrapper:(w) => ({
         width: '100%',
-        backgroundColor: '#31304D',
+        backgroundColor: '#161A30',
         borderBottomWidth: 2.5,
         borderColor: '#F0ECE5'
     }),

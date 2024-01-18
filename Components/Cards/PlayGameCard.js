@@ -138,7 +138,7 @@ export function PlayGameCard ({ code }) {
             <RoundStepper 
                 gameData={currentGameData || {}}
                 />
-            <View style={{height: 50 }} />
+            <View style={{height: 25 }} />
             <TurnRenderer />
         </View>
     )

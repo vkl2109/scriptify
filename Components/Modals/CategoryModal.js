@@ -8,6 +8,7 @@ import {
 } from 'react-native'
 import { BlurView } from 'expo-blur'
 import { CloseHeader } from '../Headers/CloseHeader';
+import { SafeAreaView } from 'react-native-safe-area-context'
 import {
     useState,
     useEffect,
@@ -36,6 +37,7 @@ import { generateCode } from '../../Hooks'
 import { db } from "../../firebase";
 import { MessageModal } from './MessageModal'
 import { AuthContext } from '../../Context'
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export function CategoryModal ({ isVisible, setIsVisible, category }) {
     const { height, width } = useWindowDimensions()
@@ -44,6 +46,7 @@ export function CategoryModal ({ isVisible, setIsVisible, category }) {
     const { deviceID } = useContext(AuthContext)
     const [ error, setError ] = useState(false)
     const [ loading, setLoading ] = useState(false)
+    const insets = useSafeAreaInsets();
 
     const handleClose = () => {
         cardHeight.value = withSpring(height, {
@@ -134,7 +137,7 @@ export function CategoryModal ({ isVisible, setIsVisible, category }) {
             onRequestClose={handleClose}
             >
             <BlurView
-                style={styles.wrapper}
+                style={styles.blurWrapper(insets)}
                 intensity={10}
                 >
                 <CloseHeader 
@@ -149,7 +152,7 @@ export function CategoryModal ({ isVisible, setIsVisible, category }) {
                     <View style={styles.innerWrapper}>
                         <Image
                             source={images[category.image]}
-                            style={styles.image(width)}
+                            style={styles.image(height, width)}
                             resizeMode='cover'
                             />
                         <View style={styles.titleWrapper}>
@@ -179,22 +182,22 @@ export function CategoryModal ({ isVisible, setIsVisible, category }) {
 }
 
 const styles = StyleSheet.create({
-    wrapper: {
+    blurWrapper:(i) => ({
         width: '100%',
         height: '100%',
         flex: 1,
         justifyContent: 'space-between',
-        paddingVertical: 65,
         alignItems: 'center',
         position: 'relative',
-    },
+        paddingTop: i.top,
+    }),
     main:(h, w) => ({
         width: w * 0.8,
         height: h * 0.75,
         position: 'absolute',
         borderRadius: 20,
         backgroundColor: '#161A30',
-        padding: 10,
+        padding: 7.5,
     }),
     innerWrapper: {
         width: '100%',
@@ -207,28 +210,29 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingBottom: 20,
     },
-    image: (w) => ({
+    image: (h, w) => ({
         width: w * 0.8 - 40,
-        height: w * 0.8 - 30,
+        height: h * 0.25,
         borderRadius: 10,
     }),
     title: {
         margin: 10,
         fontSize: 50,
         fontWeight: 'bold',
-        color: '#F0ECE5'
+        color: '#F0ECE5',
     },
     titleWrapper: {
         width: '100%',
         justifyContent: 'center',
         alignItems: 'center',
+        flex: 1,
     },
     playersWrapper: {
         flexDirection: 'row',
         flexWrap: 'wrap',
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'space-evenly',
     },
     divider: {
         width: '90%',
