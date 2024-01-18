@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
         height: '100%',
         backgroundColor: '#31304D',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-start',
     },
     center: {
         flex: 1,

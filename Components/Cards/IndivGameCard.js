@@ -26,7 +26,17 @@ export function IndivGameCard ({
                 <View style={styles.mainTxtWrapper}>
                     <Text style={styles.choiceTxt}>{choice || "Test"}</Text>
                     <View style={styles.divider} />
-                    <Text style={styles.quoteTxt}>{quote || "quote"}</Text>
+                    {authDeviceID == playerDeviceID 
+                    ?
+                    <>
+                        <Text style={styles.instructions}>Give Us Your Best Impression!</Text>
+                        <Text style={styles.quoteTxt}>{quote || "quote"}</Text>
+                    </>
+                    :
+                    <>
+                        <Text style={styles.instructions}>Rate this impression!</Text>
+                    </>
+                    }
                 </View>
                 {authDeviceID == playerDeviceID ?
                 <PrimaryButton 
@@ -74,6 +84,12 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         backgroundColor: '#F0ECE5',
         margin: 10,
+    },
+    instructions: {
+        color: '#F0ECE5',
+        fontSize: 20,
+        fontWeight: 100,
+        textAlign: 'center',
     },
     quoteTxt: {
         color: '#F0ECE5',

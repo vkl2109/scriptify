@@ -18,7 +18,7 @@ const rules = [
 export function InfoGameCard ({ categoryData, handleNav }) {
 
     return(
-        <MainCard>
+        <MainCard scale={1.05}>
             <View style={styles.innerCard}>
                 <Text style={styles.titleTxt}>{categoryData?.title}</Text>
                 <View style={styles.divider} />
@@ -61,17 +61,20 @@ const styles = StyleSheet.create({
         height: 5,
         backgroundColor: '#F0ECE5',
         borderRadius: 10,
+        margin: 5,
     },
     bodyTxt: {
         color: '#F0ECE5',
-        fontSize: 20,
+        fontSize: 15,
         fontStyle: "italic",
         textAlign: 'center',
+        margin: 5,
     },
     findMurderTxt: {
         fontWeight: 'bold',
         color: '#F0ECE5',
         fontSize: 25,
+        margin: 5,
         textAlign: 'center',
     },
     ruleWrapper: {
@@ -79,11 +82,13 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
+        margin: 5,
     },
     ruleTxt: {
         color: '#F0ECE5',
         fontWeight: 100,
-        fontSize: 25,
+        fontSize: 20,
         textAlign: 'center',
+        margin: 2.5,
     }
 })

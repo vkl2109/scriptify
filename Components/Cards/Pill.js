@@ -19,6 +19,7 @@ const styles = StyleSheet.create({
         padding: 5,
         backgroundColor: '#F0ECE5',
         borderRadius: 100,
+        margin: 5,
     },
     innerWrapper: {
         padding: 5,
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
     },
     mainTxt: {
         color: '#31304D',
-        fontSize: 30,
+        fontSize: 25,
         fontWeight: 'bold',
     }
 })
