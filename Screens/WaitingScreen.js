@@ -24,6 +24,7 @@ import {
     HostRow,
     SegmentControl,
     CodeRow,
+    PlayerList,
 } from '../Components'
 import { AuthContext } from '../Context'
 import { useNavigation } from '@react-navigation/native'
@@ -150,18 +151,6 @@ export function WaitingScreen ({ route }) {
         }
     }
 
-    const handleShare = async () => {
-        try {
-            await Share.share({
-                message:
-                `Let's Play Scriptify! Join the Game below with the code ${code}`,
-            });
-        }
-        catch (e) {
-            console.log(e)
-        }
-    }
-
     return(
         <SafeAreaView style={styles.container}>
             <ChoosePlayerModal 
@@ -194,22 +183,10 @@ export function WaitingScreen ({ route }) {
                     <ActivityIndicator size='large' />
                 </View>
             :
-            <View style={styles.flatlistWrapper(width)}>
-                <View style={styles.flatlistInnerWrapper}>
-                    <FlatList
-                        data={players}
-                        contentContainerStyle={styles.flatlist}
-                        renderItem={({ item, index }) => (
-                            <PlayerRow key={index} player={item} />
-                        )}
-                        ListEmptyComponent={
-                            <View style={styles.waiting}>
-                                <ActivityIndicator size='large' />
-                            </View>
-                        }
-                        />
-                </View>
-            </View>
+            <PlayerList 
+                players={players}
+                handleAdd={() => setHasChosen(true)}
+                />
             }
             {unchosen.length > 0 ?
                 <Text style={styles.subText}>

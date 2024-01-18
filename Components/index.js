@@ -11,6 +11,7 @@ export * from './Rows/PlayerRow'
 export * from './Rows/HostRow'
 export * from './Rows/PlayerCheck'
 export * from './Rows/CodeRow'
+export * from './Rows/PlayerList'
 
 export * from './Cards/CategoryCard'
 export * from './Cards/Pill'
