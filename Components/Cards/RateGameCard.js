@@ -21,10 +21,12 @@ export function RateGameCard ({
     const [ sentRating, setSentRating ] = useState(false)
     const [ currentRating, setCurrentRating ] = useState(3)
 
-    const handleSubmit = () => {
-        handleRating(currentRating)
-        setHasRated(true)
-        setSentRating(true)
+    const handleSubmit = async () => {
+        const result = await handleRating(currentRating)
+        if (result) {
+            setHasRated(true)
+            setSentRating(true)
+        }
     }
 
     return(

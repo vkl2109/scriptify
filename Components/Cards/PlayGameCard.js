@@ -69,7 +69,7 @@ export function PlayGameCard ({ code }) {
     function LoadingView () {
         return(
             <Animated.View 
-                entering={SlideInRight.duration(500)} exiting={SlideOutLeft.duration(500)}
+                entering={SlideInRight.springify().damping(15)} exiting={SlideOutLeft.springify().damping(15)}
                 style={styles.center}>
                 <CircularProgress
                     value={99}
@@ -114,30 +114,54 @@ export function PlayGameCard ({ code }) {
 
     const handleRating = async (rating) => {
         try {
-            
+            let newPlayers = []
+            currentGameData?.players.map((player, index) => {
+                if (index == currentGameData?.currentTurn) {
+                    let newRatings = {}
+                    if (player.ratings) newRatings = JSON.parse(JSON.stringify(player.ratings))
+                    newRatings[currentGameData?.currentRound] = {
+                        [authDeviceID]: rating
+                    }
+                    let newPlayer = {
+                        choice: player.choice,
+                        deviceID: player.deviceID,
+                        name: player.name,
+                        ratings: newRatings
+                    }
+                    newPlayers.push(newPlayer)
+                }
+                else {
+                    newPlayers.push(player)
+                }
+            })
+            await updateDoc(sessionRef, {
+                players: newPlayers
+            })
+            return true
         }
         catch (e) {
             console.log(e)
             setError(true)
+            return false
         }
     }
 
     const TurnRenderer = useCallback(() => {
-        if (!currentGameData) return <LoadingView />
+        // if (!currentGameData) return <LoadingView />
         if (currentGameData?.hasFinished) return (
-            <Animated.View entering={SlideInRight.duration(500)} exiting={SlideOutLeft.duration(500)}>
+            <Animated.View entering={SlideInRight.springify().damping(15)} exiting={SlideOutLeft.springify().damping(15)}>
                 
             </Animated.View>
         )
         else if (currentGameData?.currentTurn == currentGameData?.players.length) return(
-            <Animated.View entering={SlideInRight.duration(500)} exiting={SlideOutLeft.duration(500)}>
+            <Animated.View entering={SlideInRight.springify().damping(15)} exiting={SlideOutLeft.springify().damping(15)}>
                 <ChameleonCard code={code} handleNextTurn={handleNextTurn}/>
             </Animated.View>
         )
         const currentPlayer = currentGameData?.players[currentGameData?.currentTurn]
         const { deviceID: playerDeviceID } = currentPlayer
         return (
-            <Animated.View entering={SlideInRight.duration(500)} exiting={SlideOutLeft.duration(500)}>
+            <Animated.View entering={SlideInRight.springify().damping(15)} exiting={SlideOutLeft.springify().damping(15)}>
                 {playerDeviceID == authDeviceID ?
                 <IndivGameCard 
                     currentPlayer={currentGameData?.players[currentGameData?.currentTurn]}
@@ -154,18 +178,26 @@ export function PlayGameCard ({ code }) {
     }, [currentGameData])
 
     return(
-        <View style={styles.wrapper}>
+        <>
+        {currentGameData ?
+        <Animated.View 
+        entering={SlideInRight.springify().damping(15)}
+        style={styles.wrapper}>
             <MessageModal
                 isVisible={error}
                 setIsVisible={setError}
-                message={"Failed to Connect: Check Connection"}
+                message={"Bad Connection"}
                 />
             <RoundStepper 
-                gameData={currentGameData || {}}
+                gameData={currentGameData}
                 />
             <View style={{height: 25 }} />
             <TurnRenderer />
-        </View>
+        </Animated.View>
+        :
+        <LoadingView />
+        }
+        </>
     )
 }
 

@@ -126,11 +126,7 @@ export function GameScreen ({ route, navigation }) {
                     </Animated.View>
                 )
             case "play":
-                return (
-                    <Animated.View entering={SlideInDown.springify().damping(15)} exiting={SlideOutLeft.springify().damping(15)}>
-                        <PlayGameCard code={code} />
-                    </Animated.View>
-                )
+                return <PlayGameCard code={code} />
             default:
                 return <LoadingPie externalError={error} />
         }

@@ -15,6 +15,7 @@ import Animated, {
     interpolateColor,
     withRepeat,
     withTiming,
+    FadeInDown,
 } from 'react-native-reanimated';
 
 export function RoundStepper ({ gameData }) {
@@ -25,12 +26,12 @@ export function RoundStepper ({ gameData }) {
     const widthAnim = useSharedValue(0)
 
     useEffect(() => {
-        colorAnim.value = withRepeat(withTiming(1 - colorAnim.value, { duration: 1000 }), 0);
-    },[])
-
-    useEffect(() => {
         widthAnim.value = withTiming((width * 0.75) * (currentTurn + 1) / (numRounds + 1))
     },[currentTurn])
+    
+    useEffect(() => {
+        colorAnim.value = withRepeat(withTiming(1 - colorAnim.value, { duration: 1000 }), 0);
+    },[])
 
     const backgroundAnimatedStyle = useAnimatedStyle(() => {
         return {
@@ -75,7 +76,7 @@ export function RoundStepper ({ gameData }) {
                 {currentRound && currentRound > totalRounds ?
                     <Text style={styles.roundTxt}>Game Complete!</Text>
                 :
-                    <Text style={styles.roundTxt}>Round {currentRound || "?"}</Text>
+                    <Text style={styles.roundTxt}>Round {currentRound}</Text>
                 }
                 <View style={styles.divider(width)}>
                     <Animated.View style={[styles.innerPill, {
