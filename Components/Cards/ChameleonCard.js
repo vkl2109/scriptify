@@ -23,7 +23,7 @@ export function ChameleonCard ({ code, handleNextTurn }) {
                 </View>
                 <PrimaryButton 
                     text="Play"
-                    onPress={() => setShowGame(true)}
+                    onPress={handleNextTurn}
                     />
             </View>
         </MainCard>

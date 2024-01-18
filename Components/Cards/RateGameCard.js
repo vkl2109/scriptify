@@ -5,11 +5,12 @@ import {
     ActivityIndicator
 } from 'react-native'
 import { MainCard } from './MainCard'
+import { MessageModal } from '../Modals/MessageModal'
 import { PrimaryButton } from '../Buttons/PrimaryButton'
 import {
     useState
 } from 'react'
-import { Rating, AirbnbRating } from 'react-native-ratings';
+import { AirbnbRating } from 'react-native-ratings';
 
 export function RateGameCard ({ 
     currentPlayer,
@@ -17,16 +18,23 @@ export function RateGameCard ({
 }) {
     const { choice, name } = currentPlayer
     const [ hasRated, setHasRated] = useState(false)
+    const [ sentRating, setSentRating ] = useState(false)
     const [ currentRating, setCurrentRating ] = useState(3)
 
     const handleSubmit = () => {
         handleRating(currentRating)
         setHasRated(true)
+        setSentRating(true)
     }
 
     return(
         <MainCard scale={.75}>
             <View style={styles.innerWrapper}>
+                <MessageModal
+                    isVisible={sentRating}
+                    setIsVisible={setSentRating}
+                    message={`You gave ${name} ${currentRating} stars!`}
+                    />
                 <View style={styles.mainTxtWrapper}>
                     <Text style={styles.choiceTxt}>{choice}'s Turn</Text>
                     <View style={styles.divider} />
@@ -36,7 +44,7 @@ export function RateGameCard ({
                     <AirbnbRating 
                         reviewColor={"#31304D"}
                         selectedColor={"#31304D"}
-                        readonly={hasRated}
+                        isDisabled={hasRated}
                         ratingContainerStyle={styles.ratingInnerWrapper}
                         onFinishRating={(rating) => setCurrentRating(rating)}
                         />
