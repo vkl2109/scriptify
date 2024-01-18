@@ -10,6 +10,7 @@ export * from './Headers/CloseHeader'
 export * from './Rows/PlayerRow'
 export * from './Rows/HostRow'
 export * from './Rows/PlayerCheck'
+export * from './Rows/CodeRow'
 
 export * from './Cards/CategoryCard'
 export * from './Cards/Pill'

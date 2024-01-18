@@ -5,6 +5,7 @@ import {
     TouchableOpacity,
     ActivityIndicator,
     FlatList,
+    Share,
     useWindowDimensions
 } from 'react-native'
 import { 
@@ -22,6 +23,7 @@ import {
     PrimaryButton,
     HostRow,
     SegmentControl,
+    CodeRow,
 } from '../Components'
 import { AuthContext } from '../Context'
 import { useNavigation } from '@react-navigation/native'
@@ -35,6 +37,7 @@ import {
 import { fetchDoc } from '../Hooks'
 import { db } from '../firebase'
 import { friendCategory, roundsData } from '../constants'
+import { Feather } from '@expo/vector-icons';
 
 export function WaitingScreen ({ route }) {
     const { category, code } = route.params
@@ -147,8 +150,16 @@ export function WaitingScreen ({ route }) {
         }
     }
 
-    const handleCopy = () => {
-
+    const handleShare = async () => {
+        try {
+            await Share.share({
+                message:
+                `Let's Play Scriptify! Join the Game below with the code ${code}`,
+            });
+        }
+        catch (e) {
+            console.log(e)
+        }
     }
 
     return(
@@ -166,23 +177,17 @@ export function WaitingScreen ({ route }) {
                 isHost={isHost}
                 handleCancel={handleCancel}
                 />
-            {/* <MessageModal
+            <MessageModal
                 isVisible={isFull}
                 setIsVisible={setIsFull}
                 message={"Game is Full"}
-                /> */}
+                />
             <CloseHeader
                 title={'Waiting Room'}
                 onPress={() => setCancel(true)}
                 />
             <Text style={styles.subText}>Session Code</Text>
-            <TouchableOpacity 
-            onPress={handleCopy}
-            style={styles.codeWrapper}>
-                <View style={styles.codeInnerWrapper}>
-                    <Text style={styles.codeText}>{code}</Text>
-                </View>
-            </TouchableOpacity>
+            <CodeRow code={code} />
             <HostRow host={host} />
             {!players ?
                 <View style={styles.waiting}>
@@ -281,29 +286,6 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 20,
     },
-    codeWrapper: {
-        width: '75%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 5,
-        margin: 10,
-        borderRadius: 50,
-        backgroundColor: '#161A30',
-        shadowColor: '#B6BBC4',
-        shadowOffset: { width: 0, height: 0 },
-        shadowOpacity: 5,
-        shadowRadius: 2.5,
-    },
-    codeInnerWrapper: {
-        width: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 10,
-        borderRadius: 50,
-        borderWidth: 2.5,
-        backgroundColor: '#161A30',
-        borderColor: '#F0ECE5',
-    },
     flatlist: {
         width: '100%',
         height: '100%',
@@ -346,5 +328,5 @@ const styles = StyleSheet.create({
         width: '90%',
         borderColor: '#F0ECE5',
         margin: 10,
-    }
+    },
 })
