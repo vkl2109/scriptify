@@ -74,6 +74,10 @@ export function WaitingScreen ({ route }) {
                 setHost(sessionData?.host)
                 setUnchosen(newChosen)
                 setPlayers(newPlayers)
+                if (sessionData?.hasStarted) navigation.navigate(
+                    "Game",
+                    { code: code }
+                )
             }
         },
         (error) => {
@@ -143,6 +147,10 @@ export function WaitingScreen ({ route }) {
         }
     }
 
+    const handleCopy = () => {
+
+    }
+
     return(
         <SafeAreaView style={styles.container}>
             <ChoosePlayerModal 
@@ -158,19 +166,23 @@ export function WaitingScreen ({ route }) {
                 isHost={isHost}
                 handleCancel={handleCancel}
                 />
-            <MessageModal
+            {/* <MessageModal
                 isVisible={isFull}
                 setIsVisible={setIsFull}
                 message={"Game is Full"}
-                />
+                /> */}
             <CloseHeader
                 title={'Waiting Room'}
                 onPress={() => setCancel(true)}
                 />
             <Text style={styles.subText}>Session Code</Text>
-            <View style={styles.codeWrapper}>
-                <Text style={styles.codeText}>{code}</Text>
-            </View>
+            <TouchableOpacity 
+            onPress={handleCopy}
+            style={styles.codeWrapper}>
+                <View style={styles.codeInnerWrapper}>
+                    <Text style={styles.codeText}>{code}</Text>
+                </View>
+            </TouchableOpacity>
             <HostRow host={host} />
             {!players ?
                 <View style={styles.waiting}>
@@ -247,12 +259,13 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     codeText: {
-        color: 'white',
+        color: '#F0ECE5',
         fontSize: 50,
     },
     subText: {
-        color: 'white',
+        color: '#F0ECE5',
         fontSize: 20,
+        fontWeight: '200',
     },
     waiting: {
         flexDirection: 'column',
@@ -272,7 +285,7 @@ const styles = StyleSheet.create({
         width: '75%',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 10,
+        padding: 5,
         margin: 10,
         borderRadius: 50,
         backgroundColor: '#161A30',
@@ -280,6 +293,16 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 0 },
         shadowOpacity: 5,
         shadowRadius: 2.5,
+    },
+    codeInnerWrapper: {
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 10,
+        borderRadius: 50,
+        borderWidth: 2.5,
+        backgroundColor: '#161A30',
+        borderColor: '#F0ECE5',
     },
     flatlist: {
         width: '100%',

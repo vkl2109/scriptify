@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 30,
         lineHeight: 50,
-        color: 'white',
+        color: '#F0ECE5',
         fontWeight: 'bold',
         marginHorizontal: 20,
     }

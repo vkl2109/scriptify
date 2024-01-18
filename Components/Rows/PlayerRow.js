@@ -51,6 +51,7 @@ const styles = StyleSheet.create({
     middleTxt: {
         color: '#B6BBC4',
         fontSize: 20,
+        fontWeight: '200'
     },
     wrapper: {
         width: '100%',
