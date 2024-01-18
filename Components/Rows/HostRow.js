@@ -2,55 +2,52 @@ import {
     StyleSheet,
     View,
     Text,
-    Animated,
 } from 'react-native'
 import {
     useState,
     useEffect,
-    useRef
 } from 'react'
 import { fetchDoc } from '../../Hooks'
+import Animated, { 
+    FadeInDown,
+    FadeOutDown,
+} from 'react-native-reanimated';
 
 export function HostRow ({ host }) {
     const [ hostName, setHostName ] = useState('')
-    const heightAnim = useRef(new Animated.Value(0)).current;
+    const [ showRow, setShowRow ] = useState(false)
 
     useEffect(() => {
         const getHostName = async () => {
             try {
                 let hostData = await fetchDoc('users', host)
-                if (hostData) {
-                    setHostName(hostData?.name)
-                }
+                if (hostData) setHostName(hostData?.name)
             }
             catch (e) {
                 console.log(e)
             }
         }
-
         if (host != '') getHostName()
     },[host])
 
     useEffect(() => {
-        if (hostName != '') {
-            Animated.timing(heightAnim, {
-                toValue: 75,
-                duration: 500,
-                useNativeDriver: false,
-            }).start();
-        }
+        if (hostName != '') setShowRow(true)
     },[hostName])
 
     return(
-        <Animated.View style={[styles.wrapper, {
-            height: heightAnim
-        }]}>
-            <View style={styles.innerWrapper}>
-                <Text style={styles.text}>
-                    Host: {hostName}
-                </Text>
-            </View>
-        </Animated.View>
+        <>
+            {showRow && 
+            <Animated.View 
+                entering={FadeInDown.springify().damping(15)}
+                style={styles.wrapper}
+                >
+                <View style={styles.innerWrapper}>
+                    <Text style={styles.text}>
+                        Host: {hostName}
+                    </Text>
+                </View>
+            </Animated.View>}
+        </>
     )
 }
 
@@ -73,13 +70,13 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 17.5,
         borderTopLeftRadius: 17.5,
         width: '100%',
-        height: '100%',
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#161A30',
         borderColor: '#F0ECE5',
         borderWidth: 2.5,
         borderBottomWidth: 0,
+        padding: 5,
     },
     text: {
         fontSize: 30,

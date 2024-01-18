@@ -249,24 +249,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingVertical: 10,
     },
-    topRow: {
-        width: '100%',
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-        padding: 10,
-    },
-    closeButton: {
-        padding: 10,
-        borderRadius: 100,
-        backgroundColor: 'red',
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    codeText: {
-        color: '#F0ECE5',
-        fontSize: 50,
-    },
     subText: {
         color: '#F0ECE5',
         fontSize: 20,
