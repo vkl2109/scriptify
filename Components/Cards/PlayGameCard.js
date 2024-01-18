@@ -112,6 +112,16 @@ export function PlayGameCard ({ code }) {
         }
     }
 
+    const handleRating = async (rating) => {
+        try {
+            
+        }
+        catch (e) {
+            console.log(e)
+            setError(true)
+        }
+    }
+
     const TurnRenderer = useCallback(() => {
         if (!currentGameData) return <LoadingView />
         const currentPlayer = currentGameData?.players[currentGameData?.currentTurn]
@@ -136,7 +146,7 @@ export function PlayGameCard ({ code }) {
                 :
                 <RateGameCard
                     currentPlayer={currentPlayer}
-                    code={code}
+                    handleRating={handleRating}
                     />
                 }
             </Animated.View>

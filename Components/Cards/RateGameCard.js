@@ -13,26 +13,22 @@ import { Rating, AirbnbRating } from 'react-native-ratings';
 
 export function RateGameCard ({ 
     currentPlayer,
-    code,
+    handleRating,
 }) {
     const { choice, name } = currentPlayer
     const [ hasRated, setHasRated] = useState(false)
     const [ currentRating, setCurrentRating ] = useState(3)
 
-    const handleSubmit = async () => {
-        try {
-            
-        }
-        catch (e) {
-            console.log(e)
-        }
+    const handleSubmit = () => {
+        handleRating(currentRating)
+        setHasRated(true)
     }
 
     return(
         <MainCard scale={.75}>
             <View style={styles.innerWrapper}>
                 <View style={styles.mainTxtWrapper}>
-                    <Text style={styles.choiceTxt}>{choice || "Test"}</Text>
+                    <Text style={styles.choiceTxt}>{choice}'s Turn</Text>
                     <View style={styles.divider} />
                     <Text style={styles.instructions}>Rate {name}'s impression!</Text>
                 </View>
@@ -40,6 +36,7 @@ export function RateGameCard ({
                     <AirbnbRating 
                         reviewColor={"#31304D"}
                         selectedColor={"#31304D"}
+                        readonly={hasRated}
                         ratingContainerStyle={styles.ratingInnerWrapper}
                         onFinishRating={(rating) => setCurrentRating(rating)}
                         />
