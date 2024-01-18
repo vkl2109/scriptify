@@ -4,41 +4,29 @@ import {
     Text,
     ActivityIndicator
 } from 'react-native'
+import {
+    useState
+} from 'react'
 import { MainCard } from './MainCard'
 import { PrimaryButton } from '../Buttons/PrimaryButton'
-import {
-    useContext,
-} from 'react'
-import {
-    AuthContext,
-} from '../../Context'
 
 export function IndivGameCard ({ 
     currentPlayer,
     handleNext = () => {}
 }) {
-    const { deviceID: authDeviceID } = useContext(AuthContext)
-    const { choice, name, deviceID: playerDeviceID, quote } = currentPlayer
+    const { choice, name, quote } = currentPlayer
+    const [ waiting, setWaiting ] = useState(true)
 
     return(
         <MainCard scale={.75}>
             <View style={styles.innerWrapper}>
                 <View style={styles.mainTxtWrapper}>
-                    <Text style={styles.choiceTxt}>{choice || "Test"}</Text>
+                    <Text style={styles.choiceTxt}>Your Turn</Text>
                     <View style={styles.divider} />
-                    {authDeviceID == playerDeviceID 
-                    ?
-                    <>
-                        <Text style={styles.instructions}>Give Us Your Best Impression!</Text>
-                        <Text style={styles.quoteTxt}>{quote || "quote"}</Text>
-                    </>
-                    :
-                    <>
-                        <Text style={styles.instructions}>Rate this impression!</Text>
-                    </>
-                    }
+                    <Text style={styles.instructions}>Give Us Your Best {choice} Impression!</Text>
                 </View>
-                {authDeviceID == playerDeviceID ?
+                <Text style={styles.quoteTxt}>"{quote || "quote"}"</Text>
+                {waiting ?
                 <PrimaryButton 
                     text="Next"
                     onPress={handleNext}
@@ -68,7 +56,6 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     mainTxtWrapper: {
-        flex: 1,
         width: '100%',
         justifyContent: 'flex-start',
         alignItems: 'center',
@@ -87,8 +74,8 @@ const styles = StyleSheet.create({
     },
     instructions: {
         color: '#F0ECE5',
-        fontSize: 20,
-        fontWeight: 100,
+        fontSize: 15,
+        fontWeight: '100',
         textAlign: 'center',
     },
     quoteTxt: {

@@ -68,22 +68,8 @@ export function ChoosePlayerModal({ unchosen, isVisible, setIsVisible, code, tot
     const [ name, setName ] = useState('')
     const [ error, setError ] = useState('')
     const [ choice, setChoice ] = useState()
-    const [ availableChoices, setAvailableChoices ] = useState([])
     const navigation = useNavigation()
     const { currentUser, deviceID } = useContext(AuthContext)
-
-    // useEffect(() => {
-    //     const fetchChoices = async () => {
-    //         try {
-    //             const sessionData = await fetchDoc('sessions', code)
-    //         }
-    //         catch (e) {
-    //             console.log(e)
-    //         }
-    //     }
-
-    //     fetchChoices()
-    // },[])
 
     const handlePlay = async () => {
         try {

@@ -124,8 +124,6 @@ export function PlayGameCard ({ code }) {
 
     const TurnRenderer = useCallback(() => {
         if (!currentGameData) return <LoadingView />
-        const currentPlayer = currentGameData?.players[currentGameData?.currentTurn]
-        const { deviceID: playerDeviceID } = currentPlayer
         if (currentGameData?.hasFinished) return (
             <Animated.View entering={SlideInRight.duration(500)} exiting={SlideOutLeft.duration(500)}>
                 
@@ -136,7 +134,9 @@ export function PlayGameCard ({ code }) {
                 <ChameleonCard code={code} handleNextTurn={handleNextTurn}/>
             </Animated.View>
         )
-        else return (
+        const currentPlayer = currentGameData?.players[currentGameData?.currentTurn]
+        const { deviceID: playerDeviceID } = currentPlayer
+        return (
             <Animated.View entering={SlideInRight.duration(500)} exiting={SlideOutLeft.duration(500)}>
                 {playerDeviceID == authDeviceID ?
                 <IndivGameCard 

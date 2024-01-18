@@ -52,6 +52,14 @@ export function LandingScreen () {
 
     return(
         <SafeAreaView style={styles.container}>
+            <JoinGameModal 
+                isVisible={joinGame}
+                setIsVisible={setJoinGame}
+                />
+            <AuthModal
+                isVisible={isAuth}
+                setIsVisible={setIsAuth}
+                />
             <Image 
               source={logo}
               style={styles.logoImg(width)}
@@ -67,14 +75,6 @@ export function LandingScreen () {
                     variant="secondary"
                     onPress={()=>setJoinGame(true)}
                     text={"Join Game"}
-                    />
-                <JoinGameModal 
-                    isVisible={joinGame}
-                    setIsVisible={setJoinGame}
-                    />
-                <AuthModal
-                    isVisible={isAuth}
-                    setIsVisible={setIsAuth}
                     />
             </View>
         </SafeAreaView>

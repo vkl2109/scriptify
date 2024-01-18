@@ -63,6 +63,8 @@ export function JoinGameModal ({ isVisible, setIsVisible }) {
                     code: code,
                 })
             }
+            setError('')
+            setCode('')
         }
         catch (e) {
             console.log(e)

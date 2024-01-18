@@ -42,7 +42,7 @@ export function RateGameCard ({
                         />
                 </View>
                 {hasRated ? 
-                <Text style={styles.waitingTxt}>waiting for other players</Text>
+                <Text style={styles.waitingTxt}>waiting for other players...</Text>
                 :
                 <PrimaryButton
                     text="Rate"
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     instructions: {
         color: '#F0ECE5',
         fontSize: 20,
-        fontWeight: 100,
+        fontWeight: '100',
         textAlign: 'center',
     },
     quoteTxt: {
@@ -120,6 +120,7 @@ const styles = StyleSheet.create({
     waitingTxt: {
         color: '#F0ECE5',
         fontSize: 20,
+        fontWeight: '100',
         textAlign: 'center',
     },
     center: {

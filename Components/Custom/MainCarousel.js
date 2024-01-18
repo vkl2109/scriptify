@@ -137,7 +137,8 @@ const styles = StyleSheet.create({
     },
     caption: {
         color: '#F0ECE5',
-        fontSize: 30,
+        fontSize: 25,
+        textAlign: 'center',
         fontWeight: 'bold',
     }
 })
