@@ -3,16 +3,24 @@ import {
     Modal,
     Text,
     KeyboardAvoidingView,
-    Animated
 } from 'react-native'
 import { 
     useState, 
     useEffect,
-    useRef,
 } from 'react'
 import {
     PrimaryButton
 } from '../Buttons/PrimaryButton'
+import Animated, { 
+    SlideInRight,
+    SlideInLeft,
+    SlideInUp,
+    SlideInDown,
+    SlideOutRight,
+    SlideOutLeft,
+    SlideOutUp,
+    SlideOutDown
+} from 'react-native-reanimated';
 import {
     CodeInput,
 } from '../Custom/CodeInput'
@@ -22,21 +30,18 @@ import {
 } from '../Headers/BackHeader'
 import { useNavigation } from '@react-navigation/native';
 import { fetchDoc } from '../../Hooks'
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { StatusBar } from 'expo-status-bar';
 
 export function JoinGameModal ({ isVisible, setIsVisible }) {
+    const insets = useSafeAreaInsets();
     const navigation = useNavigation();
     const [ code, setCode ] = useState('')
     const [ error, setError ] = useState('')
-    const heightAnim = useRef(new Animated.Value(-300)).current;
+    const [ cardVisible, setCardVisible ] = useState(false)
 
     useEffect(() => {
-        if (isVisible) {
-            Animated.timing(heightAnim, {
-                toValue: 0,
-                duration: 300,
-                useNativeDriver: false,
-            }).start();
-        }
+        if (isVisible) setCardVisible(true)
     },[isVisible])
 
     const handleJoin = async () => {
@@ -66,15 +71,8 @@ export function JoinGameModal ({ isVisible, setIsVisible }) {
     }
 
     const handleClose = () => {
-        Animated.timing(heightAnim, {
-            toValue: -300,
-            duration: 300,
-            useNativeDriver: false,
-        }).start(({finished}) => {
-            setIsVisible(false)
-            setCode('')
-            setError('')
-        });
+        setCardVisible(false)
+        setTimeout(() => setIsVisible(false), 500)
     }
 
     return(
@@ -82,15 +80,19 @@ export function JoinGameModal ({ isVisible, setIsVisible }) {
             animationType='fade'
             visible={isVisible}
             transparent
-            onRequestClose={() => setIsVisible(false)}>
+            onRequestClose={handleClose}>
             <BlurView
                 style={styles.wrapper}
                 intensity={10}
                 >
-                <KeyboardAvoidingView style={styles.wrapper} behavior='padding'>
-                    <Animated.View style={[styles.main, {
-                        top: heightAnim,
-                    }]}>
+                {/* <KeyboardAvoidingView style={styles.wrapper} behavior='padding'> */}
+                    <StatusBar style="dark"/>
+                    {cardVisible &&
+                    <Animated.View
+                        entering={SlideInUp.springify().damping(15)}
+                        exiting={SlideOutUp.springify().damping(15)}
+                        style={styles.main(insets)}
+                        >
                         <BackHeader 
                         title='Enter Code'
                         primary={false}
@@ -106,8 +108,8 @@ export function JoinGameModal ({ isVisible, setIsVisible }) {
                             text={"Join"}
                             onPress={handleJoin}
                             />
-                    </Animated.View>    
-                </KeyboardAvoidingView>
+                    </Animated.View>}   
+                {/* </KeyboardAvoidingView> */}
             </BlurView>
         </Modal>
     )
@@ -119,18 +121,19 @@ const styles = StyleSheet.create({
         height: '100%',
         flex: 1,
     },
-    main: {
+    main:(i) => ({
         backgroundColor: 'white',
         borderRadius: 20,
-        paddingTop: 30,
-        paddingVertical: 20,
-        padding: 10,
+        paddingTop: i.top,
+        paddingBottom: 20,
+        paddingHorizontal: 10,
         width: '100%',
-        justifyContent: 'space-evenly',
+        height: 'auto',
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
         alignItems: 'center',
-        position: 'absolute',
         left: 0,
-    },
+    }),
     row: {
         justifyContent: 'flex-start',
         width: '100%',
