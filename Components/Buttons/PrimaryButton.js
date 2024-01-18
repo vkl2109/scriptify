@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
         width: '90%',
         height: 50,
         borderRadius: 10,
-        padding: 3,
+        padding: 2.5,
         shadowColor: '#B6BBC4',
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.5,
@@ -58,6 +58,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 8,
-        borderWidth: 2,
+        borderWidth: 2.5,
     }
 })
