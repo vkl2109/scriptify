@@ -21,6 +21,7 @@ import {
   doc,
   onSnapshot,
   updateDoc,
+  arrayUnion,
 } from "firebase/firestore";
 import { db } from '../../firebase'
 import Animated, { 
@@ -114,28 +115,10 @@ export function PlayGameCard ({ code }) {
 
     const handleRating = async (rating) => {
         try {
-            let newPlayers = []
-            players.map((player, index) => {
-                if (index == turns?.currentTurn) {
-                    let newRatings = {}
-                    if (player.ratings) newRatings = JSON.parse(JSON.stringify(player.ratings))
-                    newRatings[turns?.currentRound] = {
-                        [authDeviceID]: rating
-                    }
-                    let newPlayer = {
-                        choice: player.choice,
-                        deviceID: player.deviceID,
-                        name: player.name,
-                        ratings: newRatings
-                    }
-                    newPlayers.push(newPlayer)
-                }
-                else {
-                    newPlayers.push(player)
-                }
-            })
-            await updateDoc(sessionRef, {
-                players: newPlayers
+            const sessionRatingRef = doc(db, "sessions", code, "rounds", `round${turns.currentRound}`)
+            const ratingRef = `ratings.${authDeviceID}`
+            await updateDoc(sessionRatingRef, {
+                [ratingRef]: rating,
             })
             return true
         }

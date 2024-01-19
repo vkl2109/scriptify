@@ -105,6 +105,39 @@ export function RoundStepper ({
         )
     }
 
+    function NumberRenderer ({ index }) {
+        if (introRound) return(
+            <View style={styles.iconWrapper}>
+                <Text style={[styles.iconText, { color: '#B6BBC4'}]}>
+                    {index + 1}
+                </Text>
+            </View>
+        )
+        if (currentTurn == index) return(
+            <Animated.View 
+                style={[styles.iconWrapper, styles.selectedIcon, backgroundAnimatedStyle]} 
+                >
+                <Animated.Text style={[styles.iconText, colorAnimatedStyle]}>
+                    {index + 1}
+                </Animated.Text>
+            </Animated.View>
+        )
+        else if (currentTurn > index) return(
+            <View style={styles.pastIconWrapper}>
+                <Text style={[styles.iconText, { color: '#31304D'}]}>
+                    {index + 1}
+                </Text>
+            </View>
+        )
+        return(
+            <View style={styles.iconWrapper}>
+                <Text style={[styles.iconText, { color: '#B6BBC4'}]}>
+                    {index + 1}
+                </Text>
+            </View>
+        )
+    }
+
 
     return(
         <View style={styles.wrapper(width)}>
@@ -120,30 +153,9 @@ export function RoundStepper ({
                     }]} />
                     <View style={styles.iconsWrapper}>
                         <InfoRenderer />
-                        {Array(numRounds).fill(null).map(( _, index) => {
-                            return(currentTurn == index && !introRound ?
-                                <Animated.View 
-                                    style={[styles.iconWrapper, styles.selectedIcon, backgroundAnimatedStyle]} 
-                                    key={index}
-                                    >
-                                    <Animated.Text style={[styles.iconText, colorAnimatedStyle]}>
-                                        {index + 1}
-                                    </Animated.Text>
-                                </Animated.View>
-                                :
-                                <View 
-                                    style={[styles.iconWrapper, 
-                                        { borderColor: currentTurn > index ? "#F0ECE5" : "#B6BBC4" },
-                                        { backgroundColor: currentTurn > index ? "#F0ECE5" : "transparent" }
-                                    ]} 
-                                    key={index}
-                                    >
-                                    <Text style={[styles.iconText, { color: currentTurn > index ? "#31304D" : "#B6BBC4" }]}>
-                                        {index + 1}
-                                    </Text>
-                                </View>
-                            )
-                        })}
+                        {Array(numRounds).fill(null).map(( _, index) => 
+                            <NumberRenderer index={index} key={index} />
+                        )}
                         <CheckRenderer />
                     </View>
                 </View>
@@ -190,7 +202,7 @@ const styles = StyleSheet.create({
     }),
     innerPill: {
         height: 30,
-        // borderRadius: 100,
+        borderRadius: 100,
         backgroundColor: '#F0ECE5',
         zIndex: 10,
     },
@@ -210,18 +222,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 100,
-        borderColor: '#F0ECE5',
+        borderColor: '#B6BBC4',
         padding: 2.5,
-        borderWidth: 2,
-    },
-    preCheckIconWrapper: {
-        width: 26,
-        height: 26,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 100,
-        backgroundColor: '#B6BBC4',
-        padding: 2.5,
+        borderWidth: 2.5,
     },
     pastIconWrapper: {
         width: 26,
@@ -242,7 +245,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
     },
     iconText: {
-        fontSize: 15,
+        fontSize: 12,
         fontWeight: 'bold',
     }
 })
