@@ -78,7 +78,7 @@ export function WaitingScreen ({ route }) {
                 setHost(sessionData?.host)
                 setUnchosen(newChosen)
                 setPlayers(newPlayers)
-                if (sessionData?.hasStarted) navigation.navigate(
+                if (sessionData?.turns?.hasStarted) navigation.navigate(
                     "Game",
                     { code: code }
                 )

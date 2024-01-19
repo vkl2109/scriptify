@@ -179,7 +179,7 @@ export function PlayGameCard ({ code }) {
                 }
             </Animated.View>
         )
-    }, [turns])
+    }, [turns, players])
 
     return(
         <>

@@ -24,11 +24,11 @@ export function PlayerList ({
                     renderItem={({ item, index }) => (
                         <PlayerRow key={index} player={item} />
                     )}
-                    ListEmptyComponent={
-                        <View style={styles.waiting}>
-                            <ActivityIndicator size='large' />
-                        </View>
-                    }
+                    // ListEmptyComponent={
+                    //     <View style={styles.waiting}>
+                    //         <ActivityIndicator size='large' />
+                    //     </View>
+                    // }
                     />
             </View>
             <TouchableOpacity 
