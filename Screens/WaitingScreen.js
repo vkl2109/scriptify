@@ -42,6 +42,7 @@ import { fetchDoc } from '../Hooks'
 import { db } from '../firebase'
 import { friendCategory, roundsData } from '../constants'
 import { Feather } from '@expo/vector-icons';
+import { getFunctions, httpsCallable } from "firebase/functions";
 
 export function WaitingScreen ({ route }) {
     const { category, code } = route.params
@@ -53,6 +54,7 @@ export function WaitingScreen ({ route }) {
     const [ isFull, setIsFull ] = useState(false)
     const [ totalPlayers, setTotalPlayers ] = useState([])
     const [ host, setHost ] = useState('')
+    const [ loading, setLoading ] = useState(false)
     const [ rounds, setRounds ] = useState(roundsData[0].label)
     const navigation = useNavigation()
     const { height, width } = useWindowDimensions()
@@ -97,28 +99,15 @@ export function WaitingScreen ({ route }) {
 
     const handleStart = async () => {
         try {
-            const newPlayersArray = []
-            totalPlayers.map((player) => {
-                if (player?.deviceID != '') {
-                    newPlayersArray.push(player)
-                }
+            setLoading(true)
+            const functions = getFunctions();
+            const updateWaitingRoom = httpsCallable(functions, 'updateWaitingRoom');
+            const result = await updateWaitingRoom({ 
+                totalPlayers: totalPlayers, 
+                rounds: rounds, 
+                code: code,
             })
-            const randomSuspect = Math.floor(Math.random() * newPlayersArray.length)
-            await updateDoc(sessionRef, {
-                players: newPlayersArray,
-                suspect: randomSuspect,
-                turns: {
-                    hasStarted: true,
-                    hasFinished: false,
-                    currentRound: 1,
-                    currentTurn: 0,
-                    totalRounds: rounds,
-                }
-            })
-            const roundsRef = doc(db, "sessions", code, "ratings", "round1")
-            await setDoc(roundsRef, {
-                test: []
-            })
+            if (!result?.data?.success) throw new Error ("failed to update game")
             navigation.navigate(
                 "Game",
                 { code: code }
@@ -126,6 +115,9 @@ export function WaitingScreen ({ route }) {
         }
         catch (e) {
             console.log(e)
+        }
+        finally {
+            setLoading(false)
         }
     }
 
@@ -219,6 +211,7 @@ export function WaitingScreen ({ route }) {
                     <PrimaryButton 
                         text={'Start Game'}
                         onPress={handleStart}
+                        loading={loading}
                         />
                 </>
             }

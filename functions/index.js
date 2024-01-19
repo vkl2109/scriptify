@@ -9,6 +9,7 @@
 
 const { onCall } = require("firebase-functions/v2/https");
 const { createGameHandler } = require("./handlers/createGameHandler")
+const { updateWaitingHandler } = require("./handlers/updateWaitingHandler")
 
 // Create and deploy your first functions
 // https://firebase.google.com/docs/functions/get-started
@@ -20,4 +21,8 @@ const { createGameHandler } = require("./handlers/createGameHandler")
 
 exports.createNewGame = onCall(async (request) => {
     return createGameHandler(request)
+})
+
+exports.updateWaitingRoom = onCall(async (request) => {
+    return updateWaitingHandler(request)
 })

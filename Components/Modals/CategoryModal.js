@@ -63,19 +63,6 @@ export function CategoryModal ({ isVisible, setIsVisible, category }) {
             setLoading(true)
             const newCode = await generateCode()
             if (!newCode) throw new Error('Code Check Failed')
-            // let newPlayers = []
-            // category.players.map((player) => {
-            //     newPlayers.push({
-            //         name: '',
-            //         deviceID: '',
-            //         choice: player
-            //     })
-            // })
-            // await setDoc(doc(db, "sessions", newCode), {
-            //     category: category.title,
-            //     host: deviceID,
-            //     players: newPlayers,
-            // })
             const functions = getFunctions();
             const createNewGame = httpsCallable(functions, 'createNewGame');
             const result = await createNewGame({ code: newCode, category: category, deviceID: deviceID })
