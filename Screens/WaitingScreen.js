@@ -50,7 +50,7 @@ export function WaitingScreen ({ route }) {
     const [ players, setPlayers ] = useState(null)
     const [ unchosen, setUnchosen] = useState(new Set())
     const [ showCancel, setCancel ] = useState(false)
-    const [ hasChosen, setHasChosen ] = useState(false)
+    const [ hasChosen, setHasChosen ] = useState(true)
     const [ isFull, setIsFull ] = useState(false)
     const [ totalPlayers, setTotalPlayers ] = useState([])
     const [ host, setHost ] = useState('')

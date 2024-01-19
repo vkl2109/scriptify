@@ -53,7 +53,7 @@ export function JoinGameModal ({ isVisible, setIsVisible }) {
                 return
             }
             handleClose()
-            if (checkSessionDB.hasStarted) {
+            if (checkSessionDB?.turns?.hasStarted) {
                 navigation.navigate('Game', {
                     code: code,
                 })

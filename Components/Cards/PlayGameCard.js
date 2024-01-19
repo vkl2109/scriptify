@@ -15,6 +15,7 @@ import { MessageModal } from '../Modals/MessageModal'
 import { ChameleonCard } from './ChameleonCard'
 import { IndivGameCard } from './IndivGameCard'
 import { RateGameCard } from './RateGameCard'
+import { IntroRoundCard } from './IntroRoundCard'
 import CircularProgress from 'react-native-circular-progress-indicator';
 import {
   doc,
@@ -153,6 +154,15 @@ export function PlayGameCard ({ code }) {
         else if (turns.currentTurn == players.length) return(
             <Animated.View entering={SlideInRight.springify().damping(15)} exiting={SlideOutLeft.springify().damping(15)}>
                 <ChameleonCard code={code} handleNextTurn={handleNextTurn}/>
+            </Animated.View>
+        )
+        else if (turns.currentTurn == 0) return(
+            <Animated.View entering={SlideInRight.springify().damping(15)} exiting={SlideOutLeft.springify().damping(15)}>
+                <IntroRoundCard 
+                    code={code}
+                    currentRound={turns.currentRound}
+                    handleNext={handleNextTurn}
+                    />
             </Animated.View>
         )
         const currentPlayer = players[turns.currentTurn]
