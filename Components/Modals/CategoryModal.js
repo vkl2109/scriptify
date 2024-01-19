@@ -38,6 +38,7 @@ import { db } from "../../firebase";
 import { MessageModal } from './MessageModal'
 import { AuthContext } from '../../Context'
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { getFunctions, httpsCallable } from "firebase/functions";
 
 export function CategoryModal ({ isVisible, setIsVisible, category }) {
     const insets = useSafeAreaInsets();
@@ -62,19 +63,23 @@ export function CategoryModal ({ isVisible, setIsVisible, category }) {
             setLoading(true)
             const newCode = await generateCode()
             if (!newCode) throw new Error('Code Check Failed')
-            let newPlayers = []
-            category.players.map((player) => {
-                newPlayers.push({
-                    name: '',
-                    deviceID: '',
-                    choice: player
-                })
-            })
-            await setDoc(doc(db, "sessions", newCode), {
-                category: category.title,
-                host: deviceID,
-                players: newPlayers,
-            })
+            // let newPlayers = []
+            // category.players.map((player) => {
+            //     newPlayers.push({
+            //         name: '',
+            //         deviceID: '',
+            //         choice: player
+            //     })
+            // })
+            // await setDoc(doc(db, "sessions", newCode), {
+            //     category: category.title,
+            //     host: deviceID,
+            //     players: newPlayers,
+            // })
+            const functions = getFunctions();
+            const createNewGame = httpsCallable(functions, 'createNewGame');
+            const result = await createNewGame({ code: newCode, category: category, deviceID: deviceID })
+            if (!result?.data?.success) throw new Error ("failed to create game")
             setCardVisible(false)
             setTimeout(() => {
                 setIsVisible(false)
@@ -110,7 +115,7 @@ export function CategoryModal ({ isVisible, setIsVisible, category }) {
                 <MessageModal
                     isVisible={error}
                     setIsVisible={setError}
-                    message={"Failed to Connect: Check Connection"}
+                    message={"Bad Connection"}
                     />
                 {cardVisible && 
                 <Animated.View style={styles.main(width)} entering={SlideInDown.springify().damping(15)} exiting={SlideOutDown.springify().damping(15)}>
