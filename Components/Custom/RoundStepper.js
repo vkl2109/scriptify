@@ -2,6 +2,7 @@ import {
     StyleSheet,
     View,
     Text,
+    TouchableOpacity,
     useWindowDimensions
 } from 'react-native'
 import {
@@ -21,15 +22,21 @@ import Animated, {
     FadeInDown,
 } from 'react-native-reanimated';
 
-export function RoundStepper ({ turns, numRounds }) {
+export function RoundStepper ({ 
+    turns, 
+    numRounds,
+    introRound,
+    setIntroRound,
+}) {
     const { currentRound, currentTurn, totalRounds } = turns
     const { height, width } = useWindowDimensions()
     const colorAnim = useSharedValue(0)
     const widthAnim = useSharedValue(0)
 
     useEffect(() => {
-        widthAnim.value = withTiming((width * 0.75) * (currentTurn) / (numRounds))
-    },[currentTurn])
+        if (introRound) widthAnim.value = withTiming(0)
+        else widthAnim.value = withTiming((width * 0.75) * (currentTurn + 1) / (numRounds + 1))
+    },[currentTurn, introRound])
     
     useEffect(() => {
         colorAnim.value = withRepeat(withTiming(1 - colorAnim.value, { duration: 1000 }), 0);
@@ -67,34 +74,34 @@ export function RoundStepper ({ turns, numRounds }) {
     function CheckRenderer () {
         if (currentRound > totalRounds) return (
             <View style={styles.iconWrapper}>
-                <AntDesign name="check" size={20} color="#F0ECE5" />
+                <AntDesign name="check" size={18} color="#F0ECE5" />
             </View>
         )
         else if (currentTurn == numRounds) return(
             <Animated.View style={[styles.selectedIcon, backgroundAnimatedStyle]}>
-                <AnimatedCheck name="check" size={20} style={colorAnimatedStyle} />
+                <AnimatedCheck name="check" size={18} style={colorAnimatedStyle} />
             </Animated.View>
         )
         else return (
             <View style={styles.iconWrapper}>
-                <AntDesign name="check" size={20} color="#B6BBC4" />
+                <AntDesign name="check" size={18} color="#B6BBC4" />
             </View>
         )
     }
 
     function InfoRenderer () {
         return (
-            <>
-                {currentTurn == 0 ?
+            <TouchableOpacity onPress={() => setIntroRound(true)}>
+                {introRound ?
                 <Animated.View style={[styles.selectedIcon, backgroundAnimatedStyle]}>
-                    <AnimatedInfo name="information" size={20} style={colorAnimatedStyle} />
+                    <AnimatedInfo name="information" size={16} style={colorAnimatedStyle} />
                 </Animated.View>
                 :
-                <View style={styles.iconWrapper}>
-                    <Ionicons name="information" size={20} color="#F0ECE5" />
+                <View style={styles.pastIconWrapper}>
+                    <Ionicons name="information" size={16} color="#31304D" />
                 </View>
                 }
-            </>
+            </TouchableOpacity>
         )
     }
 
@@ -114,7 +121,7 @@ export function RoundStepper ({ turns, numRounds }) {
                     <View style={styles.iconsWrapper}>
                         <InfoRenderer />
                         {Array(numRounds).fill(null).map(( _, index) => {
-                            return(currentTurn == index + 1 ?
+                            return(currentTurn == index && !introRound ?
                                 <Animated.View 
                                     style={[styles.iconWrapper, styles.selectedIcon, backgroundAnimatedStyle]} 
                                     key={index}
@@ -177,7 +184,7 @@ const styles = StyleSheet.create({
         width: w * 0.75,
         margin: 10,
         overflow: 'hidden',
-        borderWidth: 1,
+        borderWidth: 2,
         borderColor: '#F0ECE5',
         borderRadius: 100,
     }),
@@ -189,7 +196,7 @@ const styles = StyleSheet.create({
     },
     iconsWrapper: {
         width: '100%',
-        height: 30,
+        height: 26,
         position: 'absolute',
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -198,14 +205,32 @@ const styles = StyleSheet.create({
         zIndex: 100,
     },
     iconWrapper: {
-        width: 28,
-        height: 28,
+        width: 26,
+        height: 26,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 100,
         borderColor: '#F0ECE5',
         padding: 2.5,
-        borderWidth: 1,
+        borderWidth: 2,
+    },
+    preCheckIconWrapper: {
+        width: 26,
+        height: 26,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 100,
+        backgroundColor: '#B6BBC4',
+        padding: 2.5,
+    },
+    pastIconWrapper: {
+        width: 26,
+        height: 26,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 100,
+        borderColor: '#31304D',
+        borderWidth: 2.5,
     },
     selectedIcon: {
         backgroundColor: '#161A30',
@@ -214,7 +239,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.9,
         borderRadius: 100,
         padding: 2.5,
-        borderWidth: 1,
+        borderWidth: 2,
     },
     iconText: {
         fontSize: 15,

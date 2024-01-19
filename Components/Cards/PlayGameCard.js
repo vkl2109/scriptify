@@ -35,6 +35,7 @@ export function PlayGameCard ({ code }) {
     const [ players, setPlayers ] = useState(null)
     const [ turns, setTurns ] = useState(null)
     const [ error, setError ] = useState(false)
+    const [ introRound, setIntroRound ] = useState(true)
     const sessionRef = doc(db, 'sessions', code)
     const { deviceID: authDeviceID } = useContext(AuthContext)
 
@@ -156,12 +157,12 @@ export function PlayGameCard ({ code }) {
                 <ChameleonCard code={code} handleNextTurn={handleNextTurn}/>
             </Animated.View>
         )
-        else if (turns.currentTurn == 0) return(
+        else if (introRound) return(
             <Animated.View entering={SlideInRight.springify().damping(15)} exiting={SlideOutLeft.springify().damping(15)}>
                 <IntroRoundCard 
                     code={code}
                     currentRound={turns.currentRound}
-                    handleNext={handleNextTurn}
+                    handleNext={() => setIntroRound(false)}
                     />
             </Animated.View>
         )
@@ -182,7 +183,7 @@ export function PlayGameCard ({ code }) {
                 }
             </Animated.View>
         )
-    }, [turns, players])
+    }, [turns, players, introRound])
 
     return(
         <>
@@ -198,6 +199,8 @@ export function PlayGameCard ({ code }) {
             <RoundStepper 
                 turns={turns}
                 numRounds={players.length}
+                introRound={introRound}
+                setIntroRound={setIntroRound}
                 />
             <View style={{height: 25 }} />
             <TurnRenderer />

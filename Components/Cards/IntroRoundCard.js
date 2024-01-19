@@ -38,7 +38,10 @@ export function IntroRoundCard ({
                 :
                     <Text style={styles.loadingTxt}>{loadTxt}</Text>
                 }
-                <View />
+                <PrimaryButton 
+                    text={"Next"}
+                    onPress={handleNext}
+                    />
             </View>
         </MainCard>
     )
