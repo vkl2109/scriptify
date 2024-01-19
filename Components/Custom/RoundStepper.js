@@ -26,7 +26,7 @@ export function RoundStepper ({ gameData }) {
     const widthAnim = useSharedValue(0)
 
     useEffect(() => {
-        widthAnim.value = withTiming((width * 0.75) * (currentTurn + 1) / (numRounds + 1))
+        widthAnim.value = withTiming((width * 0.75) * (currentTurn - 1) / (numRounds))
     },[currentTurn])
     
     useEffect(() => {
@@ -59,13 +59,13 @@ export function RoundStepper ({ gameData }) {
     })
 
     function CheckRenderer () {
-        if (currentRound > totalRounds) return <AntDesign name="checkcircle" size={50} color="#F0ECE5" />
+        if (currentRound > totalRounds) return <AntDesign name="checkcircle" size={29} color="#F0ECE5" />
         else if (currentTurn == numRounds) return(
             <Animated.View style={[styles.selectedIcon, backgroundAnimatedStyle]}>
-                <AnimatedCheck name="checkcircleo" size={50} style={colorAnimatedStyle} />
+                <AnimatedCheck name="checkcircle" size={29} style={colorAnimatedStyle} />
             </Animated.View>
         )
-        else return <AntDesign name="checkcircleo" size={50} color="#B6BBC4" />
+        else return <AntDesign name="checkcircle" size={29} color="#B6BBC4" />
     }
 
     const AnimatedCheck = Animated.createAnimatedComponent(AntDesign)
@@ -82,36 +82,36 @@ export function RoundStepper ({ gameData }) {
                     <Animated.View style={[styles.innerPill, {
                         width: widthAnim
                     }]} />
-                </View>
-                {/* <View style={styles.iconsWrapper}>
-                    {Array(numRounds).fill(null).map(( _, index) => {
-                        return(currentTurn == index ?
-                            <Animated.View 
-                                style={[styles.iconWrapper, styles.selectedIcon, backgroundAnimatedStyle]} 
-                                key={index}
-                                >
-                                <Animated.Text style={[styles.iconText, colorAnimatedStyle]}>
-                                    {index + 1}
-                                </Animated.Text>
-                            </Animated.View>
-                            :
-                            <View 
-                                style={[styles.iconWrapper, 
-                                    { borderColor: currentTurn > index ? "#F0ECE5" : "#B6BBC4" },
-                                    { backgroundColor: currentTurn > index ? "#F0ECE5" : "transparent" }
-                                ]} 
-                                key={index}
-                                >
-                                <Text style={[styles.iconText, { color: currentTurn > index ? "#31304D" : "#B6BBC4" }]}>
-                                    {index + 1}
-                                </Text>
-                            </View>
-                        )
-                    })}
-                    <View style={{ margin: 10 }}>
-                        <CheckRenderer />
+                    <View style={styles.iconsWrapper}>
+                        {Array(numRounds).fill(null).map(( _, index) => {
+                            return(currentTurn == index ?
+                                <Animated.View 
+                                    style={[styles.iconWrapper, styles.selectedIcon, backgroundAnimatedStyle]} 
+                                    key={index}
+                                    >
+                                    <Animated.Text style={[styles.iconText, colorAnimatedStyle]}>
+                                        {index + 1}
+                                    </Animated.Text>
+                                </Animated.View>
+                                :
+                                <View 
+                                    style={[styles.iconWrapper, 
+                                        { borderColor: currentTurn > index ? "#F0ECE5" : "#B6BBC4" },
+                                        { backgroundColor: currentTurn > index ? "#F0ECE5" : "transparent" }
+                                    ]} 
+                                    key={index}
+                                    >
+                                    <Text style={[styles.iconText, { color: currentTurn > index ? "#31304D" : "#B6BBC4" }]}>
+                                        {index + 1}
+                                    </Text>
+                                </View>
+                            )
+                        })}
+                        <View>
+                            <CheckRenderer />
+                        </View>
                     </View>
-                </View> */}
+                </View>
             </View>
         </View>
     )
@@ -151,29 +151,31 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         borderWidth: 1,
         borderColor: '#F0ECE5',
-        borderRadius: 20,
+        borderRadius: 100,
     }),
     innerPill: {
         height: 30,
-        borderRadius: 30,
+        // borderRadius: 100,
         backgroundColor: '#F0ECE5',
+        zIndex: 10,
     },
     iconsWrapper: {
+        width: '100%',
+        height: 30,
+        position: 'absolute',
         flexDirection: 'row',
-        justifyContent: 'space-evenly',
+        justifyContent: 'space-between',
         alignItems: 'center',
-        width: '90%',
-        padding: 5,
         flexWrap: 'wrap',
+        zIndex: 100,
     },
     iconWrapper: {
-        width: 50,
-        height: 50,
+        width: 28,
+        height: 28,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 100,
-        borderWidth: 4,
-        margin: 10,
+        borderWidth: 2,
     },
     selectedIcon: {
         backgroundColor: '#161A30',
@@ -183,7 +185,7 @@ const styles = StyleSheet.create({
         borderRadius: 100,
     },
     iconText: {
-        fontSize: 25,
+        fontSize: 15,
         fontWeight: 'bold',
     }
 })

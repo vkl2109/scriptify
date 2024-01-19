@@ -3,7 +3,6 @@ import {
     Modal,
     View,
     Text,
-    TextInput,
     TouchableOpacity,
     FlatList,
     useWindowDimensions
@@ -11,7 +10,6 @@ import {
 import { 
     useState,
     useContext,
-    useEffect,
 } from 'react'
 import { BlurView } from 'expo-blur'
 import {
@@ -25,11 +23,8 @@ import {
   doc,
   updateDoc,
 } from "firebase/firestore";
-import { useNavigation } from '@react-navigation/native';
-import { fetchDoc } from '../../Hooks'
-import { Ionicons } from '@expo/vector-icons';
 import { AuthContext } from '../../Context'
-import { friendCategory } from '../../constants'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 function ChoicePlayer ({ player, selected }) {
     const { height, width } = useWindowDimensions()
@@ -64,19 +59,20 @@ const choiceStyles = StyleSheet.create({
     },
 })
 
-export function ChoosePlayerModal({ unchosen, isVisible, setIsVisible, code, totalPlayers }) {
-    const [ name, setName ] = useState('')
+export function ChoosePlayerModal({ 
+    unchosen, 
+    isVisible, 
+    setIsVisible, 
+    code, 
+    totalPlayers 
+}) {
     const [ error, setError ] = useState('')
-    const [ choice, setChoice ] = useState()
-    const navigation = useNavigation()
+    const [ choice, setChoice ] = useState(null)
     const { currentUser, deviceID } = useContext(AuthContext)
+    const insets = useSafeAreaInsets()
 
     const handlePlay = async () => {
         try {
-            if (!currentUser && name == '') {
-                setError('Enter Name')
-                return
-            }
             if (!choice) {
                 setError('Choose Player')
                 return
@@ -84,13 +80,20 @@ export function ChoosePlayerModal({ unchosen, isVisible, setIsVisible, code, tot
             const sessionRef = doc(db, 'sessions', code)
             const newPlayerObject = {
                 deviceID: deviceID,
-                name: name == '' ? currentUser : name,
+                name: currentUser,
                 choice: choice,
             }
             const newPlayersArray = []
             for (const player of totalPlayers) {
                 if (player?.choice == choice) {
                     newPlayersArray.push(newPlayerObject)
+                }
+                else if (player?.deviceID == deviceID) {
+                    newPlayersArray.push({
+                        deviceID: '',
+                        name: '',
+                        choice: player?.choice
+                    })
                 }
                 else {
                     newPlayersArray.push(player)
@@ -100,7 +103,6 @@ export function ChoosePlayerModal({ unchosen, isVisible, setIsVisible, code, tot
                 players: newPlayersArray
             })
             setChoice()
-            setName('')
             setError('')
             setIsVisible(false)
         }
@@ -127,11 +129,11 @@ export function ChoosePlayerModal({ unchosen, isVisible, setIsVisible, code, tot
             onRequestClose={() => setIsVisible(false)}
             >
             <BlurView
-                style={styles.wrapper}
+                style={styles.wrapper(insets)}
                 intensity={10}
                 >
                 <BackHeader 
-                    onPress={navigation.goBack}
+                    onPress={() => setIsVisible(false)}
                     />
                 <View style={styles.main}>
                     <Text style={styles.name}>{currentUser}</Text>
@@ -162,14 +164,14 @@ export function ChoosePlayerModal({ unchosen, isVisible, setIsVisible, code, tot
 }
 
 const styles = StyleSheet.create({
-    wrapper: {
+    wrapper:(i) => ({
         width: '100%',
         height: '100%',
         flex: 1,
         justifyContent: 'space-between',
-        paddingVertical: 50,
+        paddingTop: i.top + 10,
         alignItems: 'center'
-    },
+    }),
     main: {
         width: '75%',
         backgroundColor: 'white',
