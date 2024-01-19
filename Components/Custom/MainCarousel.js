@@ -53,7 +53,7 @@ export function MainCarousel () {
     useEffect(() => {
         const intervalId = setInterval(() => {
         setIndex((prevIndex) => (prevIndex + 1) % 3);
-        }, 1500);
+        }, 2000);
 
         // Cleanup the interval on component unmount
         return () => clearInterval(intervalId);

@@ -4,7 +4,6 @@ import {
     Text,
     ActivityIndicator
 } from 'react-native'
-import { MainCard } from './MainCard'
 import { RoundStepper } from '../Custom/RoundStepper'
 import {
     useState,
@@ -25,13 +24,7 @@ import {
 import { db } from '../../firebase'
 import Animated, { 
     SlideInRight,
-    SlideInLeft,
-    SlideInUp,
-    SlideInDown,
-    SlideOutRight,
     SlideOutLeft,
-    SlideOutUp,
-    SlideOutDown
 } from 'react-native-reanimated';
 import {
     AuthContext,

@@ -31,9 +31,12 @@ import { useNavigation } from '@react-navigation/native'
 import { AntDesign } from '@expo/vector-icons';
 import {
   doc,
+  collection,
+  addDoc,
   onSnapshot,
   deleteDoc,
   updateDoc,
+  setDoc,
 } from "firebase/firestore";
 import { fetchDoc } from '../Hooks'
 import { db } from '../firebase'
@@ -111,6 +114,10 @@ export function WaitingScreen ({ route }) {
                     currentTurn: 0,
                     totalRounds: rounds,
                 }
+            })
+            const roundsRef = doc(db, "sessions", code, "ratings", "round1")
+            await setDoc(roundsRef, {
+                test: []
             })
             navigation.navigate(
                 "Game",

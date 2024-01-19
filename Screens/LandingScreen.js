@@ -23,6 +23,8 @@ import { AuthContext } from "../Context";
 import {
   doc,
   getDoc,
+  collection,
+  addDoc,
   setDoc,
   updateDoc,
 } from "firebase/firestore";
@@ -36,7 +38,7 @@ export function LandingScreen () {
     const [ isAuth, setIsAuth ] = useState(false)
 
     const handleStart = async () => {
-        navigation.navigate("Categories")
+        // navigation.navigate("Categories")
         // testing only hehehehe
         // try { 
           
