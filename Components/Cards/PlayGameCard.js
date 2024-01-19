@@ -38,20 +38,22 @@ import {
 } from '../../Context'
 
 export function PlayGameCard ({ code }) {
-    const [ currentGameData, setCurrentGameData ] = useState(null)
+    const [ players, setPlayers ] = useState(null)
+    const [ turns, setTurns ] = useState(null)
     const [ error, setError ] = useState(false)
     const sessionRef = doc(db, 'sessions', code)
     const { deviceID: authDeviceID } = useContext(AuthContext)
 
     const checkError = () => {
-        if (!currentGameData) setError(true)
+        if (!players || !turns) setError(true)
     }
 
     useEffect(() => {
         const unsubscribe = onSnapshot(sessionRef, async (doc) => {
             if (doc.exists()) {
                 const sessionData = doc.data()
-                setCurrentGameData(sessionData)
+                setPlayers(sessionData?.players)
+                setTurns(sessionData?.turns)
             }
             else {
                 setError(true)
@@ -87,23 +89,26 @@ export function PlayGameCard ({ code }) {
 
     const handleNextTurn = async () => {
         try {
-            let newTurn = currentGameData?.currentTurn
-            let newRound = currentGameData?.currentRound
-            let newFinished = currentGameData?.hasFinished
+            let newTurn = turns?.currentTurn
+            let newRound = turns?.currentRound
+            let newFinished = turns?.hasFinished
             newTurn += 1
-            if (newTurn > currentGameData?.players.length) {
+            if (newTurn > players.length) {
                 newTurn = 0
                 newRound += 1
             }
-            if (newRound > currentGameData?.totalRounds) {
+            if (newRound > turns?.totalRounds) {
                 newFinished = true
-                newRound = currentGameData?.totalRounds + 1
-                newTurn = currentGameData?.players.length
+                newRound = turns?.totalRounds + 1
+                newTurn = players.length
             }
-            await updateDoc(sessionRef, {
+            let newTurns = {...turns,
                 currentTurn: newTurn,
                 currentRound: newRound,
-                hasFinished: newFinished,
+                hasFinished: newFinished
+            }
+            await updateDoc(sessionRef, {
+                turns: newTurns,
             })
         }
         catch (e) {
@@ -115,11 +120,11 @@ export function PlayGameCard ({ code }) {
     const handleRating = async (rating) => {
         try {
             let newPlayers = []
-            currentGameData?.players.map((player, index) => {
-                if (index == currentGameData?.currentTurn) {
+            players.map((player, index) => {
+                if (index == turns?.currentTurn) {
                     let newRatings = {}
                     if (player.ratings) newRatings = JSON.parse(JSON.stringify(player.ratings))
-                    newRatings[currentGameData?.currentRound] = {
+                    newRatings[turns?.currentRound] = {
                         [authDeviceID]: rating
                     }
                     let newPlayer = {
@@ -147,24 +152,23 @@ export function PlayGameCard ({ code }) {
     }
 
     const TurnRenderer = useCallback(() => {
-        // if (!currentGameData) return <LoadingView />
-        if (currentGameData?.hasFinished) return (
+        if (turns.hasFinished) return (
             <Animated.View entering={SlideInRight.springify().damping(15)} exiting={SlideOutLeft.springify().damping(15)}>
                 
             </Animated.View>
         )
-        else if (currentGameData?.currentTurn == currentGameData?.players.length) return(
+        else if (turns.currentTurn == players.length) return(
             <Animated.View entering={SlideInRight.springify().damping(15)} exiting={SlideOutLeft.springify().damping(15)}>
                 <ChameleonCard code={code} handleNextTurn={handleNextTurn}/>
             </Animated.View>
         )
-        const currentPlayer = currentGameData?.players[currentGameData?.currentTurn]
+        const currentPlayer = players[turns.currentTurn]
         const { deviceID: playerDeviceID } = currentPlayer
         return (
             <Animated.View entering={SlideInRight.springify().damping(15)} exiting={SlideOutLeft.springify().damping(15)}>
                 {playerDeviceID == authDeviceID ?
                 <IndivGameCard 
-                    currentPlayer={currentGameData?.players[currentGameData?.currentTurn]}
+                    currentPlayer={currentPlayer}
                     handleNext={handleNextTurn}
                     />
                 :
@@ -175,11 +179,11 @@ export function PlayGameCard ({ code }) {
                 }
             </Animated.View>
         )
-    }, [currentGameData])
+    }, [turns])
 
     return(
         <>
-        {currentGameData ?
+        {players && turns ?
         <Animated.View 
         entering={SlideInRight.springify().damping(15)}
         style={styles.wrapper}>
@@ -189,7 +193,8 @@ export function PlayGameCard ({ code }) {
                 message={"Bad Connection"}
                 />
             <RoundStepper 
-                gameData={currentGameData}
+                turns={turns}
+                numRounds={players.length}
                 />
             <View style={{height: 25 }} />
             <TurnRenderer />

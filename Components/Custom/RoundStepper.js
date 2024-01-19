@@ -7,7 +7,10 @@ import {
 import {
     useEffect
 } from 'react'
-import { AntDesign } from '@expo/vector-icons'
+import { 
+    AntDesign,
+    Ionicons,
+} from '@expo/vector-icons'
 import Animated, { 
     useSharedValue,
     useAnimatedStyle,
@@ -18,15 +21,14 @@ import Animated, {
     FadeInDown,
 } from 'react-native-reanimated';
 
-export function RoundStepper ({ gameData }) {
-    const { currentRound, currentTurn, totalRounds, players } = gameData
-    const numRounds = players?.length || 0
+export function RoundStepper ({ turns, numRounds }) {
+    const { currentRound, currentTurn, totalRounds } = turns
     const { height, width } = useWindowDimensions()
     const colorAnim = useSharedValue(0)
     const widthAnim = useSharedValue(0)
 
     useEffect(() => {
-        widthAnim.value = withTiming((width * 0.75) * (currentTurn - 1) / (numRounds))
+        widthAnim.value = withTiming((width * 0.75) * (currentTurn) / (numRounds))
     },[currentTurn])
     
     useEffect(() => {
@@ -58,22 +60,49 @@ export function RoundStepper ({ gameData }) {
         }
     })
 
+    const AnimatedCheck = Animated.createAnimatedComponent(AntDesign)
+
+    const AnimatedInfo = Animated.createAnimatedComponent(Ionicons)
+
     function CheckRenderer () {
-        if (currentRound > totalRounds) return <AntDesign name="checkcircle" size={29} color="#F0ECE5" />
+        if (currentRound > totalRounds) return (
+            <View style={styles.iconWrapper}>
+                <AntDesign name="check" size={20} color="#F0ECE5" />
+            </View>
+        )
         else if (currentTurn == numRounds) return(
             <Animated.View style={[styles.selectedIcon, backgroundAnimatedStyle]}>
-                <AnimatedCheck name="checkcircle" size={29} style={colorAnimatedStyle} />
+                <AnimatedCheck name="check" size={20} style={colorAnimatedStyle} />
             </Animated.View>
         )
-        else return <AntDesign name="checkcircle" size={29} color="#B6BBC4" />
+        else return (
+            <View style={styles.iconWrapper}>
+                <AntDesign name="check" size={20} color="#B6BBC4" />
+            </View>
+        )
     }
 
-    const AnimatedCheck = Animated.createAnimatedComponent(AntDesign)
+    function InfoRenderer () {
+        return (
+            <>
+                {currentTurn == 0 ?
+                <Animated.View style={[styles.selectedIcon, backgroundAnimatedStyle]}>
+                    <AnimatedInfo name="information" size={20} style={colorAnimatedStyle} />
+                </Animated.View>
+                :
+                <View style={styles.iconWrapper}>
+                    <Ionicons name="information" size={20} color="#F0ECE5" />
+                </View>
+                }
+            </>
+        )
+    }
+
 
     return(
         <View style={styles.wrapper(width)}>
             <View style={styles.innerWrapper}>
-                {currentRound && currentRound > totalRounds ?
+                {currentRound > totalRounds ?
                     <Text style={styles.roundTxt}>Game Complete!</Text>
                 :
                     <Text style={styles.roundTxt}>Round {currentRound}</Text>
@@ -83,8 +112,9 @@ export function RoundStepper ({ gameData }) {
                         width: widthAnim
                     }]} />
                     <View style={styles.iconsWrapper}>
+                        <InfoRenderer />
                         {Array(numRounds).fill(null).map(( _, index) => {
-                            return(currentTurn == index ?
+                            return(currentTurn == index + 1 ?
                                 <Animated.View 
                                     style={[styles.iconWrapper, styles.selectedIcon, backgroundAnimatedStyle]} 
                                     key={index}
@@ -107,9 +137,7 @@ export function RoundStepper ({ gameData }) {
                                 </View>
                             )
                         })}
-                        <View>
-                            <CheckRenderer />
-                        </View>
+                        <CheckRenderer />
                     </View>
                 </View>
             </View>
@@ -175,7 +203,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 100,
-        borderWidth: 2,
+        borderColor: '#F0ECE5',
+        padding: 2.5,
+        borderWidth: 1,
     },
     selectedIcon: {
         backgroundColor: '#161A30',
@@ -183,6 +213,8 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 0 },
         shadowOpacity: 0.9,
         borderRadius: 100,
+        padding: 2.5,
+        borderWidth: 1,
     },
     iconText: {
         fontSize: 15,

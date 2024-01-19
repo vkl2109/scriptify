@@ -74,7 +74,7 @@ export function WaitingScreen ({ route }) {
                     playerIDs.add(player?.deviceID)
                 }
                 if (!playerIDs.has(deviceID) && newChosen.length > 0) setHasChosen(true)
-                if (newChosen.length == 0 && !sessionData?.hasStarted) setIsFull(true)
+                if (newChosen.length == 0 && !sessionData?.turns?.hasStarted) setIsFull(true)
                 setHost(sessionData?.host)
                 setUnchosen(newChosen)
                 setPlayers(newPlayers)
@@ -100,14 +100,17 @@ export function WaitingScreen ({ route }) {
                     newPlayersArray.push(player)
                 }
             })
+            const randomSuspect = Math.floor(Math.random() * newPlayersArray.length)
             await updateDoc(sessionRef, {
-                hasStarted: true,
                 players: newPlayersArray,
-                currentRound: 1,
-                currentTurn: 0,
-                totalRounds: rounds,
-                hasFinished: false,
-                suspect: Math.floor(Math.random() * newPlayersArray.length)
+                suspect: randomSuspect,
+                turns: {
+                    hasStarted: true,
+                    hasFinished: false,
+                    currentRound: 1,
+                    currentTurn: 0,
+                    totalRounds: rounds,
+                }
             })
             navigation.navigate(
                 "Game",
