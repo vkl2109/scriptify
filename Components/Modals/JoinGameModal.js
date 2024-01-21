@@ -2,7 +2,8 @@ import {
     StyleSheet,
     Modal,
     Text,
-    KeyboardAvoidingView,
+    TouchableOpacity,
+    TouchableWithoutFeedback,
 } from 'react-native'
 import { 
     useState, 
@@ -83,36 +84,40 @@ export function JoinGameModal ({ isVisible, setIsVisible }) {
             visible={isVisible}
             transparent
             onRequestClose={handleClose}>
-            <BlurView
-                style={styles.wrapper}
-                intensity={10}
+            <TouchableWithoutFeedback
+                onPress={handleClose}
                 >
-                {/* <KeyboardAvoidingView style={styles.wrapper} behavior='padding'> */}
+                <BlurView
+                    style={styles.wrapper}
+                    intensity={10}
+                    >
                     <StatusBar style="dark"/>
                     {cardVisible &&
-                    <Animated.View
-                        entering={SlideInUp.springify().damping(15)}
-                        exiting={SlideOutUp.springify().damping(15)}
-                        style={styles.main(insets)}
-                        >
-                        <BackHeader 
-                        title='Enter Code'
-                        primary={false}
-                        onPress={handleClose}
-                        />
-                        <CodeInput 
-                            value={code}
-                            setValue={setCode}
+                    <TouchableWithoutFeedback>
+                        <Animated.View
+                            entering={SlideInUp.springify().damping(15)}
+                            exiting={SlideOutUp.springify().damping(15)}
+                            style={styles.main(insets)}
+                            >
+                            <BackHeader 
+                            title='Enter Code'
+                            primary={false}
+                            onPress={handleClose}
                             />
-                        {error != '' && <Text style={styles.errorText}>{error}</Text>}
-                        <PrimaryButton
-                            variant={code.length == 4 ? "secondary" : "primary"}
-                            text={"Join"}
-                            onPress={handleJoin}
-                            />
-                    </Animated.View>}   
-                {/* </KeyboardAvoidingView> */}
-            </BlurView>
+                            <CodeInput 
+                                value={code}
+                                setValue={setCode}
+                                />
+                            {error != '' && <Text style={styles.errorText}>{error}</Text>}
+                            <PrimaryButton
+                                variant={code.length == 4 ? "secondary" : "primary"}
+                                text={"Join"}
+                                onPress={handleJoin}
+                                />
+                        </Animated.View>   
+                    </TouchableWithoutFeedback>}
+                </BlurView>
+            </TouchableWithoutFeedback>
         </Modal>
     )
 }
