@@ -50,7 +50,6 @@ export function WaitingScreen ({ route }) {
     const [ players, setPlayers ] = useState(null)
     const [ unchosen, setUnchosen] = useState(new Set())
     const [ showCancel, setCancel ] = useState(false)
-    const [ hasChosen, setHasChosen ] = useState(true)
     const [ isFull, setIsFull ] = useState(false)
     const [ totalPlayers, setTotalPlayers ] = useState([])
     const [ host, setHost ] = useState('')
@@ -78,7 +77,6 @@ export function WaitingScreen ({ route }) {
                     }
                     playerIDs.add(player?.deviceID)
                 }
-                if (!playerIDs.has(deviceID) && newChosen.length > 0) setHasChosen(true)
                 if (newChosen.length == 0 && !sessionData?.turns?.hasStarted) setIsFull(true)
                 setHost(sessionData?.host)
                 setUnchosen(newChosen)
@@ -87,6 +85,9 @@ export function WaitingScreen ({ route }) {
                     "Game",
                     { code: code }
                 )
+            }
+            else {
+                navigation.goBack()
             }
         },
         (error) => {
@@ -155,13 +156,6 @@ export function WaitingScreen ({ route }) {
 
     return(
         <SafeAreaView style={styles.container}>
-            <ChoosePlayerModal 
-                unchosen={unchosen}
-                isVisible={hasChosen}
-                setIsVisible={setHasChosen}
-                totalPlayers={totalPlayers}
-                code={code}
-                />
             <CancelGameModal 
                 showCancel={showCancel}
                 setCancel={setCancel}
@@ -187,7 +181,9 @@ export function WaitingScreen ({ route }) {
             :
             <PlayerList 
                 players={players}
-                handleAdd={() => setHasChosen(true)}
+                totalPlayers={totalPlayers}
+                unchosen={unchosen}
+                code={code}
                 />
             }
             {unchosen.length > 0 ?

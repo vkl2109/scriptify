@@ -12,6 +12,16 @@ import {
     useContext,
 } from 'react'
 import { BlurView } from 'expo-blur'
+import Animated, { 
+    SlideInRight,
+    SlideInLeft,
+    SlideInUp,
+    SlideInDown,
+    SlideOutRight,
+    SlideOutLeft,
+    SlideOutUp,
+    SlideOutDown
+} from 'react-native-reanimated';
 import {
     PrimaryButton
 } from '../Buttons/PrimaryButton'
@@ -135,7 +145,9 @@ export function ChoosePlayerModal({
                 <BackHeader 
                     onPress={() => setIsVisible(false)}
                     />
-                <View style={styles.main}>
+                <Animated.View 
+                    entering={SlideInDown.springify().damping(15)} exiting={SlideOutDown.duration(500)}
+                    style={styles.main}>
                     <Text style={styles.name}>{currentUser}</Text>
                     <View style={styles.greyDivider} />
                     <FlatList
@@ -156,7 +168,7 @@ export function ChoosePlayerModal({
                         onPress={handlePlay}
                         variant={"secondary"}
                         />
-                </View>
+                </Animated.View>
                 <View style={{height: 100}} />
             </BlurView>
         </Modal>

@@ -7,16 +7,30 @@ import {
     useWindowDimensions
 } from 'react-native'
 import { PlayerRow } from './PlayerRow'
+import {
+    useState
+} from 'react'
+import { ChoosePlayerModal } from '../Modals/ChoosePlayerModal';
 import { AntDesign } from '@expo/vector-icons';
 
 export function PlayerList ({ 
     players,
-    handleAdd,
+    totalPlayers,
+    unchosen,
+    code,
 }) {
     const { height, width } = useWindowDimensions()
+    const [ hasChosen, setHasChosen ] = useState(true)
 
     return (
         <View style={styles.flatlistWrapper(width)}>
+            <ChoosePlayerModal 
+                unchosen={unchosen}
+                isVisible={hasChosen}
+                setIsVisible={setHasChosen}
+                totalPlayers={totalPlayers}
+                code={code}
+                />
             <View style={styles.flatlistInnerWrapper}>
                 <FlatList
                     data={players}
@@ -32,7 +46,7 @@ export function PlayerList ({
                     />
             </View>
             <TouchableOpacity 
-                onPress={handleAdd}
+                onPress={() => setHasChosen(true)}
                 style={styles.addButtonWrapper}
                 >
                 <View style={styles.addButtonInnerWrapper}>
