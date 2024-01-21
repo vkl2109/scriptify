@@ -11,6 +11,7 @@ import {
     CategoryCard,
     LoadingPie,
     MessageModal,
+    LoadingCategoryCard
 } from '../Components'
 // import { categories } from '../constants'
 import { useNavigation } from '@react-navigation/native';
@@ -61,11 +62,18 @@ export function CategoriesScreen () {
                 setIsVisible={setError}
                 message={"Failed to Connect: Check Connection"}
                 />
+            {categories.length == 0 ?
             <FlatList 
-                // ListHeaderComponent={<Text style={styles.title}>Choose A Category</Text>}
                 contentContainerStyle={styles.categories}
                 horizontal={false}
-                // ListEmptyComponent={<LoadingPie />}
+                numColumns={2}
+                data={Array(6).fill(null)}
+                renderItem={({ _, index }) => <LoadingCategoryCard key={index}/>}
+                />
+            :
+            <FlatList 
+                contentContainerStyle={styles.categories}
+                horizontal={false}
                 numColumns={2}
                 data={categories}
                 renderItem={({ item, index }) => (
@@ -74,6 +82,7 @@ export function CategoriesScreen () {
                   </Animated.View>
                 )}
                 />
+            }
         </SafeAreaView>
     )
 }

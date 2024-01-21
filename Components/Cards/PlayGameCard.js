@@ -117,7 +117,9 @@ export function PlayGameCard ({ code }) {
     const handleRating = async (rating) => {
         try {
             const sessionRatingRef = doc(db, "sessions", code, "rounds", `round${turns.currentRound}`)
-            const ratingRef = `ratings.${authDeviceID}`
+            const currentPlayer = players[turns.currentTurn]
+            const { deviceID: playerDeviceID } = currentPlayer
+            const ratingRef = `ratings.${playerDeviceID}.${authDeviceID}`
             await updateDoc(sessionRatingRef, {
                 [ratingRef]: rating,
             })
