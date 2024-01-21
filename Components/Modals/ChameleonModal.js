@@ -95,7 +95,7 @@ export function CategoryModal ({ isVisible, setIsVisible, category }) {
                 <MessageModal
                     isVisible={error}
                     setIsVisible={setError}
-                    message={"Failed to Connect: Check Connection"}
+                    message={"Bad Connection"}
                     />
                 <Animated.View style={[styles.main(height, width), cardAnimatedStyle]}>
                     <View style={styles.innerWrapper}>

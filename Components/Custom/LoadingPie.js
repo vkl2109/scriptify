@@ -26,7 +26,7 @@ export function LoadingPie ({ externalError = false }) {
             <MessageModal
                 isVisible={error && !externalError}
                 setIsVisible={setError}
-                message={"Failed to Connect: Check Connection"}
+                message={"Bad Connection"}
                 />
             <CircularProgress
                 value={50}

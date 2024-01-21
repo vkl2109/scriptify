@@ -60,7 +60,7 @@ export function CategoriesScreen () {
             <MessageModal
                 isVisible={error}
                 setIsVisible={setError}
-                message={"Failed to Connect: Check Connection"}
+                message={"Bad Connection"}
                 />
             {categories.length == 0 ?
             <FlatList 

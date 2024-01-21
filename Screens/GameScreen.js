@@ -144,7 +144,7 @@ export function GameScreen ({ route, navigation }) {
             <MessageModal
                 isVisible={error}
                 setIsVisible={setError}
-                message={"Failed to Connect: Check Connection"}
+                message={"Bad Connection"}
                 />
             <View style={styles.headerWrapper}>
                 {loading ?
