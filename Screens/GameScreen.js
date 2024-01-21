@@ -75,6 +75,7 @@ export function GameScreen ({ route, navigation }) {
                 const sessionData = await fetchDoc('sessions', code)
                 if (!sessionData) throw new Error ("failed to fetch sessionData")
                 setGameData(sessionData)
+                if (sessionData?.turns?.hasFinished) setCurrentCard("play")
                 const infoData = await fetchDoc('categories', sessionData?.category)
                 if (!infoData) throw new Error('invalid category')
                 setCategoryData(infoData)

@@ -92,6 +92,7 @@ export function PlayGameCard ({ code }) {
             if (newTurn > players.length) {
                 newTurn = 0
                 newRound += 1
+                setIntroRound(true)
             }
             if (newRound > turns?.totalRounds) {
                 newFinished = true
@@ -170,27 +171,24 @@ export function PlayGameCard ({ code }) {
 
     return(
         <>
-        {players && turns ?
-        <Animated.View 
-        entering={SlideInRight.springify().damping(15)}
-        style={styles.wrapper}>
-            <MessageModal
-                isVisible={error}
-                setIsVisible={setError}
-                message={"Bad Connection"}
-                />
-            <RoundStepper 
-                turns={turns}
-                numRounds={players.length}
-                introRound={introRound}
-                setIntroRound={setIntroRound}
-                />
-            <View style={{height: 25 }} />
-            <TurnRenderer />
-        </Animated.View>
-        :
-        <LoadingView />
-        }
+            {players && turns &&
+            <Animated.View 
+            entering={SlideInRight.springify().damping(15)}
+            style={styles.wrapper}>
+                <MessageModal
+                    isVisible={error}
+                    setIsVisible={setError}
+                    message={"Bad Connection"}
+                    />
+                <RoundStepper 
+                    turns={turns}
+                    numRounds={players.length}
+                    introRound={introRound}
+                    setIntroRound={setIntroRound}
+                    />
+                <View style={{height: 25 }} />
+                <TurnRenderer />
+            </Animated.View>}
         </>
     )
 }

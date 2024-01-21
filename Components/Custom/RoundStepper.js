@@ -28,15 +28,28 @@ export function RoundStepper ({
     introRound,
     setIntroRound,
 }) {
-    const { currentRound, currentTurn, totalRounds } = turns
+    const { currentRound, currentTurn, totalRounds, hasFinished } = turns
     const { height, width } = useWindowDimensions()
     const colorAnim = useSharedValue(0)
     const widthAnim = useSharedValue(0)
 
     useEffect(() => {
-        if (introRound) widthAnim.value = withTiming(0)
-        else widthAnim.value = withTiming((width * 0.75) * (currentTurn + 1) / (numRounds + 1))
-    },[currentTurn, introRound])
+        const checkWidth = () => {
+            if (hasFinished) {
+                widthAnim.value = withTiming(width * 0.75)
+                return
+            }
+            else if (introRound) {
+                widthAnim.value = withTiming(0)
+                return
+            }
+            else {
+                widthAnim.value = withTiming((width * 0.75) * (currentTurn + 1) / (numRounds + 1))
+                return
+            }
+        }
+        checkWidth()
+    },[currentTurn, hasFinished, introRound])
     
     useEffect(() => {
         colorAnim.value = withRepeat(withTiming(1 - colorAnim.value, { duration: 1000 }), 0);
@@ -72,7 +85,12 @@ export function RoundStepper ({
     const AnimatedInfo = Animated.createAnimatedComponent(Ionicons)
 
     function CheckRenderer () {
-        if (currentRound > totalRounds) return (
+        if (hasFinished) return(
+            <View style={styles.pastIconWrapper}>
+                <AntDesign name="check" size={18} color="#31304D" />
+            </View>
+        )
+        else if (currentRound > totalRounds) return (
             <View style={styles.iconWrapper}>
                 <AntDesign name="check" size={18} color="#F0ECE5" />
             </View>
@@ -92,7 +110,7 @@ export function RoundStepper ({
     function InfoRenderer () {
         return (
             <TouchableOpacity onPress={() => setIntroRound(true)}>
-                {introRound ?
+                {introRound && !hasFinished ?
                 <Animated.View style={[styles.selectedIcon, backgroundAnimatedStyle]}>
                     <AnimatedInfo name="information" size={16} style={colorAnimatedStyle} />
                 </Animated.View>
@@ -106,7 +124,7 @@ export function RoundStepper ({
     }
 
     function NumberRenderer ({ index }) {
-        if (introRound) return(
+        if (introRound && !hasFinished) return(
             <View style={styles.iconWrapper}>
                 <Text style={[styles.iconText, { color: '#B6BBC4'}]}>
                     {index + 1}
@@ -122,7 +140,7 @@ export function RoundStepper ({
                 </Animated.Text>
             </Animated.View>
         )
-        else if (currentTurn > index) return(
+        else if (currentTurn > index || hasFinished) return(
             <View style={styles.pastIconWrapper}>
                 <Text style={[styles.iconText, { color: '#31304D'}]}>
                     {index + 1}
