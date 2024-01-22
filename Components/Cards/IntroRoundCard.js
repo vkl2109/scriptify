@@ -67,7 +67,7 @@ export function IntroRoundCard ({
                         setTypeStory(prevStory => prevStory + story[index])
                         setIndex(prevIndex => prevIndex + 1)
                     // }
-                }, 25)
+                }, 1)
                 
                 return () => {
                     clearTimeout(typeStoryTimeout)

@@ -156,17 +156,19 @@ export function PlayGameCard ({ code }) {
         const { deviceID: playerDeviceID } = currentPlayer
         return (
             <Animated.View entering={SlideInRight.springify().damping(15)} exiting={SlideOutLeft.springify().damping(15)}>
-                {playerDeviceID == authDeviceID ?
+                {/* {playerDeviceID == authDeviceID ? */}
                 <IndivGameCard 
                     currentPlayer={currentPlayer}
+                    currentRound={turns.currentRound}
                     handleNext={handleNextTurn}
+                    code={code}
                     />
-                :
+                {/* :
                 <RateGameCard
                     currentPlayer={currentPlayer}
                     handleRating={handleRating}
                     />
-                }
+                } */}
             </Animated.View>
         )
     }, [turns, players, introRound])

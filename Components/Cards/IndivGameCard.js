@@ -5,27 +5,79 @@ import {
     ActivityIndicator
 } from 'react-native'
 import {
-    useState
+    useState,
+    useEffect,
 } from 'react'
 import { MainCard } from './MainCard'
 import { PrimaryButton } from '../Buttons/PrimaryButton'
+import {
+  doc,
+  getDoc,
+  collection,
+  addDoc,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
+import { db } from "../../firebase";
+import { MessageModal } from '../Modals/MessageModal'
 
 export function IndivGameCard ({ 
     currentPlayer,
+    code,
+    currentRound,
     handleNext = () => {}
 }) {
-    const { choice, name, quote } = currentPlayer
+    const { choice, name } = currentPlayer
     const [ waiting, setWaiting ] = useState(true)
+    const [ quote, setQuote ] = useState('')
+    const [ typeQuote, setTypeQuote ] = useState('')
+    const [ index, setIndex ] = useState(0)
+    const [ error, setError ] = useState(false)
+
+    useEffect(() => {
+        if (quote == '') fetchStory()
+        else {
+            if (index < quote.length) {
+                const typeStoryTimeout = setTimeout(() => {
+                        setTypeQuote(prevQuote => prevQuote + quote[index])
+                        setIndex(prevIndex => prevIndex + 1)
+                }, 1)
+                        
+                return () => clearTimeout(typeStoryTimeout)
+            }
+        }
+    },[quote, typeQuote, index])
+
+    const fetchStory = async () => {
+        try {
+            const roundRef = doc(db, 'sessions', code, 'rounds', `round${currentRound}`)
+            const roundSnap = await getDoc(roundRef)
+            if (!roundSnap.exists()) throw new Error('not found')
+            const roundData = roundSnap.data()
+            const newQuote = roundData?.quotes[choice]
+            if (!newQuote) throw new Error('not found')
+            setQuote(newQuote)
+        }
+        catch (e) {
+            console.log(e)
+            setError(true)
+        }
+    }
 
     return(
         <MainCard scale={.75}>
             <View style={styles.innerWrapper}>
+                <MessageModal
+                    isVisible={error}
+                    setIsVisible={setError}
+                    message={"Bad Connection"}
+                    />
                 <View style={styles.mainTxtWrapper}>
                     <Text style={styles.choiceTxt}>Your Turn</Text>
                     <View style={styles.divider} />
                     <Text style={styles.instructions}>Give Us Your Best {choice} Impression!</Text>
                 </View>
-                <Text style={styles.quoteTxt}>"{quote || "quote"}"</Text>
+                <Text style={styles.quoteTxt}>{typeQuote}</Text>
                 {waiting ?
                 <PrimaryButton 
                     text="Next"
@@ -80,7 +132,7 @@ const styles = StyleSheet.create({
     },
     quoteTxt: {
         color: '#F0ECE5',
-        fontSize: 30,
+        fontSize: 20,
         fontWeight: '100',
         fontStyle: "italic",
         textAlign: 'center',
