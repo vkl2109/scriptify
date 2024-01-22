@@ -45,7 +45,7 @@ import { Feather } from '@expo/vector-icons';
 import { getFunctions, httpsCallable } from "firebase/functions";
 
 export function WaitingScreen ({ route }) {
-    const { category, code } = route.params
+    const { code } = route.params
     const { deviceID } = useContext(AuthContext)
     const [ players, setPlayers ] = useState(null)
     const [ unchosen, setUnchosen] = useState(new Set())
@@ -53,10 +53,10 @@ export function WaitingScreen ({ route }) {
     const [ isFull, setIsFull ] = useState(false)
     const [ totalPlayers, setTotalPlayers ] = useState([])
     const [ host, setHost ] = useState('')
+    const [ category, setCategory ] = useState('')
     const [ loading, setLoading ] = useState(false)
     const [ rounds, setRounds ] = useState(roundsData[0].label)
     const navigation = useNavigation()
-    const { height, width } = useWindowDimensions()
     const isHost = host == deviceID
     const sessionRef = doc(db, 'sessions', code)
 
@@ -79,6 +79,7 @@ export function WaitingScreen ({ route }) {
                 }
                 if (newChosen.length == 0 && !sessionData?.turns?.hasStarted) setIsFull(true)
                 setHost(sessionData?.host)
+                setCategory(sessionData?.category)
                 setUnchosen(newChosen)
                 setPlayers(newPlayers)
                 if (sessionData?.turns?.hasStarted) navigation.navigate(
@@ -107,6 +108,7 @@ export function WaitingScreen ({ route }) {
                 totalPlayers: totalPlayers, 
                 rounds: rounds, 
                 code: code,
+                category: category,
             })
             if (!result?.data?.success) throw new Error ("failed to update game")
             navigation.navigate(

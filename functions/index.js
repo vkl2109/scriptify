@@ -26,8 +26,13 @@ exports.createNewGame = onCall(async (request) => {
     return createGameHandler(request)
 })
 
-exports.updateWaitingRoom = onCall(async (request) => {
-    return updateWaitingHandler(request)
+exports.updateWaitingRoom = onCall(
+    { secrets: [GPTAPIKey] },
+    async (request) => {
+    return updateWaitingHandler({
+        request: request,
+        secret: GPTAPIKey.value()
+    })
 })
 
 exports.testScriptGenerator = onCall(

@@ -8,21 +8,22 @@ const {
  } = require('../config.js')
 
 exports.generateScenario = async ({ 
-    request, 
+    category, 
     secret 
 }) => {
     try {
         const model = new ChatOpenAI({
             openAIApiKey: secret,
+            temperature: 1,
         });
         const promptTemplate = PromptTemplate.fromTemplate(
-        "Tell me a joke about {topic}"
+        "Generate an elaborate scene introduction to a wacky zany murder mystery scenario for the cast of the hit TV show {show} with another {show} side character being the victim and one of the main cast being one of the suspected murderers without revealing who yet. Limit to two paragraphs and end every sentence with a period."
         );
         const outputParser = new StringOutputParser();
 
         const chain = RunnableSequence.from([promptTemplate, model, outputParser]);
 
-        const result = await chain.invoke({ topic: "bears" });
+        const result = await chain.invoke({ show: category });
 
         return { success: true, scenario: result }
     }

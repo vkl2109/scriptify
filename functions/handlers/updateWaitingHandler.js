@@ -3,10 +3,14 @@ const {
     logger,
     HttpsError
  } = require('../config.js')
+ const { generateScenario } = require("../langchain/generateScenario.js")
 
-exports.updateWaitingHandler = async (request) => {
+exports.updateWaitingHandler = async ({
+    request: request,
+    secret: secret,
+}) => {
     try {
-        const { totalPlayers, rounds, code } = request.data
+        const { totalPlayers, rounds, code, category } = request.data
         const newPlayersArray = []
         totalPlayers.map((player) => {
             if (player?.deviceID != '') {
@@ -26,9 +30,16 @@ exports.updateWaitingHandler = async (request) => {
                 totalRounds: rounds,
             }
         })
+        const generateScenarioResult = await generateScenario({
+            category: category,
+            secret: secret,
+        })
+        if (!generateScenarioResult?.success) throw new Error('failed to generate scenario')
+        let newScenario = generateScenarioResult?.scenario
         for (let i = 1; i <= rounds; i++) {
             await db.collection('sessions').doc(code).collection('rounds').doc(`round${i}`).set({
-                ratings: []
+                ratings: [],
+                scenario: newScenario,
             })
         }
         return { success: true }
