@@ -148,7 +148,7 @@ export function GameScreen ({ route, navigation }) {
                 />
             <View style={styles.headerWrapper}>
                 {loading ?
-                <View />
+                <View style={{ width: 100 }} />
                 :
                 <View style={styles.iconsWrapper}>
                     <TouchableOpacity 
@@ -162,9 +162,12 @@ export function GameScreen ({ route, navigation }) {
                         <Ionicons name="person-circle-sharp" size={42} color="white" />
                     </TouchableOpacity>
                 </View>}
-                <CloseButton 
-                onPress={() => setCloseGame(true)}
-                />
+                <Text style={styles.codeTxt}>{code}</Text>
+                <View style={styles.closeBtnWrapper}>
+                    <CloseButton 
+                    onPress={() => setCloseGame(true)}
+                    />
+                </View>
             </View>
             {loading ?
             <LoadingPie externalError={error} />
@@ -192,7 +195,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     headerWrapper: {
-        flexDirection: 'row',flexDirection: 'row',
+        flexDirection: 'row',
+        flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: 10,
@@ -203,8 +207,19 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 5,
+        width: 120,
     },
     icon: {
         margin: 10,
+    },
+    codeTxt: {
+        fontSize: 30,
+        color: '#F0ECE5'
+    },
+    closeBtnWrapper: {
+        width: 120,
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
     }
 })

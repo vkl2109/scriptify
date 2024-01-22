@@ -29,6 +29,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../firebase";
+import { getFunctions, httpsCallable } from "firebase/functions";
 
 export function LandingScreen () {
     const {height, width} = useWindowDimensions();
@@ -38,14 +39,18 @@ export function LandingScreen () {
     const [ isAuth, setIsAuth ] = useState(false)
 
     const handleStart = async () => {
-        navigation.navigate("Categories")
+        // navigation.navigate("Categories")
         // testing only hehehehe
-        // try { 
-          
-        // }
-        // catch (e) {
-        //   console.log(e)
-        // }
+        try { 
+            const functions = getFunctions();
+            const testScriptGenerator = httpsCallable(functions, 'testScriptGenerator');
+            const result = await testScriptGenerator()
+            if (!result?.data?.success) throw new Error ("failed to generate scenario")
+            console.log(result?.data?.scenario)
+        }
+        catch (e) {
+          console.log(e)
+        }
     }
 
     useEffect(() => {
