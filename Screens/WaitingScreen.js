@@ -56,6 +56,7 @@ export function WaitingScreen ({ route }) {
     const [ category, setCategory ] = useState('')
     const [ loading, setLoading ] = useState(false)
     const [ rounds, setRounds ] = useState(roundsData[0].label)
+    const [ error, setError ] = useState(false)
     const navigation = useNavigation()
     const isHost = host == deviceID
     const sessionRef = doc(db, 'sessions', code)
@@ -93,6 +94,7 @@ export function WaitingScreen ({ route }) {
         },
         (error) => {
             console.log(error)
+            setError(true)
         })
         return () => {
             unsubscribe()
@@ -111,13 +113,10 @@ export function WaitingScreen ({ route }) {
                 category: category,
             })
             if (!result?.data?.success) throw new Error ("failed to update game")
-            navigation.navigate(
-                "Game",
-                { code: code }
-            )
         }
         catch (e) {
             console.log(e)
+            setError(true)
         }
         finally {
             setLoading(false)
@@ -168,6 +167,11 @@ export function WaitingScreen ({ route }) {
                 isVisible={isFull}
                 setIsVisible={setIsFull}
                 message={"Game is Full"}
+                />
+            <MessageModal
+                isVisible={error}
+                setIsVisible={setError}
+                message={"Bad Connection"}
                 />
             <CloseHeader
                 title={'Waiting Room'}

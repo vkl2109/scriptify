@@ -3,9 +3,14 @@ import {
     View,
     Text,
     TouchableOpacity,
+    ScrollView,
 } from 'react-native'
 import { MainCard } from './MainCard'
-import { useState, useEffect, } from 'react'
+import { 
+    useState, 
+    useEffect, 
+    useRef
+} from 'react'
 import { PrimaryButton } from '../Buttons/PrimaryButton'
 import { MessageModal } from '../Modals/MessageModal'
 import {
@@ -29,8 +34,10 @@ export function IntroRoundCard ({
     const [ story, setStory ] = useState('')
     const [ typeStory, setTypeStory ] = useState('')
     const [ loadTxt, setLoadTxt ] = useState('.')
+    const [ done, setDone ] = useState(false)
     const [ error, setError ] = useState(false)
     const [ index, setIndex ] = useState(0)
+    const scrollRef = useRef()
 
     useEffect(() => {
         const loadingTimeout = setTimeout(() => {
@@ -44,23 +51,31 @@ export function IntroRoundCard ({
     },[loadTxt])
 
     useEffect(() => {
-        if (story == '') fetchStory()
-        if (index < story.length) {
-            const typeStoryTimeout = setTimeout(() => {
-                if (story[index - 1] == '.') {
-                    setTimeout(() => {
+        if (story == '') {
+            fetchStory()
+        }
+        else {
+            if (index < story.length) {
+                const typeStoryTimeout = setTimeout(() => {
+                    // if (typeStory.length > 150 && story[index] == ' ') {
+                    //     setTimeout(() => {
+                    //         setTypeStory(prevStory => prevStory + story[index])
+                    //         setIndex(prevIndex => prevIndex + 1)
+                    //         setTypeStory('')
+                    //     }, 1000)
+                    // } else {
                         setTypeStory(prevStory => prevStory + story[index])
                         setIndex(prevIndex => prevIndex + 1)
-                        setTypeStory('')
-                    }, 1000)
-                } else {
-                    setTypeStory(prevStory => prevStory + story[index])
-                    setIndex(prevIndex => prevIndex + 1)
+                    // }
+                }, 5)
+                
+                return () => {
+                    clearTimeout(typeStoryTimeout)
                 }
-            }, 25)
-            
-            return () => {
-                clearTimeout(typeStoryTimeout)
+            }
+            else {
+                scrollRef.current.scrollToEnd({animated: true})
+                setDone(true)
             }
         }
     },[story, index])
@@ -85,6 +100,7 @@ export function IntroRoundCard ({
         setIndex(0)
         setStory('')
         setTypeStory('')
+        setDone(false)
     }
 
     return(
@@ -99,30 +115,34 @@ export function IntroRoundCard ({
                     <Text style={styles.choiceTxt}>Scenario</Text>
                     <View style={styles.divider} />
                 </View>
-                <View style={styles.storyWrapper}>
+                <ScrollView 
+                    contentContainerStyle={styles.storyWrapper}
+                    ref={scrollRef}
+                    onContentSizeChange={() => scrollRef.current.scrollToEnd({animated: true})}
+                    >
                     {story != '' ?
                         <Text style={styles.storyTxt}>{typeStory}</Text>
                     :
                         <Text style={styles.loadingTxt}>{loadTxt}</Text>
                     }
-                </View>
-                {index >= story.length && story != '' ?
-                <Animated.View entering={ZoomIn.springify().damping(15)} style={styles.btnWrapper}>
-                    <PrimaryButton 
-                        text={"Next"}
-                        onPress={handleNext}
-                        />
-                    <Animated.View entering={ZoomIn.springify().damping(15).delay(500)} style={styles.replayWrapper}>
-                        <TouchableOpacity
-                            style={styles.replayWrapper}
-                            onPress={handleReplay}>
-                            <Text style={styles.replayTxt}>Replay</Text>
-                        </TouchableOpacity>
-                    </Animated.View>
-                </Animated.View>
-                :
-                <View />
-                }
+                    {done &&
+                    <Animated.View 
+                        entering={ZoomIn.springify().damping(15)}
+                        style={styles.btnWrapper}
+                        >
+                        <PrimaryButton 
+                            text={"Next"}
+                            onPress={handleNext}
+                            />
+                        <Animated.View entering={ZoomIn.springify().damping(15).delay(500)} style={styles.replayWrapper}>
+                            <TouchableOpacity
+                                style={styles.replayWrapper}
+                                onPress={handleReplay}>
+                                <Text style={styles.replayTxt}>Replay</Text>
+                            </TouchableOpacity>
+                        </Animated.View>
+                    </Animated.View>}
+                </ScrollView>
             </View>
         </MainCard>
     )
@@ -135,10 +155,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '100%',
         height: '100%',
-        paddingVertical: 15,
+        paddingVertical: 10,
     },
     storyWrapper: {
+        flexGrow: 1,
         padding: 20,
+        justifyContent: 'space-between'
     },
     mainTxtWrapper: {
         width: '100%',
@@ -149,6 +171,7 @@ const styles = StyleSheet.create({
         width: '100%',
         justifyContent: 'center',
         alignItems: 'center',
+        marginTop: 20,
     },
     replayWrapper: {
         justifyContent: 'center',

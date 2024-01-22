@@ -3,7 +3,8 @@ const {
     logger,
     HttpsError
  } = require('../config.js')
- const { generateScenario } = require("../langchain/generateScenario.js")
+const { generateScenario } = require("../langchain/generateScenario.js")
+const { generateQuote } = require("../langchain/generateQuote.js")
 
 exports.updateWaitingHandler = async ({
     request: request,
@@ -11,6 +12,34 @@ exports.updateWaitingHandler = async ({
 }) => {
     try {
         const { totalPlayers, rounds, code, category } = request.data
+        
+        for (let i = 1; i <= rounds; i++) {
+            let newScenario = ''
+            let quotes = {}
+            if (i == 1) {
+                const generateScenarioResult = await generateScenario({
+                    category: category,
+                    secret: secret,
+                })
+                if (!generateScenarioResult?.success) throw new Error('failed to generate scenario')
+                newScenario = generateScenarioResult?.scenario
+                for (let player of totalPlayers) {
+                    const generateQuoteResult = await generateQuote({
+                        character: player?.choice,
+                        scenario: newScenario,
+                        secret: secret,
+                    })
+                    if (!generateQuoteResult?.success) throw new Error('failed to generate quote')
+                    quotes[player?.choice] = generateQuoteResult?.quote
+                }
+            }
+            await db.collection('sessions').doc(code).collection('rounds').doc(`round${i}`).set({
+                ratings: [],
+                scenario: newScenario,
+                quotes: quotes,
+            })
+        }
+
         const newPlayersArray = []
         totalPlayers.map((player) => {
             if (player?.deviceID != '') {
@@ -30,18 +59,7 @@ exports.updateWaitingHandler = async ({
                 totalRounds: rounds,
             }
         })
-        const generateScenarioResult = await generateScenario({
-            category: category,
-            secret: secret,
-        })
-        if (!generateScenarioResult?.success) throw new Error('failed to generate scenario')
-        let newScenario = generateScenarioResult?.scenario
-        for (let i = 1; i <= rounds; i++) {
-            await db.collection('sessions').doc(code).collection('rounds').doc(`round${i}`).set({
-                ratings: [],
-                scenario: newScenario,
-            })
-        }
+
         return { success: true }
     }
     catch (e) {
