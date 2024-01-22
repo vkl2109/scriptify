@@ -10,6 +10,9 @@
 const { onCall } = require("firebase-functions/v2/https");
 const { createGameHandler } = require("./handlers/createGameHandler")
 const { updateWaitingHandler } = require("./handlers/updateWaitingHandler")
+const { generateScenario } = require("./langchain/generateScenario")
+const { defineSecret } = require('firebase-functions/params');
+const GPTAPIKey = defineSecret('Scriptify-GPT');
 
 // Create and deploy your first functions
 // https://firebase.google.com/docs/functions/get-started
@@ -25,4 +28,13 @@ exports.createNewGame = onCall(async (request) => {
 
 exports.updateWaitingRoom = onCall(async (request) => {
     return updateWaitingHandler(request)
+})
+
+exports.testScriptGenerator = onCall(
+    { secrets: [GPTAPIKey] },
+    async (request) => {
+    return generateScenario({
+        request: request,
+        secret: GPTAPIKey
+    })
 })
