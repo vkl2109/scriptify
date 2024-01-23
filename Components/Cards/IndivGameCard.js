@@ -14,6 +14,7 @@ import { PrimaryButton } from '../Buttons/PrimaryButton'
 import { ChoiceModal } from '../Modals/ChoiceModal'
 import { MessageModal } from '../Modals/MessageModal'
 import { ReviewRow } from '../Rows/ReviewRow'
+import { IconButton } from '../Buttons/IconButton'
 import {
   doc,
   getDoc,
@@ -124,16 +125,15 @@ export function IndivGameCard ({
                             entering={FadeInDown.springify().damping(15)} 
                             exiting={FadeOutUp.springify().damping(15)}
                             >
-                            <TouchableOpacity
-                            style={styles.iconWrapper}
-                            onPress={() => setShowReviews(prevReview => !prevReview)}>
-                                <View style={styles.innerIconWrapper}>
-                                    {showReviews ?
-                                    <FontAwesome name="quote-right" size={15} color="#31304D" />
-                                    :
-                                    <FontAwesome name="star" size={20} color="#31304D" />}
-                                </View>
-                            </TouchableOpacity>
+                            <IconButton
+                                handlePress={() => setShowReviews(prevReview => !prevReview)}
+                                >
+                                {showReviews ?
+                                <FontAwesome name="quote-right" size={15} color="#31304D" />
+                                :
+                                <FontAwesome name="star" size={20} color="#31304D" />
+                                }
+                            </IconButton>
                         </Animated.View>
                         :
                         <View style={{ width: 35 }}/>}

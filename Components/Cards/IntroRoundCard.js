@@ -12,6 +12,7 @@ import {
     useRef
 } from 'react'
 import { PrimaryButton } from '../Buttons/PrimaryButton'
+import { IconButton } from '../Buttons/IconButton'
 import { MessageModal } from '../Modals/MessageModal'
 import {
   doc,
@@ -25,7 +26,7 @@ import { db } from "../../firebase";
 import Animated, { 
     ZoomIn,
 } from 'react-native-reanimated';
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, FontAwesome } from '@expo/vector-icons';
 
 export function IntroRoundCard ({
     code,
@@ -59,16 +60,8 @@ export function IntroRoundCard ({
         else {
             if (index < story.length) {
                 const typeStoryTimeout = setTimeout(() => {
-                    // if (typeStory.length > 150 && story[index] == ' ') {
-                    //     setTimeout(() => {
-                    //         setTypeStory(prevStory => prevStory + story[index])
-                    //         setIndex(prevIndex => prevIndex + 1)
-                    //         setTypeStory('')
-                    //     }, 1000)
-                    // } else {
-                        setTypeStory(prevStory => prevStory + story[index])
-                        setIndex(prevIndex => prevIndex + 1)
-                    // }
+                    setTypeStory(prevStory => prevStory + story[index])
+                    setIndex(prevIndex => prevIndex + 1)
                 }, textSpeed)
                 
                 return () => {
@@ -103,6 +96,7 @@ export function IntroRoundCard ({
         setStory('')
         setTypeStory('')
         setDone(false)
+        setTextSpeed(25)
     }
 
     const handleSpeed = () => {
@@ -127,13 +121,23 @@ export function IntroRoundCard ({
                     />
                 <View style={styles.mainTxtWrapper}>
                     <View style={styles.rowWrapper}>
-                        <TouchableOpacity onPress={handleSpeed}>
-                            <AntDesign name="forward" size={24} color="#F0ECE5" />
-                        </TouchableOpacity>
+                        <IconButton 
+                            dimensions={35}
+                            handlePress={done ? handleReplay : handleSpeed}
+                            >
+                            {done ?
+                                <FontAwesome name="repeat" size={15} color="#31304D" />
+                            :
+                                <AntDesign name="forward" size={15} color="#31304D" />
+                            }
+                        </IconButton>
                         <Text style={styles.choiceTxt}>Scenario</Text>
-                        <TouchableOpacity onPress={handleNext}>
-                            <AntDesign name="stepforward" size={24} color="#F0ECE5" />
-                        </TouchableOpacity>
+                        <IconButton 
+                            dimensions={35}
+                            handlePress={handleNext}
+                            >
+                            <AntDesign name="stepforward" size={15} color="#31304D" />
+                        </IconButton>
                     </View>
                     <View style={styles.divider} />
                 </View>
@@ -156,13 +160,6 @@ export function IntroRoundCard ({
                             text={"Next"}
                             onPress={handleNext}
                             />
-                        <Animated.View entering={ZoomIn.springify().damping(15).delay(500)} style={styles.replayWrapper}>
-                            <TouchableOpacity
-                                style={styles.replayWrapper}
-                                onPress={handleReplay}>
-                                <Text style={styles.replayTxt}>Replay</Text>
-                            </TouchableOpacity>
-                        </Animated.View>
                     </Animated.View>}
                 </ScrollView>
             </View>

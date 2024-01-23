@@ -36,6 +36,7 @@ import {
     CharacterCard,
     PlayGameCard,
     LoadingPie,
+    IconButton
 } from '../Components'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Entypo, Ionicons } from '@expo/vector-icons';
@@ -151,16 +152,16 @@ export function GameScreen ({ route, navigation }) {
                 <View style={{ width: 100 }} />
                 :
                 <View style={styles.iconsWrapper}>
-                    <TouchableOpacity 
-                    style={styles.icon}
-                    onPress={() => setCurrentCard("info")}>
-                        <Entypo name="info-with-circle" size={36} color="white" />
-                    </TouchableOpacity>
-                    <TouchableOpacity 
-                    style={styles.icon}
-                    onPress={() => setCurrentCard("character")}>
-                        <Ionicons name="person-circle-sharp" size={42} color="white" />
-                    </TouchableOpacity>
+                    <IconButton
+                    dimensions={50}
+                    handlePress={() => setCurrentCard("info")}>
+                        <Entypo name="info" size={25} color="#31304D" />
+                    </IconButton>
+                    <IconButton
+                    dimensions={50}
+                    handlePress={() => setCurrentCard("character")}>
+                        <Ionicons name="person-sharp" size={25} color="#31304D" />
+                    </IconButton>
                 </View>}
                 <Text style={styles.codeTxt}>{code}</Text>
                 <View style={styles.closeBtnWrapper}>
@@ -204,7 +205,7 @@ const styles = StyleSheet.create({
     },
     iconsWrapper: {
         flexDirection: 'row',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         alignItems: 'center',
         padding: 5,
         width: 120,
