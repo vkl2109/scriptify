@@ -16,6 +16,7 @@ import { ChameleonCard } from './ChameleonCard'
 import { IndivGameCard } from './IndivGameCard'
 import { RateGameCard } from './RateGameCard'
 import { IntroRoundCard } from './IntroRoundCard'
+import { FinalRoundCard } from './FinalRoundCard'
 import CircularProgress from 'react-native-circular-progress-indicator';
 import {
   doc,
@@ -35,6 +36,7 @@ import {
 export function PlayGameCard ({ code }) {
     const [ players, setPlayers ] = useState(null)
     const [ turns, setTurns ] = useState(null)
+    const [ isHost, setIsHost ] = useState(false)
     const [ error, setError ] = useState(false)
     const [ introRound, setIntroRound ] = useState(true)
     const sessionRef = doc(db, 'sessions', code)
@@ -50,6 +52,7 @@ export function PlayGameCard ({ code }) {
                 const sessionData = doc.data()
                 setPlayers(sessionData?.players)
                 setTurns(sessionData?.turns)
+                setIsHost(sessionData?.host == authDeviceID)
             }
             else {
                 setError(true)
@@ -138,17 +141,21 @@ export function PlayGameCard ({ code }) {
                 
             </Animated.View>
         )
-        else if (turns.currentTurn == players.length) return(
-            <Animated.View entering={SlideInRight.springify().damping(15)} exiting={SlideOutLeft.springify().damping(15)}>
-                <ChameleonCard code={code} handleNextTurn={handleNextTurn}/>
-            </Animated.View>
-        )
         else if (introRound) return(
             <Animated.View entering={SlideInRight.springify().damping(15)} exiting={SlideOutLeft.springify().damping(15)}>
                 <IntroRoundCard 
                     code={code}
                     currentRound={turns.currentRound}
                     handleNext={() => setIntroRound(false)}
+                    />
+            </Animated.View>
+        )
+        else if (turns.currentTurn == players.length) return(
+            <Animated.View entering={SlideInRight.springify().damping(15)} exiting={SlideOutLeft.springify().damping(15)}>
+                <FinalRoundCard 
+                    code={code} 
+                    currentRound={turns?.currentRound}
+                    isHost={isHost}
                     />
             </Animated.View>
         )

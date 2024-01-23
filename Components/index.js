@@ -22,6 +22,7 @@ export * from './Cards/CharacterCard'
 export * from './Cards/InfoGameCard'
 export * from './Cards/PlayGameCard'
 export * from './Cards/LoadingCategoryCard'
+export * from './Cards/FinalRoundCard'
 
 export * from './Modals/ChoosePlayerModal'
 export * from './Modals/ChoiceModal'
