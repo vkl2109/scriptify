@@ -93,7 +93,6 @@ export function IntroRoundCard ({
 
     const handleReplay = () => {
         setIndex(0)
-        setStory('')
         setTypeStory('')
         setDone(false)
         setTextSpeed(25)
@@ -108,7 +107,6 @@ export function IntroRoundCard ({
             case 1:
                 return setTextSpeed(25)
         }
-
     }
 
     return(
@@ -174,7 +172,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '100%',
         height: '100%',
-        paddingVertical: 10,
+        paddingTop: 20,
     },
     storyWrapper: {
         flexGrow: 1,

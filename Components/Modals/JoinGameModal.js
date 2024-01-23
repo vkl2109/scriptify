@@ -39,6 +39,7 @@ export function JoinGameModal ({ isVisible, setIsVisible }) {
     const navigation = useNavigation();
     const [ code, setCode ] = useState('')
     const [ error, setError ] = useState('')
+    const [ loading, setLoading ] = useState(false)
     const [ cardVisible, setCardVisible ] = useState(false)
 
     useEffect(() => {
@@ -48,6 +49,7 @@ export function JoinGameModal ({ isVisible, setIsVisible }) {
     const handleJoin = async () => {
         if (code.length != 4) return
         try {
+            setLoading(true)
             const checkSessionDB = await fetchDoc('sessions', code)
             if (!checkSessionDB) {
                 setError('Invalid Session Code')
@@ -70,6 +72,9 @@ export function JoinGameModal ({ isVisible, setIsVisible }) {
         catch (e) {
             console.log(e)
             setError('Please Try Again')
+        }
+        finally {
+            setLoading(false)
         }
     }
 
@@ -112,6 +117,7 @@ export function JoinGameModal ({ isVisible, setIsVisible }) {
                             <PrimaryButton
                                 variant={code.length == 4 ? "secondary" : "primary"}
                                 text={"Join"}
+                                loading={loading}
                                 onPress={handleJoin}
                                 />
                         </Animated.View>   

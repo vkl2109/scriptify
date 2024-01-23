@@ -29,8 +29,9 @@ import { db } from '../../firebase'
 import Animated, { 
     FadeInDown,
     FadeOutUp,
+    ZoomIn
 } from 'react-native-reanimated';
-import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome, AntDesign } from '@expo/vector-icons';
 
 export function IndivGameCard ({ 
     currentPlayer,
@@ -44,6 +45,8 @@ export function IndivGameCard ({
     const [ quote, setQuote ] = useState('')
     const [ typeQuote, setTypeQuote ] = useState('')
     const [ index, setIndex ] = useState(0)
+    const [ done, setDone ] = useState(false)
+    const [ textSpeed, setTextSpeed ] = useState(25)
     const [ error, setError ] = useState(false)
     const [ showChoice, setShowChoice ] = useState(false)
     const [ showReviews, setShowReviews ] = useState(false)
@@ -57,10 +60,11 @@ export function IndivGameCard ({
                 const typeStoryTimeout = setTimeout(() => {
                         setTypeQuote(prevQuote => prevQuote + quote[index])
                         setIndex(prevIndex => prevIndex + 1)
-                }, 1)
+                }, textSpeed)
                         
                 return () => clearTimeout(typeStoryTimeout)
             }
+            else setDone(true)
         }
     },[quote, typeQuote, index])
 
@@ -95,6 +99,25 @@ export function IndivGameCard ({
         }
     }
 
+    const handleReplay = () => {
+        setShowReviews(false)
+        setIndex(0)
+        setTypeQuote('')
+        setDone(false)
+        setTextSpeed(25)
+    }
+
+    const handleSpeed = () => {
+        switch (textSpeed) {
+            case 25:
+                return setTextSpeed(5)
+            case 5:
+                return setTextSpeed(1)
+            case 1:
+                return setTextSpeed(25)
+        }
+    }
+
     const toggleChoice = () => {
         // if (reviews.length < numReviews) setShowChoice(true)
         // else handleNext()
@@ -118,7 +141,16 @@ export function IndivGameCard ({
                     />
                 <View style={styles.mainTxtWrapper}>
                     <View style={styles.titleWrapper}>
-                        <View style={{ width: 35 }}/>
+                        <IconButton 
+                            dimensions={35}
+                            handlePress={done ? handleReplay : handleSpeed}
+                            >
+                            {done ?
+                                <FontAwesome name="repeat" size={15} color="#31304D" />
+                            :
+                                <AntDesign name="forward" size={15} color="#31304D" />
+                            }
+                        </IconButton>
                         <Text style={styles.choiceTxt}>Your Turn</Text>
                         {reviews.length > 0 ?
                         <Animated.View
@@ -141,25 +173,35 @@ export function IndivGameCard ({
                     <View style={styles.divider} />
                     <Text style={styles.instructions}>Give Us Your Best {choice} Impression!</Text>
                 </View>
-                {showReviews ? 
-                <Animated.FlatList 
-                    entering={FadeInDown.springify().damping(15)} 
-                    exiting={FadeOutUp.springify().damping(15)}
-                    data={reviews}
-                    contentContainerStyle={styles.flatlist}
-                    renderItem={({ item, index }) => <ReviewRow review={item} />}
-                    />
+                <View style={styles.mainBodyWrapper}>
+                    {showReviews ? 
+                    <Animated.FlatList 
+                        entering={FadeInDown.springify().damping(15)} 
+                        exiting={FadeOutUp.springify().damping(15)}
+                        data={reviews}
+                        contentContainerStyle={styles.flatlist}
+                        renderItem={({ item, index }) => <ReviewRow review={item} />}
+                        />
+                    :
+                    <Animated.Text 
+                        entering={FadeInDown.springify().damping(15)} 
+                        exiting={FadeOutUp.springify().damping(15)}
+                        style={styles.quoteTxt}>
+                            {typeQuote}
+                    </Animated.Text>}
+                </View>
+                {done ? 
+                <Animated.View 
+                        entering={ZoomIn.springify().damping(15)}
+                        style={styles.btnWrapper}
+                        >
+                        <PrimaryButton 
+                            text="Next"
+                            onPress={toggleChoice}
+                            />
+                </Animated.View>
                 :
-                <Animated.Text 
-                    entering={FadeInDown.springify().damping(15)} 
-                    exiting={FadeOutUp.springify().damping(15)}
-                    style={styles.quoteTxt}>
-                        {typeQuote}
-                </Animated.Text>}
-                <PrimaryButton 
-                    text="Next"
-                    onPress={toggleChoice}
-                    />
+                <View />}
             </View>
         </MainCard>
     )
@@ -179,7 +221,7 @@ const styles = StyleSheet.create({
         height: '100%',
         justifyContent: 'space-between',
         alignItems: 'center',
-        padding: 20,
+        paddingVertical: 20,
     },
     mainTxtWrapper: {
         width: '100%',
@@ -243,25 +285,17 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
     },
-    iconWrapper: {
-        width: 35,
-        height: 35,
-        padding: 2.5,
-        borderRadius: 100,
-        backgroundColor: '#F0ECE5',
-        shadowColor: '#B6BBC4',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.5,
-        shadowRadius: 0.75,
-    },
-    innerIconWrapper: {
-        width: 30,
-        height: 30,
-        padding: 2.5,
+    btnWrapper: {
+        width: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 100,
-        borderWidth: 2.5,
-        borderColor: '#31304D',
+    },
+    mainBodyWrapper: {
+        padding: 20,
+        textAlign: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
+        flex: 1,
     }
 })
