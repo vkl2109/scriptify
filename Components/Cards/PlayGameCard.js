@@ -38,7 +38,7 @@ export function PlayGameCard ({ code }) {
     const [ error, setError ] = useState(false)
     const [ introRound, setIntroRound ] = useState(true)
     const sessionRef = doc(db, 'sessions', code)
-    const { deviceID: authDeviceID } = useContext(AuthContext)
+    const { deviceID: authDeviceID, currentUser } = useContext(AuthContext)
 
     const checkError = () => {
         if (!players || !turns) setError(true)
@@ -119,7 +119,7 @@ export function PlayGameCard ({ code }) {
             const sessionRatingRef = doc(db, "sessions", code, "rounds", `round${turns.currentRound}`)
             const currentPlayer = players[turns.currentTurn]
             const { deviceID: playerDeviceID } = currentPlayer
-            const ratingRef = `ratings.${playerDeviceID}.${authDeviceID}`
+            const ratingRef = `ratings.${playerDeviceID}.${currentUser}`
             await updateDoc(sessionRatingRef, {
                 [ratingRef]: rating,
             })
@@ -156,19 +156,19 @@ export function PlayGameCard ({ code }) {
         const { deviceID: playerDeviceID } = currentPlayer
         return (
             <Animated.View entering={SlideInRight.springify().damping(15)} exiting={SlideOutLeft.springify().damping(15)}>
-                {/* {playerDeviceID == authDeviceID ? */}
+                {playerDeviceID == authDeviceID ?
                 <IndivGameCard 
                     currentPlayer={currentPlayer}
-                    currentRound={turns.currentRound}
+                    turns={turns}
                     handleNext={handleNextTurn}
                     code={code}
                     />
-                {/* :
+                :
                 <RateGameCard
                     currentPlayer={currentPlayer}
                     handleRating={handleRating}
                     />
-                } */}
+                }
             </Animated.View>
         )
     }, [turns, players, introRound])

@@ -24,7 +24,7 @@ export * from './Cards/PlayGameCard'
 export * from './Cards/LoadingCategoryCard'
 
 export * from './Modals/ChoosePlayerModal'
-export * from './Modals/CancelGameModal'
+export * from './Modals/ChoiceModal'
 export * from './Modals/JoinGameModal'
 export * from './Modals/AuthModal'
 export * from './Modals/LoadingModal'

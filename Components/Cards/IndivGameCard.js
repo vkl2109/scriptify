@@ -10,6 +10,7 @@ import {
 } from 'react'
 import { MainCard } from './MainCard'
 import { PrimaryButton } from '../Buttons/PrimaryButton'
+import { ChoiceModal } from '../Modals/ChoiceModal'
 import {
   doc,
   getDoc,
@@ -24,15 +25,17 @@ import { MessageModal } from '../Modals/MessageModal'
 export function IndivGameCard ({ 
     currentPlayer,
     code,
-    currentRound,
-    handleNext = () => {}
+    turns,
+    handleNext,
 }) {
     const { choice, name } = currentPlayer
-    const [ waiting, setWaiting ] = useState(true)
+    const { currentRound } = turns
     const [ quote, setQuote ] = useState('')
     const [ typeQuote, setTypeQuote ] = useState('')
     const [ index, setIndex ] = useState(0)
     const [ error, setError ] = useState(false)
+    const [ showChoice, setShowChoice ] = useState(false)
+    const [ showReviews, setShowReview ] = useState(false)
 
     useEffect(() => {
         if (quote == '') fetchStory()
@@ -67,6 +70,12 @@ export function IndivGameCard ({
     return(
         <MainCard scale={.75}>
             <View style={styles.innerWrapper}>
+                <ChoiceModal 
+                    isVisible={showChoice}
+                    setIsVisible={setShowChoice}
+                    text={"Proceed without all reviews?"}
+                    handleChoice={handleNext}
+                    />
                 <MessageModal
                     isVisible={error}
                     setIsVisible={setError}
@@ -77,15 +86,14 @@ export function IndivGameCard ({
                     <View style={styles.divider} />
                     <Text style={styles.instructions}>Give Us Your Best {choice} Impression!</Text>
                 </View>
-                <Text style={styles.quoteTxt}>{typeQuote}</Text>
-                {waiting ?
+                {showReviews ? 
+                <></>
+                :
+                <Text style={styles.quoteTxt}>{typeQuote}</Text>}
                 <PrimaryButton 
                     text="Next"
-                    onPress={handleNext}
+                    onPress={() => setShowChoice(true)}
                     />
-                :
-                <Text style={styles.waitingTxt}>waiting for {name}...</Text>
-                }
             </View>
         </MainCard>
     )

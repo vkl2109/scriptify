@@ -22,16 +22,21 @@ import {
     useState
 } from 'react'
 
-export function CancelGameModal ({ showCancel, setCancel, isHost = true, handleCancel }) {
+export function ChoiceModal ({ 
+    isVisible, 
+    setIsVisible, 
+    handleChoice,
+    text = ''
+}) {
 
     const handleClose = () => {
-        setCancel(false)
+        setIsVisible(false)
     }
 
     return (
         <Modal
             animationType='fade'
-            visible={showCancel}
+            visible={isVisible}
             transparent
             onRequestClose={handleClose}
             >
@@ -42,7 +47,7 @@ export function CancelGameModal ({ showCancel, setCancel, isHost = true, handleC
                 <Animated.View 
                     entering={SlideInDown.springify().damping(15)} exiting={SlideOutDown.duration(500)}
                     style={styles.main}>
-                    <Text style={styles.cancelTxt}>{isHost ? 'Cancel' : 'Leave'} Game?</Text>
+                    <Text style={styles.cancelTxt}>{text}</Text>
                     <View style={styles.greyDivider} />
                     <View style={styles.bottomRow}>
                         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -55,7 +60,7 @@ export function CancelGameModal ({ showCancel, setCancel, isHost = true, handleC
                             <PrimaryButton
                                 text={'Yes'}
                                 variant='secondary'
-                                onPress={handleCancel}
+                                onPress={handleChoice}
                                 />
                         </View>
                     </View>
@@ -86,6 +91,7 @@ const styles = StyleSheet.create({
         fontSize: 30,
         fontWeight: 'bold',
         margin: 10,
+        textAlign: 'center',
     },
     bottomRow: {
         flexDirection: 'row',

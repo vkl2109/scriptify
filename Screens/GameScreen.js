@@ -29,7 +29,7 @@ import {
 } from '../Context'
 import {
     CloseButton,
-    CancelGameModal,
+    ChoiceModal,
     MessageModal,
     InfoGameCard,
     AnonymousCard,
@@ -135,11 +135,11 @@ export function GameScreen ({ route, navigation }) {
 
     return(
         <SafeAreaView style={styles.container}>
-            <CancelGameModal 
-                showCancel={closeGame}
-                setCancel={setCloseGame}
-                isHost={false}
-                handleCancel={handleCancel}
+            <ChoiceModal 
+                isVisible={closeGame}
+                setIsVisible={setCloseGame}
+                text={"Leave Game?"}
+                handleChoice={handleCancel}
                 />
             <MessageModal
                 isVisible={error}

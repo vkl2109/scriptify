@@ -16,7 +16,6 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context'
 import {
     ChoosePlayerModal,
-    CancelGameModal,
     MessageModal,
     PlayerRow,
     CloseHeader,
@@ -25,6 +24,7 @@ import {
     SegmentControl,
     CodeRow,
     PlayerList,
+    ChoiceModal,
 } from '../Components'
 import { AuthContext } from '../Context'
 import { useNavigation } from '@react-navigation/native'
@@ -157,11 +157,11 @@ export function WaitingScreen ({ route }) {
 
     return(
         <SafeAreaView style={styles.container}>
-            <CancelGameModal 
-                showCancel={showCancel}
-                setCancel={setCancel}
-                isHost={isHost}
-                handleCancel={handleCancel}
+            <ChoiceModal 
+                isVisible={showCancel}
+                setIsVisible={setCancel}
+                text={isHost ? "Cancel Game?" : "Leave Game?"}
+                handleChoice={handleCancel}
                 />
             <MessageModal
                 isVisible={isFull}
