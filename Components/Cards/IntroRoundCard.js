@@ -25,6 +25,7 @@ import { db } from "../../firebase";
 import Animated, { 
     ZoomIn,
 } from 'react-native-reanimated';
+import { AntDesign } from '@expo/vector-icons';
 
 export function IntroRoundCard ({
     code,
@@ -37,6 +38,7 @@ export function IntroRoundCard ({
     const [ done, setDone ] = useState(false)
     const [ error, setError ] = useState(false)
     const [ index, setIndex ] = useState(0)
+    const [ textSpeed, setTextSpeed ] = useState(25)
     const scrollRef = useRef()
 
     useEffect(() => {
@@ -67,7 +69,7 @@ export function IntroRoundCard ({
                         setTypeStory(prevStory => prevStory + story[index])
                         setIndex(prevIndex => prevIndex + 1)
                     // }
-                }, 1)
+                }, textSpeed)
                 
                 return () => {
                     clearTimeout(typeStoryTimeout)
@@ -103,6 +105,18 @@ export function IntroRoundCard ({
         setDone(false)
     }
 
+    const handleSpeed = () => {
+        switch (textSpeed) {
+            case 25:
+                return setTextSpeed(5)
+            case 5:
+                return setTextSpeed(1)
+            case 1:
+                return setTextSpeed(25)
+        }
+
+    }
+
     return(
         <MainCard scale={0.75}>
             <View style={styles.wrapper}>
@@ -112,7 +126,15 @@ export function IntroRoundCard ({
                     message={"Bad Connection"}
                     />
                 <View style={styles.mainTxtWrapper}>
-                    <Text style={styles.choiceTxt}>Scenario</Text>
+                    <View style={styles.rowWrapper}>
+                        <TouchableOpacity onPress={handleSpeed}>
+                            <AntDesign name="forward" size={24} color="#F0ECE5" />
+                        </TouchableOpacity>
+                        <Text style={styles.choiceTxt}>Scenario</Text>
+                        <TouchableOpacity onPress={handleNext}>
+                            <AntDesign name="stepforward" size={24} color="#F0ECE5" />
+                        </TouchableOpacity>
+                    </View>
                     <View style={styles.divider} />
                 </View>
                 <ScrollView 
@@ -166,6 +188,13 @@ const styles = StyleSheet.create({
         width: '100%',
         justifyContent: 'flex-start',
         alignItems: 'center',
+    },
+    rowWrapper: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: '100%',
+        paddingHorizontal: 20,
     },
     btnWrapper: {
         width: '100%',

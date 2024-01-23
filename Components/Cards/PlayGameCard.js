@@ -160,6 +160,7 @@ export function PlayGameCard ({ code }) {
                 <IndivGameCard 
                     currentPlayer={currentPlayer}
                     turns={turns}
+                    numReviews={players.length}
                     handleNext={handleNextTurn}
                     code={code}
                     />
