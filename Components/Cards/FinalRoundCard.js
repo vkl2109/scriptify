@@ -49,7 +49,17 @@ export function FinalRoundCard ({
             const roundData = roundSnap.data()
             const newOptions = roundData?.options
             if (!newOptions) throw new Error('not found')
-            setOptions(Object.entries(newOptions))
+            const newOptionsArray = Object.entries(newOptions)
+            setOptions(newOptionsArray)
+            newOptionsArray?.map((newOption) => {
+                const [key, value] = newOption
+                if (value.length > 0) value?.map((user) => {
+                    if (user == authDeviceID) {
+                        setHasVoted(true)
+                        setSelectedVote(key)
+                    }
+                })
+            })
         }
         catch (e) {
             setError(true)
@@ -108,6 +118,7 @@ export function FinalRoundCard ({
                 <View style={styles.endWrapper}>
                     {isHost ? 
                     <PrimaryButton 
+                        text="Next Round"
                         onPress={toggleNextRound}
                         />
                     :
