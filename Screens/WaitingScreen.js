@@ -25,6 +25,7 @@ import {
     CodeRow,
     PlayerList,
     ChoiceModal,
+    LoadingModal,
 } from '../Components'
 import { AuthContext } from '../Context'
 import { useNavigation } from '@react-navigation/native'
@@ -163,6 +164,10 @@ export function WaitingScreen ({ route }) {
                 text={isHost ? "Cancel Game?" : "Leave Game?"}
                 handleChoice={handleCancel}
                 />
+            <LoadingModal
+                isVisible={loading}
+                setIsVisible={setLoading}
+                />
             <MessageModal
                 isVisible={isFull}
                 setIsVisible={setIsFull}
@@ -212,7 +217,7 @@ export function WaitingScreen ({ route }) {
                         />
                     <PrimaryButton 
                         text={'Start Game'}
-                        onPress={handleStart}
+                        onPress={() => setLoading(true)}
                         loading={loading}
                         />
                 </>

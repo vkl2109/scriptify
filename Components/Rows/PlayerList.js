@@ -12,6 +12,7 @@ import {
 } from 'react'
 import { ChoosePlayerModal } from '../Modals/ChoosePlayerModal';
 import { AntDesign } from '@expo/vector-icons';
+import { useChoosePlayerStore } from '../../Context/ZustandStores';
 
 export function PlayerList ({ 
     players,
@@ -20,14 +21,15 @@ export function PlayerList ({
     code,
 }) {
     const { height, width } = useWindowDimensions()
-    const [ hasChosen, setHasChosen ] = useState(true)
+    const choosePlayerState = useChoosePlayerStore((state) => state.choosePlayerState);
+    const toggle = useChoosePlayerStore((state) => state.toggle)
 
     return (
         <View style={styles.flatlistWrapper(width)}>
             <ChoosePlayerModal 
                 unchosen={unchosen}
-                isVisible={hasChosen}
-                setIsVisible={setHasChosen}
+                isVisible={choosePlayerState}
+                setIsVisible={toggle}
                 totalPlayers={totalPlayers}
                 code={code}
                 />
@@ -46,7 +48,7 @@ export function PlayerList ({
                     />
             </View>
             <TouchableOpacity 
-                onPress={() => setHasChosen(true)}
+                onPress={() => toggle(true)}
                 style={styles.addButtonWrapper}
                 >
                 <View style={styles.addButtonInnerWrapper}>
