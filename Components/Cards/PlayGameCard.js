@@ -2,7 +2,6 @@ import {
     StyleSheet,
     View,
     Text,
-    ActivityIndicator
 } from 'react-native'
 import { RoundStepper } from '../Custom/RoundStepper'
 import {

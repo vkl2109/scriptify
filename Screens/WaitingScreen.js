@@ -3,7 +3,6 @@ import {
     View,
     Text,
     TouchableOpacity,
-    ActivityIndicator,
     FlatList,
     Share,
     useWindowDimensions
@@ -44,6 +43,7 @@ import { db } from '../firebase'
 import { friendCategory, roundsData } from '../constants'
 import { Feather } from '@expo/vector-icons';
 import { getFunctions, httpsCallable } from "firebase/functions";
+import LottieView from 'lottie-react-native';
 
 export function WaitingScreen ({ route }) {
     const { code } = route.params
@@ -187,7 +187,12 @@ export function WaitingScreen ({ route }) {
             <HostRow host={host} />
             {!players ?
                 <View style={styles.waiting}>
-                    <ActivityIndicator size='large' />
+                    <LottieView 
+                        source={require("../assets/SimpleLoading2.json")} 
+                        autoPlay 
+                        loop 
+                        style={styles.loader}
+                        />
                 </View>
             :
             <PlayerList 
@@ -298,4 +303,8 @@ const styles = StyleSheet.create({
         borderColor: '#F0ECE5',
         margin: 10,
     },
+    loader: {
+        width: 200,
+        height: 200,
+    }
 })

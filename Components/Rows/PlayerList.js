@@ -1,7 +1,6 @@
 import {
     StyleSheet,
     View,
-    ActivityIndicator,
     FlatList,
     TouchableOpacity,
     useWindowDimensions
@@ -40,11 +39,6 @@ export function PlayerList ({
                     renderItem={({ item, index }) => (
                         <PlayerRow key={index} player={item} />
                     )}
-                    // ListEmptyComponent={
-                    //     <View style={styles.waiting}>
-                    //         <ActivityIndicator size='large' />
-                    //     </View>
-                    // }
                     />
             </View>
             <TouchableOpacity 

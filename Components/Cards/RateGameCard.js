@@ -2,7 +2,6 @@ import {
     StyleSheet,
     View,
     Text,
-    ActivityIndicator
 } from 'react-native'
 import { MainCard } from './MainCard'
 import { MessageModal } from '../Modals/MessageModal'

@@ -3,7 +3,6 @@ import {
     View,
     TouchableOpacity,
     Text,
-    ActivityIndicator,
     Image,
     ImageBackground,
     useWindowDimensions,

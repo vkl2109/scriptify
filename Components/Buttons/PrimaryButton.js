@@ -3,8 +3,8 @@ import {
     TouchableOpacity,
     Text,
     View,
-    ActivityIndicator
 } from 'react-native'
+import LottieView from 'lottie-react-native';
 
 export function PrimaryButton ({ 
     text, 
@@ -23,7 +23,21 @@ export function PrimaryButton ({
                 borderColor: variant == "primary" ? '#31304D' : '#F0ECE5'
             }]}>
                 {loading ?
-                <ActivityIndicator size="small" />
+                (variant == "primary" ?
+                <LottieView 
+                    source={require("../../assets/SimpleLoading.json")} 
+                    autoPlay 
+                    loop 
+                    style={styles.loader}
+                    />
+                :
+                <LottieView 
+                    source={require("../../assets/SimpleLoading2.json")} 
+                    autoPlay 
+                    loop 
+                    style={styles.loader}
+                    />
+                )
                 :
                 <Text 
                     style={[styles.buttonText, {
@@ -59,5 +73,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 8,
         borderWidth: 2.5,
+    },
+    loader: {
+        width: 50,
+        height: 50,
     }
 })

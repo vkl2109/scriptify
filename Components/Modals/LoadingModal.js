@@ -2,7 +2,7 @@ import {
     StyleSheet,
     Modal,
     View,
-    Text
+    useWindowDimensions
 } from 'react-native'
 import {
     CloseHeader
@@ -29,6 +29,7 @@ const textLines = [
 export function LoadingModal ({ isVisible, setIsVisible }) {
     const insets = useSafeAreaInsets();
     const [ index, setIndex ] = useState(0)
+    const { height, width } = useWindowDimensions()
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -59,7 +60,7 @@ export function LoadingModal ({ isVisible, setIsVisible }) {
             >
             <BlurView
                 style={styles.wrapper(insets)}
-                intensity={20}
+                intensity={50}
                 >
                 <View style={styles.main}>
                     <CloseHeader
@@ -70,7 +71,7 @@ export function LoadingModal ({ isVisible, setIsVisible }) {
                             source={require("../../assets/SimpleLoading2.json")} 
                             autoPlay 
                             loop 
-                            style={styles.loader}
+                            style={styles.loader(width)}
                             />
                         <TextRenderer />
                     </View>
@@ -113,9 +114,10 @@ const styles = StyleSheet.create({
         fontSize: 40,
         fontWeight: 'bold',
         color: '#F0ECE5',
+        textAlign: 'center',
     },
-    loader: {
-        width: 500,
-        height: 500,
-    }
+    loader: (w) => ({
+        width: w,
+        height: w - 100,
+    })
 })
