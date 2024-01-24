@@ -53,9 +53,9 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         backgroundColor: '#161A30',
         shadowColor: '#B6BBC4',
-        shadowOffset: { width: 0, height: 0 },
-        shadowOpacity: 5,
-        shadowRadius: 2.5,
+        shadowOffset: { width: 2, height: 2 },
+        shadowOpacity: 0.75,
+        shadowRadius: 0.75,
     },
     codeInnerWrapper: {
         width: '100%',

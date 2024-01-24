@@ -80,9 +80,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#161A30',
         borderRadius: 20,
         shadowColor: '#B6BBC4',
-        shadowOffset: { width: 0, height: 0 },
-        shadowOpacity: 2.5,
-        shadowRadius: 2,
+        shadowOffset: { width: 4, height: 4 },
+        shadowOpacity: 0.75,
+        shadowRadius: 0.75,
         marginBottom: 10,
     }),
     flatlistInnerWrapper: {
