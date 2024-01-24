@@ -6,6 +6,7 @@ import {
 } from 'react-native'
 import { MainCard } from './MainCard'
 import { MessageModal } from '../Modals/MessageModal'
+import { LoadingModal } from '../Modals/LoadingModal'
 import { 
     useState, 
     useEffect,
@@ -40,6 +41,7 @@ export function FinalRoundCard ({
     const [ error, setError ] = useState(false)
     const [ selectedVote, setSelectedVote ] = useState(null)
     const [ options, setOptions ] = useState([])
+    const [ loading, setLoading ] = useState(false)
     const roundRef = doc(db, 'sessions', code, 'rounds', `round${currentRound}`)
     const { deviceID: authDeviceID } = useContext(AuthContext)
 
@@ -85,8 +87,17 @@ export function FinalRoundCard ({
         }
     }
 
-    const toggleNextRound = () => {
-
+    const toggleNextRound = async () => {
+        try {
+            setLoading(true)
+        }
+        catch (e) {
+            console.log(e)
+            setError(true)
+        }
+        finally {
+            // setLoading(false)
+        }
     }
 
     return(
@@ -96,6 +107,10 @@ export function FinalRoundCard ({
                     isVisible={error}
                     setIsVisible={setError}
                     message={"Bad Connection"}
+                    />
+                <LoadingModal
+                    isVisible={loading}
+                    setIsVisible={setLoading}
                     />
                 <View style={styles.mainTxtWrapper}>
                     <Text style={styles.choiceTxt}>What's Next?</Text>
@@ -146,6 +161,7 @@ export function FinalRoundCard ({
                     {isHost ? 
                     <PrimaryButton 
                         text="Next Round"
+                        loading={loading}
                         onPress={toggleNextRound}
                         />
                     :

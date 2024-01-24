@@ -185,6 +185,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#31304D',
         alignItems: 'center',
         justifyContent: 'flex-start',
+        paddingVertical: 10,
     },
     center: {
         flex: 1,
@@ -198,7 +199,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        padding: 10,
+        padding: 5,
+        paddingBottom: 10,
         width: '100%',
     },
     iconsWrapper: {
