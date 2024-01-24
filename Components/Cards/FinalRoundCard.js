@@ -2,7 +2,7 @@ import {
     StyleSheet,
     View,
     Text,
-    ActivityIndicator
+    FlatList,
 } from 'react-native'
 import { MainCard } from './MainCard'
 import { MessageModal } from '../Modals/MessageModal'
@@ -20,8 +20,14 @@ import {
   updateDoc,
   arrayUnion,
 } from "firebase/firestore";
+import Animated, { 
+    FadeInDown,
+    FadeOutUp,
+    ZoomIn
+} from 'react-native-reanimated';
 import { db } from "../../firebase";
 import { PrimaryButton } from '../Buttons/PrimaryButton'
+import { VoteRow } from '../Rows/VoteRow'
 import {
     AuthContext,
 } from '../../Context'
@@ -32,11 +38,10 @@ export function FinalRoundCard ({
     isHost
 }) {
     const [ error, setError ] = useState(false)
+    const [ selectedVote, setSelectedVote ] = useState(null)
     const [ options, setOptions ] = useState([])
     const roundRef = doc(db, 'sessions', code, 'rounds', `round${currentRound}`)
     const { deviceID: authDeviceID } = useContext(AuthContext)
-    const [ hasVoted, setHasVoted ] = useState(false)
-    const [ selectedVote, setSelectedVote ] = useState('')
 
     useEffect(() => {
         if (options.length == 0) fetchOptions()
@@ -51,13 +56,11 @@ export function FinalRoundCard ({
             if (!newOptions) throw new Error('not found')
             const newOptionsArray = Object.entries(newOptions)
             setOptions(newOptionsArray)
+            console.log(newOptionsArray)
             newOptionsArray?.map((newOption) => {
-                const [key, value] = newOption
-                if (value.length > 0) value?.map((user) => {
-                    if (user == authDeviceID) {
-                        setHasVoted(true)
-                        setSelectedVote(key)
-                    }
+                const [ key, value ] = newOption
+                value?.map((user) => {
+                    if (user == authDeviceID) setSelectedVote(key)
                 })
             })
         }
@@ -74,7 +77,6 @@ export function FinalRoundCard ({
             await updateDoc(roundRef, {
                 [updateOptionRef]: arrayUnion(authDeviceID)
             })
-            setHasVoted(true)
             setSelectedVote(selectedOption)
         }
         catch (e) {
@@ -100,21 +102,46 @@ export function FinalRoundCard ({
                     <View style={styles.divider} />
                     <Text style={styles.quoteTxt}>Vote on what to investigate!</Text>
                 </View>
-                <View style={styles.optionsWrapper}>
-                    {!hasVoted ?
-                    (options?.map((option, index) => {
-                        const [ key, value ] = option
-                        return (<View style={styles.btnWrapper} key={index}>
+                {!selectedVote ?
+                <Animated.View 
+                    entering={FadeInDown.springify().damping(15)} 
+                    exiting={FadeOutUp.springify().damping(15)}
+                    style={styles.optionsWrapper}>
+                    {options?.map((option, index) => {
+                        return (
+                        <Animated.View 
+                            entering={FadeInDown.springify().damping(15).delay(100 * index)} 
+                            exiting={FadeOutUp.springify().damping(15).delay(100 * index)}
+                            style={styles.btnWrapper} 
+                            key={index}
+                            >
                             <PrimaryButton 
-                                text={key}
-                                onPress={() => handleVote(key)}
+                                text={option[0]}
+                                onPress={() => handleVote(option[0])}
                                 />
-                        </View>)
-                    }))
-                    :
-                    <Text style={styles.choiceTxt}>You selected {selectedVote}!</Text>
-                    }
+                        </Animated.View>)
+                    })}
+                </Animated.View>
+                :
+                <View 
+                    style={styles.optionsWrapper}>
+                    <Animated.Text 
+                    entering={FadeInDown.springify().damping(15)} 
+                    exiting={FadeOutUp.springify().damping(15)} 
+                    style={styles.quoteTxt}>Your Choice:</Animated.Text>
+                    <Animated.Text 
+                    entering={FadeInDown.springify().damping(15)} 
+                    exiting={FadeOutUp.springify().damping(15)}
+                    style={styles.choiceTxt}>{selectedVote}</Animated.Text>
+                    <Animated.FlatList
+                        entering={FadeInDown.springify().damping(15)} 
+                        exiting={FadeOutUp.springify().damping(15)}
+                        contentContainerStyle={styles.flatlist}
+                        data={options}
+                        renderItem={({item, index}) => <VoteRow option={item} key={index} />}
+                        />
                 </View>
+                }
                 <View style={styles.endWrapper}>
                     {isHost ? 
                     <PrimaryButton 
@@ -166,7 +193,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     optionsWrapper: {
-        flex: 1,
         width: '100%',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -185,4 +211,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flex: 1,
     },
+    flatlist: {
+        width: '100%',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+    }
 })
