@@ -16,6 +16,7 @@ import Animated, {
     ZoomIn
 } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
+import { BestActorRow } from '../Rows/BestActorRow';
 
 export function ResultCard ({
     players,
@@ -84,9 +85,7 @@ export function ResultCard ({
                     <View style={styles.divider} />
                     <Text style={styles.quoteTxt}>It was {players[suspect]?.choice}!</Text>
                 </View>
-                <View style={styles.resultWrapper}>
-                    
-                </View>
+                {!bestActor && <BestActorRow bestActor={'Mike'}/>}
                 <PrimaryButton 
                     text="Back to Home"
                     onPress={() => navigation.navigate("Landing")}
@@ -106,7 +105,6 @@ const styles = StyleSheet.create({
         paddingVertical: 20,
     },
     mainTxtWrapper: {
-        flex: 1,
         width: '100%',
         justifyContent: 'flex-start',
         alignItems: 'center',
@@ -133,6 +131,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 20,
     },
     flatlist: {
+        flex: 1,
         width: '100%',
         flexDirection: 'column',
         justifyContent: 'center',
