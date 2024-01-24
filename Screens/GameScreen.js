@@ -215,7 +215,8 @@ const styles = StyleSheet.create({
     },
     codeTxt: {
         fontSize: 30,
-        color: '#F0ECE5'
+        color: '#F0ECE5',
+        fontWeight: 'bold',
     },
     closeBtnWrapper: {
         width: 120,

@@ -10,6 +10,12 @@ import {
     useState,
     useEffect
 } from 'react'
+import Animated, { 
+    FadeInDown,
+    FadeOutUp,
+    ZoomIn
+} from 'react-native-reanimated';
+import { useNavigation } from '@react-navigation/native';
 
 export function ResultCard ({
     players,
@@ -17,36 +23,75 @@ export function ResultCard ({
 }) {
     const [ hasVoted, setHasVoted ] = useState(false)
     const [ isCorrect, setIsCorrect ] = useState(false)
+    const [ bestActor, setBestActor ] = useState(null)
+    const navigation = useNavigation()
 
     const handleVote = (selected) => {
         if (selected == suspect) setIsCorrect(true)
         setHasVoted(true)
     }
 
+    useEffect(() => {
+        if (!bestActor) fetchBestActor()
+    },[bestActor])
+
+    const fetchBestActor = async () => {
+        try {
+
+        }
+        catch (e) {
+            console.log(e)
+            setBestActor(players[0]?.name)
+        }
+    }
+
     return(
         <MainCard scale={0.75}>
-            <View style={styles.wrapper}>
+            {!hasVoted ?
+            <Animated.View 
+                entering={FadeInDown.springify().damping(15)} 
+                exiting={FadeOutUp.springify().damping(15)} 
+                style={styles.wrapper}>
                 <View style={styles.mainTxtWrapper}>
                     <Text style={styles.choiceTxt}>WHO DID IT?</Text>
                     <View style={styles.divider} />
                     <Text style={styles.quoteTxt}>Vote on your top suspect!</Text>
                 </View>
-                {!hasVoted ?
                 <FlatList
                     contentContainerStyle={styles.flatlist}
                     data={players}
                     renderItem={({item, index}) => (
-                        <View style={styles.btnWrapper}>
+                        <Animated.View 
+                            entering={FadeInDown.springify().damping(15).delay(100 * index)} 
+                            exiting={FadeOutUp.springify().damping(15).delay(100 * index)}
+                            style={styles.btnWrapper}>
                             <PrimaryButton 
                                 text={item?.choice}
                                 onPress={() => handleVote(index)}
                                 />
-                        </View>
+                        </Animated.View >
                     )}
                     />
-                :
-                <View />}
-            </View>
+                <Text style={styles.quoteTxt}>Think about all the quotes and scenarios!</Text>
+            </Animated.View>
+            :
+            <Animated.View 
+                entering={FadeInDown.springify().damping(15)} 
+                exiting={FadeOutUp.springify().damping(15)} 
+                style={styles.wrapper}>
+                <View style={styles.mainTxtWrapper}>
+                    <Text style={styles.choiceTxt}>{isCorrect ? "YOU WON" : "YOU LOST"}</Text>
+                    <View style={styles.divider} />
+                    <Text style={styles.quoteTxt}>It was {players[suspect]?.choice}!</Text>
+                </View>
+                <View style={styles.resultWrapper}>
+                    
+                </View>
+                <PrimaryButton 
+                    text="Back to Home"
+                    onPress={() => navigation.navigate("Landing")}
+                    />
+            </Animated.View>}
         </MainCard>
     )
 }
@@ -85,6 +130,7 @@ const styles = StyleSheet.create({
         fontWeight: '100',
         fontStyle: "italic",
         textAlign: 'center',
+        marginHorizontal: 20,
     },
     flatlist: {
         width: '100%',
@@ -93,6 +139,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     btnWrapper: {
-        width: '100%',
+        width: 300,
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'center',
     }
 })

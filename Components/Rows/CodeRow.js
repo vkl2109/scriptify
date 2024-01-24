@@ -24,17 +24,18 @@ export function CodeRow ({ code }) {
     }
 
     return(
-        <TouchableOpacity 
-            onPress={handleShare}
-            style={styles.codeWrapper}>
+        <View style={styles.codeWrapper}>
             <View style={styles.codeInnerWrapper}>
                 <View style={{width: 50 }}/>
                 <Text style={styles.codeText}>{code}</Text>
-                <View style={styles.iconWrapper}>
+                <IconButton 
+                    dimensions={50}
+                    handlePress={handleShare}
+                    >
                     <Feather name="share" size={30} color="#31304D" />
-                </View>
+                </IconButton>
             </View>
-        </TouchableOpacity>
+        </View>
     )
 }
 
