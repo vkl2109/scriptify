@@ -180,7 +180,7 @@ export function IndivGameCard ({
                         exiting={FadeOutUp.springify().damping(15)}
                         data={reviews}
                         contentContainerStyle={styles.flatlist}
-                        renderItem={({ item, index }) => <ReviewRow review={item} />}
+                        renderItem={({ item, index }) => <ReviewRow review={item} key={index} />}
                         />
                     :
                     <Animated.Text 
