@@ -16,7 +16,6 @@ import { IndivGameCard } from './IndivGameCard'
 import { RateGameCard } from './RateGameCard'
 import { IntroRoundCard } from './IntroRoundCard'
 import { FinalRoundCard } from './FinalRoundCard'
-import CircularProgress from 'react-native-circular-progress-indicator';
 import {
   doc,
   onSnapshot,
@@ -65,25 +64,6 @@ export function PlayGameCard ({ code }) {
             unsubscribe()
         }
     },[code])
-
-    function LoadingView () {
-        return(
-            <Animated.View 
-                entering={SlideInRight.springify().damping(15)} exiting={SlideOutLeft.springify().damping(15)}
-                style={styles.center}>
-                <CircularProgress
-                    value={99}
-                    activeStrokeColor={'#F0ECE5'}
-                    inActiveStrokeColor={'#F0ECE5'}
-                    inActiveStrokeOpacity={0.2}
-                    progressValueColor={'#F0ECE5'}
-                    valueSuffix={'%'}
-                    duration={5000}
-                    onAnimationComplete={checkError}
-                    />
-            </Animated.View>
-        )
-    }
 
     const handleNextTurn = async () => {
         try {

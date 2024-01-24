@@ -7,6 +7,7 @@ import {
     Share,
     useWindowDimensions
 } from 'react-native'
+import { IconButton } from '../Buttons/IconButton';
 import { Feather } from '@expo/vector-icons';
 
 export function CodeRow ({ code }) {

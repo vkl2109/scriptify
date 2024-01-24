@@ -39,7 +39,6 @@ import {
 } from '../Components'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Entypo, Ionicons } from '@expo/vector-icons';
-import CircularProgress from 'react-native-circular-progress-indicator';
 import { fetchDoc } from '../Hooks'
 
 export function GameScreen ({ route, navigation }) {

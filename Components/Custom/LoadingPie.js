@@ -1,7 +1,6 @@
 import {
     StyleSheet,
-    View,
-    Text
+    useWindowDimensions
 } from 'react-native'
 import Animated, {
     SlideInRight,
@@ -9,34 +8,24 @@ import Animated, {
     ZoomIn,
     ZoomOut,
 } from 'react-native-reanimated'
-import { MessageModal } from '../Modals/MessageModal'
 import {
     useState
 } from 'react'
-import CircularProgress from 'react-native-circular-progress-indicator';
+import LottieView from 'lottie-react-native';
 
 export function LoadingPie ({ externalError = false }) {
-    const [ error, setError ] = useState(false)
+    const { height, width } = useWindowDimensions()
 
     return(
         <Animated.View 
             entering={ZoomIn.duration(500)} 
             exiting={ZoomOut.duration(500)}
             style={styles.center}>
-            <MessageModal
-                isVisible={error && !externalError}
-                setIsVisible={setError}
-                message={"Bad Connection"}
-                />
-            <CircularProgress
-                value={50}
-                activeStrokeColor={'#F0ECE5'}
-                inActiveStrokeColor={'#F0ECE5'}
-                inActiveStrokeOpacity={0.2}
-                progressValueColor={'#F0ECE5'}
-                valueSuffix={'%'}
-                duration={5000}
-                onAnimationComplete={() => setError(true)}
+            <LottieView 
+                source={require("../../assets/SimpleLoading2.json")} 
+                autoPlay 
+                loop 
+                style={styles.loader(width)}
                 />
         </Animated.View>
     )
@@ -50,4 +39,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    loader: (w) => ({
+        width: w,
+        height: w - 100,
+    })
 })
