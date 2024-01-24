@@ -16,6 +16,7 @@ import { IndivGameCard } from './IndivGameCard'
 import { RateGameCard } from './RateGameCard'
 import { IntroRoundCard } from './IntroRoundCard'
 import { FinalRoundCard } from './FinalRoundCard'
+import { ResultCard } from './ResultCard'
 import {
   doc,
   onSnapshot,
@@ -34,15 +35,12 @@ import {
 export function PlayGameCard ({ code }) {
     const [ players, setPlayers ] = useState(null)
     const [ turns, setTurns ] = useState(null)
+    const [ suspect, setSuspect ] = useState(0)
     const [ isHost, setIsHost ] = useState(false)
     const [ error, setError ] = useState(false)
     const [ introRound, setIntroRound ] = useState(true)
     const sessionRef = doc(db, 'sessions', code)
     const { deviceID: authDeviceID, currentUser } = useContext(AuthContext)
-
-    const checkError = () => {
-        if (!players || !turns) setError(true)
-    }
 
     useEffect(() => {
         const unsubscribe = onSnapshot(sessionRef, async (doc) => {
@@ -50,6 +48,7 @@ export function PlayGameCard ({ code }) {
                 const sessionData = doc.data()
                 setPlayers(sessionData?.players)
                 setTurns(sessionData?.turns)
+                setSuspect(sessionData?.suspect)
                 setIsHost(sessionData?.host == authDeviceID)
             }
             else {
@@ -117,7 +116,10 @@ export function PlayGameCard ({ code }) {
     const TurnRenderer = useCallback(() => {
         if (turns.hasFinished) return (
             <Animated.View entering={SlideInRight.springify().damping(15)} exiting={SlideOutLeft.springify().damping(15)}>
-                
+                <ResultCard 
+                    players={players}
+                    suspect={suspect}
+                    />
             </Animated.View>
         )
         else if (introRound) return(
@@ -190,7 +192,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         alignItems: 'center',
-        justifyContent: 'flex-start',
+        justifyContent: 'space-evenly',
         paddingBottom: 25,
     },
     center: {
