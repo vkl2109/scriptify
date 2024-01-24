@@ -17,14 +17,24 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
 import { BestActorRow } from '../Rows/BestActorRow';
+import {
+  doc,
+  getDoc,
+  onSnapshot,
+  updateDoc,
+  arrayUnion,
+} from "firebase/firestore";
+import { db } from '../../firebase'
 
 export function ResultCard ({
     players,
     suspect,
+    code,
 }) {
     const [ hasVoted, setHasVoted ] = useState(false)
     const [ isCorrect, setIsCorrect ] = useState(false)
     const [ bestActor, setBestActor ] = useState(null)
+    const [ mostVotes, setMostVotes ] = useState(0)
     const navigation = useNavigation()
 
     const handleVote = (selected) => {
@@ -38,10 +48,34 @@ export function ResultCard ({
 
     const fetchBestActor = async () => {
         try {
+            let totalRatings = {}
+            for (let i = 1; i < 4; i++) {
+                const newRoundRef = doc(db, 'sessions', code, 'rounds', `round${i}`)
+                const newRoundDoc = await getDoc(newRoundRef)
+                if (!newRoundDoc.exists()) throw new Error('failed to fetch!')
+                const newRoundData = newRoundDoc.data()
+                const { ratings } = newRoundData
 
+                // Iterate through each person
+                for (const [person, ratingsList] of Object.entries(ratings)) {
+                    let total = 0;
+                    // Iterate through each rating in the person's list
+                    if (!ratingsList || ratingsList.length == 0) continue
+                    for (const ratingDict of ratingsList) {
+                        total += Object.values(ratingDict).reduce((sum, rating) => sum + rating, 0);
+                    }
+                    if (totalRatings[person]) {
+                        const oldRatings = totalRatings[person]
+                        totalRatings[person] = oldRatings + total
+                    } 
+                    else totalRatings[person] = total;
+                }
+            }
+            const personWithHighestRatings = Object.keys(totalRatings).reduce((a, b) => totalRatings[a] > totalRatings[b] ? a : b);
         }
         catch (e) {
             console.log(e)
+            alert('failed')
             setBestActor(players[0]?.name)
         }
     }
@@ -85,7 +119,7 @@ export function ResultCard ({
                     <View style={styles.divider} />
                     <Text style={styles.quoteTxt}>It was {players[suspect]?.choice}!</Text>
                 </View>
-                {!bestActor && <BestActorRow bestActor={'Mike'}/>}
+                {!bestActor && <BestActorRow bestActor={'Mike'} mostVotes={mostVotes}/>}
                 <PrimaryButton 
                     text="Back to Home"
                     onPress={() => navigation.navigate("Landing")}

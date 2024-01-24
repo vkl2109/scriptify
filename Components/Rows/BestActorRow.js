@@ -9,7 +9,10 @@ import Animated, {
 } from 'react-native-reanimated';
 import { FontAwesome } from '@expo/vector-icons';
 
-export function BestActorRow ({ bestActor = '' }) {
+export function BestActorRow ({ 
+    bestActor = '',
+    mostVotes = 5,
+}) {
     return(
         <Animated.View
             entering={FlipInXDown.springify().damping(15)}
@@ -26,7 +29,7 @@ export function BestActorRow ({ bestActor = '' }) {
                         <Text style={styles.bestActorTxt}>{bestActor}</Text>
                         <Text style={styles.middleTxt}>with</Text>
                         <View style={styles.starWrapper}>
-                            <Text style={styles.bestActorTxt}>5</Text>
+                            <Text style={styles.bestActorTxt}>{mostVotes}</Text>
                             <FontAwesome name="star" size={24} color="#161A30" />
                         </View>
                     </View>

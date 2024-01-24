@@ -119,6 +119,7 @@ export function PlayGameCard ({ code }) {
                 <ResultCard 
                     players={players}
                     suspect={suspect}
+                    code={code}
                     />
             </Animated.View>
         )
