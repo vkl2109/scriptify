@@ -11,7 +11,7 @@ import { FontAwesome } from '@expo/vector-icons';
 
 export function BestActorRow ({ 
     bestActor = '',
-    mostVotes = 5,
+    mostVotes = -1,
 }) {
     return(
         <Animated.View

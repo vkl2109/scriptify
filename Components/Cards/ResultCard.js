@@ -49,6 +49,8 @@ export function ResultCard ({
     const fetchBestActor = async () => {
         try {
             let totalRatings = {}
+            let highestRatingKey = ' '
+            let highestRatingValue = 0
             for (let i = 1; i < 4; i++) {
                 const newRoundRef = doc(db, 'sessions', code, 'rounds', `round${i}`)
                 const newRoundDoc = await getDoc(newRoundRef)
@@ -71,7 +73,12 @@ export function ResultCard ({
                     else totalRatings[person] = total;
                 }
             }
-            const personWithHighestRatings = Object.keys(totalRatings).reduce((a, b) => totalRatings[a] > totalRatings[b] ? a : b);
+            const totalRatingsKeys = Object.keys(totalRatings)
+            if (totalRatingsKeys.length > 0) highestRatingKey = totalRatingsKeys.reduce((a, b) => totalRatings[a] > totalRatings[b] ? a : b);
+            console.log(highestRatingKey)
+            setBestActor(highestRatingKey)
+            if (totalRatings[highestRatingKey]) highestRatingValue = totalRatings[highestRatingKey]
+            setMostVotes(highestRatingValue)
         }
         catch (e) {
             console.log(e)
@@ -119,7 +126,7 @@ export function ResultCard ({
                     <View style={styles.divider} />
                     <Text style={styles.quoteTxt}>It was {players[suspect]?.choice}!</Text>
                 </View>
-                {!bestActor && <BestActorRow bestActor={'Mike'} mostVotes={mostVotes}/>}
+                {bestActor && <BestActorRow bestActor={bestActor} mostVotes={mostVotes}/>}
                 <PrimaryButton 
                     text="Back to Home"
                     onPress={() => navigation.navigate("Landing")}

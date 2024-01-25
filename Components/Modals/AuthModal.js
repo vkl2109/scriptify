@@ -77,6 +77,7 @@ export function AuthModal ({ isVisible, setIsVisible }) {
                             placeholder={'Enter Name'}
                             placeholderTextColor={'#F0ECE5'}
                             style={styles.usernameWrapper}
+                            maxLength={10}
                             autoFocus
                             />
                         <Text style={styles.error}>{error}</Text>
