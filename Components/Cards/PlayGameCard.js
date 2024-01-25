@@ -99,8 +99,8 @@ export function PlayGameCard ({ code }) {
         try {
             const sessionRatingRef = doc(db, "sessions", code, "rounds", `round${turns.currentRound}`)
             const currentPlayer = players[turns.currentTurn]
-            const { deviceID: playerDeviceID } = currentPlayer
-            const ratingRef = `ratings.${playerDeviceID}.${currentUser}`
+            const { name } = currentPlayer
+            const ratingRef = `ratings.${name}.${currentUser}`
             await updateDoc(sessionRatingRef, {
                 [ratingRef]: rating,
             })

@@ -57,20 +57,16 @@ export function ResultCard ({
                 if (!newRoundDoc.exists()) throw new Error('failed to fetch!')
                 const newRoundData = newRoundDoc.data()
                 const { ratings } = newRoundData
+                if (!ratings || ratings.length == 0) continue
 
                 // Iterate through each person
                 for (const [person, ratingsList] of Object.entries(ratings)) {
-                    let total = 0;
+                    totalRatings[person] = totalRatings[person] || 0;
                     // Iterate through each rating in the person's list
                     if (!ratingsList || ratingsList.length == 0) continue
-                    for (const ratingDict of ratingsList) {
-                        total += Object.values(ratingDict).reduce((sum, rating) => sum + rating, 0);
+                    for (const [voter, rating] of Object.entries(ratingsList)) {
+                        totalRatings[person] += rating
                     }
-                    if (totalRatings[person]) {
-                        const oldRatings = totalRatings[person]
-                        totalRatings[person] = oldRatings + total
-                    } 
-                    else totalRatings[person] = total;
                 }
             }
             const totalRatingsKeys = Object.keys(totalRatings)
@@ -79,6 +75,7 @@ export function ResultCard ({
             setBestActor(highestRatingKey)
             if (totalRatings[highestRatingKey]) highestRatingValue = totalRatings[highestRatingKey]
             setMostVotes(highestRatingValue)
+            console.log(highestRatingValue)
         }
         catch (e) {
             console.log(e)
