@@ -34,7 +34,7 @@ exports.updateWaitingHandler = async ({
                 }
             }
             await db.collection('sessions').doc(code).collection('rounds').doc(`round${i}`).set({
-                ratings: [],
+                ratings: {},
                 scenario: newScenario,
                 quotes: quotes,
             })
