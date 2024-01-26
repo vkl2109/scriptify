@@ -39,7 +39,7 @@ exports.testScriptGenerator = onCall(
     { secrets: [GPTAPIKey] },
     async (request) => {
     return generateScenario({
-        request: request,
+        scenario: request?.data?.scenario,
         secret: GPTAPIKey.value()
     })
 })

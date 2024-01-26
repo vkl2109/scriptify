@@ -4,7 +4,6 @@ const {
     HttpsError
  } = require('../config.js')
 const { generateScenario } = require("../langchain/generateScenario.js")
-const { generateQuote } = require("../langchain/generateQuote.js")
 
 exports.updateWaitingHandler = async ({
     request: request,
@@ -23,15 +22,6 @@ exports.updateWaitingHandler = async ({
                 })
                 if (!generateScenarioResult?.success) throw new Error('failed to generate scenario')
                 newScenario = generateScenarioResult?.scenario
-                for (let player of totalPlayers) {
-                    const generateQuoteResult = await generateQuote({
-                        character: player?.choice,
-                        scenario: newScenario,
-                        secret: secret,
-                    })
-                    if (!generateQuoteResult?.success) throw new Error('failed to generate quote')
-                    quotes[player?.choice] = generateQuoteResult?.quote
-                }
             }
             await db.collection('sessions').doc(code).collection('rounds').doc(`round${i}`).set({
                 ratings: {},

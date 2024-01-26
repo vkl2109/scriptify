@@ -1,14 +1,15 @@
 const { ChatOpenAI } = require("@langchain/openai");
 const { PromptTemplate } = require("@langchain/core/prompts")
 const { RunnableSequence } = require("@langchain/core/runnables")
-const { StringOutputParser } = require("@langchain/core/output_parsers")
+const { StructuredOutputParser } = require("langchain/output_parsers")
+const { z } = require("zod")
 const { 
     logger,
     HttpsError
  } = require('../config.js')
 
 exports.generateScenario = async ({ 
-    category, 
+    scenario, 
     secret 
 }) => {
     try {
@@ -17,13 +18,27 @@ exports.generateScenario = async ({
             temperature: 1,
         });
         const promptTemplate = PromptTemplate.fromTemplate(
-        "Generate an elaborate scene introduction to a wacky zany murder mystery scenario for the cast of the hit TV show {show} with another {show} side character being the victim and one of the main cast being one of the suspected murderers without revealing who yet. Limit to two paragraphs and end every sentence with a period."
+        "Generate a scenario based on these instructions: {scenario} {format_instructions}"
         );
-        const outputParser = new StringOutputParser();
 
-        const chain = RunnableSequence.from([promptTemplate, model, outputParser]);
+        const parser = StructuredOutputParser.fromZodSchema(
+            z.object({
+                scenario: z.string().describe("scenario from the user's prompt"),
+                quotes: z
+                .record(z.string())
+                .describe("quotes from the main characters"),
+                options: z
+                .array(z.string())
+                .describe("three clues from the scenario"),
+            })
+        );
 
-        const result = await chain.invoke({ show: category });
+        const chain = RunnableSequence.from([promptTemplate, model, parser]);
+
+        const result = await chain.invoke({ 
+            scenario: scenario,
+            format_instructions: parser.getFormatInstructions()
+        });
 
         return { success: true, scenario: result }
     }
