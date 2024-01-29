@@ -96,26 +96,26 @@ export function FinalRoundCard ({
     const toggleNextRound = async () => {
         try {
             setLoading(true)
-            // const chosenCharacters = players.reduce((acc, player) => {
-            //     acc.push(player?.choice)
-            //     return acc;
-            // }, []);
-            // const latestOptionsArray = await fetchOptions()
-            // const highestVotedOption = latestOptionsArray.reduce((max, obj) => {
-            //     const [key, value] = obj
-            //     const newLength = value.length
-            //     return newLength > max.length ? { "key": key, "length": newLength } : max
-            // }, { "key": null, "length": -1 })
-            // const functions = getFunctions();
-            // const updateNextRound = httpsCallable(functions, 'updateNextRound');
-            // const result = await updateNextRound({ 
-            //     currentRound: currentRound, 
-            //     code: code,
-            //     category: category,
-            //     characters: JSON.stringify(chosenCharacters),
-            //     choice: highestVotedOption["key"]
-            // })
-            // if (!result?.data?.success) throw new Error ("failed to update game")
+            const chosenCharacters = players.reduce((acc, player) => {
+                acc.push(player?.choice)
+                return acc;
+            }, []);
+            const latestOptionsArray = await fetchOptions()
+            const highestVotedOption = latestOptionsArray.reduce((max, obj) => {
+                const [key, value] = obj
+                const newLength = value.length
+                return newLength > max.length ? { "key": key, "length": newLength } : max
+            }, { "key": null, "length": -1 })
+            const functions = getFunctions();
+            const updateNextRound = httpsCallable(functions, 'updateNextRound');
+            const result = await updateNextRound({ 
+                currentRound: currentRound, 
+                code: code,
+                category: category,
+                characters: JSON.stringify(chosenCharacters),
+                choice: highestVotedOption["key"]
+            })
+            if (!result?.data?.success) throw new Error ("failed to update game")
             handleNextTurn()
         }
         catch (e) {
