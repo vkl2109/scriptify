@@ -33,12 +33,14 @@ import {
     AuthContext,
 } from '../../Context'
 import { getFunctions, httpsCallable } from "firebase/functions";
+import { generateNextScenario } from '../../constants'
 
 export function FinalRoundCard ({ 
     code,
     currentRound,
     isHost,
     players,
+    handleNextTurn
 }) {
     const [ error, setError ] = useState(false)
     const [ selectedVote, setSelectedVote ] = useState(null)
@@ -67,6 +69,7 @@ export function FinalRoundCard ({
                     if (user == authDeviceID) setSelectedVote(key)
                 })
             })
+            return newOptionsArray
         }
         catch (e) {
             setError(true)
@@ -96,17 +99,25 @@ export function FinalRoundCard ({
                 acc.push(player?.choice)
                 return acc;
             }, []);
+            const latestOptionsArray = await fetchOptions()
+            const highestVotedOption = latestOptionsArray.reduce((max, obj) => {
+                const [key, value] = obj
+                const newLength = value.length
+                return newLength > max.length ? { "key": key, "length": newLength } : max
+            }, { "key": null, "length": -1 })
             const functions = getFunctions();
             const updateNextRound = httpsCallable(functions, 'updateNextRound');
             const result = await updateNextRound({ 
                 currentRound: currentRound, 
                 code: code,
-                scenario: generateScenario({
+                scenario: generateNextScenario({
                     category: 'Friends',
-                    characters: JSON.stringify(chosenCharacters)
+                    characters: JSON.stringify(chosenCharacters),
+                    choice: highestVotedOption["key"]
                 }),
             })
             if (!result?.data?.success) throw new Error ("failed to update game")
+            handleNextTurn()
         }
         catch (e) {
             console.log(e)

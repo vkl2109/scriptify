@@ -139,6 +139,7 @@ export function PlayGameCard ({ code }) {
                     currentRound={turns?.currentRound}
                     isHost={isHost}
                     players={players}
+                    handleNextTurn={handleNextTurn}
                     />
             </Animated.View>
         )
