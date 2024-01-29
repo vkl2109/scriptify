@@ -40,7 +40,7 @@ export function IndivGameCard ({
     handleNext,
     numReviews,
 }) {
-    const { choice, deviceID } = currentPlayer
+    const { choice, deviceID, name } = currentPlayer
     const { currentRound } = turns
     const [ quote, setQuote ] = useState('')
     const [ typeQuote, setTypeQuote ] = useState('')
@@ -72,7 +72,7 @@ export function IndivGameCard ({
         const unsubscribe = onSnapshot(roundsRef, (doc) => {
             if (doc.exists()) {
                 const roundsData = doc.data()
-                const newRatings = roundsData?.ratings[deviceID]
+                const newRatings = roundsData?.ratings[name]
                 if (newRatings) setReviews(Object.entries(newRatings))
             }
         },

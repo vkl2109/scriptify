@@ -113,7 +113,7 @@ export function FinalRoundCard ({
                     setIsVisible={setLoading}
                     />
                 <View style={styles.mainTxtWrapper}>
-                    <Text style={styles.choiceTxt}>What's Next?</Text>
+                    <Text style={styles.title}>What's Next?</Text>
                     <View style={styles.divider} />
                     <Text style={styles.quoteTxt}>Vote on what to investigate!</Text>
                 </View>
@@ -153,7 +153,7 @@ export function FinalRoundCard ({
                         exiting={FadeOutUp.springify().damping(15)}
                         contentContainerStyle={styles.flatlist}
                         data={options}
-                        renderItem={({item, index}) => <VoteRow option={item} key={index} />}
+                        renderItem={({item, index}) => <VoteRow option={item} key={index} roundRef={roundRef} />}
                         />
                 </View>
                 }
@@ -183,14 +183,19 @@ const styles = StyleSheet.create({
         paddingVertical: 20,
     },
     mainTxtWrapper: {
-        flex: 1,
         width: '100%',
         justifyContent: 'flex-start',
         alignItems: 'center',
     },
-    choiceTxt: {
+    title: {
         color: '#F0ECE5',
         fontSize: 30,
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    choiceTxt: {
+        color: '#F0ECE5',
+        fontSize: 25,
         fontWeight: 'bold',
         textAlign: 'center',
     },
@@ -210,7 +215,7 @@ const styles = StyleSheet.create({
     },
     optionsWrapper: {
         width: '100%',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-start',
         alignItems: 'center',
         flexDirection: 'column',
     },
@@ -225,7 +230,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'flex-end',
         alignItems: 'center',
-        flex: 1,
+        marginTop: 20,
     },
     flatlist: {
         width: '100%',

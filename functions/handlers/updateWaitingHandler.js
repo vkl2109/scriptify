@@ -15,7 +15,8 @@ exports.updateWaitingHandler = async ({
         for (let i = 1; i <= rounds; i++) {
             let newScenario = ''
             let newQuotes = {}
-            let newOptions = []
+            let generatedOptions = []
+            let newOptions = {}
             if (i == 1) {
                 const generateScenarioResult = await generateScenario({
                     scenario: scenario,
@@ -24,7 +25,10 @@ exports.updateWaitingHandler = async ({
                 if (!generateScenarioResult?.success) throw new Error('failed to generate scenario')
                 newScenario = generateScenarioResult?.result?.scenario || ''
                 newQuotes = generateScenarioResult?.result?.quotes || {}
-                newOptions = generateScenarioResult?.result?.options || []
+                generatedOptions = generateScenarioResult?.result?.options || []
+                generatedOptions.map((newOption) => {
+                    newOptions[newOption] = []
+                })
             }
             await db.collection('sessions').doc(code).collection('rounds').doc(`round${i}`).set({
                 ratings: {},

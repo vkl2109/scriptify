@@ -4,16 +4,48 @@ import {
     Text,
     useWindowDimensions
 } from 'react-native'
+import {
+  doc,
+  getDoc,
+  collection,
+  addDoc,
+  onSnapshot,
+  deleteDoc,
+  updateDoc,
+  setDoc,
+} from "firebase/firestore";
+import { 
+    useState,
+    useEffect
+} from 'react'
+import { Entypo } from '@expo/vector-icons';
 
-export function VoteRow ({ option }) {
+export function VoteRow ({ option, roundRef }) {
     const [key, value] = option
+    const [ voteCount, setVoteCount ] = useState(0)
+
+     useEffect(() => {
+        const unsubscribe = onSnapshot(roundRef, (doc) => {
+            if (doc.exists()) {
+                const roundsData = doc.data()
+                const voteArray = roundsData?.options[key]
+                if (voteArray) setVoteCount(voteArray.length)
+            }
+        },
+        (error) => {
+            console.log(error)
+            setError(true)
+        })
+        return () => unsubscribe()
+    },[voteCount])
 
     return(
         <View style={styles.rowWrapper}>
             <View style={styles.wrapper}>
                 <Text style={styles.choiceTxt}>{key}</Text>
-                <View style={{flex: 1, alignItems: 'flex-end'}}>
-                    <Text style={[styles.choiceTxt, { marginHorizontal: 5}]}>{value.length} votes</Text>
+                <View style={{flex: 1, alignItems: 'flex-end', flexDirection: 'row', justifyContent: 'flex-end'}}>
+                    <Text style={[styles.choiceTxt, { marginHorizontal: 5}]}>{voteCount}</Text>
+                    <Entypo name="thumbs-up" size={24} color="#F0ECE5" />
                 </View>
             </View>
         </View>
