@@ -63,7 +63,7 @@ export function FinalRoundCard ({
             if (!newOptions) throw new Error('not found')
             const newOptionsArray = Object.entries(newOptions)
             setOptions(newOptionsArray)
-            console.log(newOptionsArray)
+            // console.log(newOptionsArray)
             newOptionsArray?.map((newOption) => {
                 const [ key, value ] = newOption
                 value?.map((user) => {
