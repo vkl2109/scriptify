@@ -71,11 +71,11 @@ export function ResultCard ({
             }
             const totalRatingsKeys = Object.keys(totalRatings)
             if (totalRatingsKeys.length > 0) highestRatingKey = totalRatingsKeys.reduce((a, b) => totalRatings[a] > totalRatings[b] ? a : b);
-            console.log(highestRatingKey)
+            // console.log(highestRatingKey)
             setBestActor(highestRatingKey)
             if (totalRatings[highestRatingKey]) highestRatingValue = totalRatings[highestRatingKey]
             setMostVotes(highestRatingValue)
-            console.log(highestRatingValue)
+            // console.log(highestRatingValue)
         }
         catch (e) {
             console.log(e)

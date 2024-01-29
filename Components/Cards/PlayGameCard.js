@@ -31,6 +31,7 @@ import Animated, {
 import {
     AuthContext,
 } from '../../Context'
+import { LoadingPie } from '../Custom/LoadingPie'
 
 export function PlayGameCard ({ code }) {
     const [ players, setPlayers ] = useState(null)
@@ -169,7 +170,7 @@ export function PlayGameCard ({ code }) {
 
     return(
         <>
-            {players && turns &&
+            {(players && turns) ?
             <Animated.View 
             entering={SlideInRight.springify().damping(15)}
             style={styles.wrapper}>
@@ -186,7 +187,9 @@ export function PlayGameCard ({ code }) {
                     />
                 <View style={{height: 25 }} />
                 <TurnRenderer />
-            </Animated.View>}
+            </Animated.View>
+            :
+            <LoadingPie />}
         </>
     )
 }
