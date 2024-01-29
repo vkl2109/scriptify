@@ -12,6 +12,7 @@ const { createGameHandler } = require("./handlers/createGameHandler")
 const { updateWaitingHandler } = require("./handlers/updateWaitingHandler")
 const { generateScenario } = require("./langchain/generateScenario")
 const { defineSecret } = require('firebase-functions/params');
+const { updateNextRoundHandler } = require("./handlers/updateNextRoundHandler");
 const GPTAPIKey = defineSecret('Scriptify-GPT');
 
 // Create and deploy your first functions
@@ -30,6 +31,15 @@ exports.updateWaitingRoom = onCall(
     { secrets: [GPTAPIKey] },
     async (request) => {
     return updateWaitingHandler({
+        request: request,
+        secret: GPTAPIKey.value()
+    })
+})
+
+exports.updateNextRound = onCall(
+    { secrets: [GPTAPIKey] },
+    async (request) => {
+    return updateNextRoundHandler({
         request: request,
         secret: GPTAPIKey.value()
     })
