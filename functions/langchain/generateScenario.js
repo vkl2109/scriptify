@@ -40,7 +40,7 @@ exports.generateScenario = async ({
             format_instructions: parser.getFormatInstructions()
         });
 
-        return { success: true, scenario: result }
+        return { success: true, result: result }
     }
     catch (e) {
         logger.log(e)

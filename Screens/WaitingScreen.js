@@ -39,7 +39,7 @@ import {
 } from "firebase/firestore";
 import { fetchDoc } from '../Hooks'
 import { db } from '../firebase'
-import { friendCategory, roundsData } from '../constants'
+import { friendCategory, roundsData, generateScenario } from '../constants'
 import { Feather } from '@expo/vector-icons';
 import { getFunctions, httpsCallable } from "firebase/functions";
 import LottieView from 'lottie-react-native';
@@ -110,7 +110,7 @@ export function WaitingScreen ({ route }) {
                 totalPlayers: totalPlayers, 
                 rounds: rounds, 
                 code: code,
-                category: category,
+                scenario: generateScenario(category),
             })
             if (!result?.data?.success) throw new Error ("failed to update game")
         }
@@ -221,7 +221,7 @@ export function WaitingScreen ({ route }) {
                         />
                     <PrimaryButton 
                         text={'Start Game'}
-                        onPress={() => setLoading(true)}
+                        onPress={handleStart}
                         loading={loading}
                         />
                 </>
