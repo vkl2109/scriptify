@@ -5,7 +5,18 @@ const colorPalette = {
     winter: '#F0ECE5'
 }
 
-const generateScenario = "Generate 250 words of an insane, crazy, elaborate scene introduction with three clues to a wacky zany murder mystery scenario for the cast of the hit TV show Friends with one of the side characters being the victim and one of the main cast being one of the suspected murderers without revealing who yet. Next, generate an object of quotes for each of main characters based on their personality traits remarking on the scenario where each main character name is the key and each quote generated is the corresponding value. Finally, generate an array of strings of the three clues each being only one or two words used in generating the scenario."
+const generateScenario = `Generate 250 words of an insane, 
+crazy, elaborate scene introduction with three clues to a 
+wacky zany murder mystery scenario for the cast of the hit TV show 
+Friends with one of the side characters being the 
+victim and one of the main cast being one of the 
+suspected murderers without revealing who yet. 
+Next, generate an object of quotes for each of main characters 
+based on their personality traits remarking on the scenario 
+where each main character name is the key and each quote generated is the corresponding value. 
+Finally, generate an array of strings of the three clues each being only one or two words 
+used in generating the scenario.
+`
 
 const categories = [
     {
