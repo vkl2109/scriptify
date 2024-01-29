@@ -40,7 +40,8 @@ export function FinalRoundCard ({
     currentRound,
     isHost,
     players,
-    handleNextTurn
+    handleNextTurn,
+    category
 }) {
     const [ error, setError ] = useState(false)
     const [ selectedVote, setSelectedVote ] = useState(null)
@@ -111,7 +112,7 @@ export function FinalRoundCard ({
                 currentRound: currentRound, 
                 code: code,
                 scenario: generateNextScenario({
-                    category: 'Friends',
+                    category: category,
                     characters: JSON.stringify(chosenCharacters),
                     choice: highestVotedOption["key"]
                 }),
@@ -124,7 +125,7 @@ export function FinalRoundCard ({
             setError(true)
         }
         finally {
-            // setLoading(false)
+            setLoading(false)
         }
     }
 

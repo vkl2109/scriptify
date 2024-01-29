@@ -39,6 +39,7 @@ export function PlayGameCard ({ code }) {
     const [ isHost, setIsHost ] = useState(false)
     const [ error, setError ] = useState(false)
     const [ introRound, setIntroRound ] = useState(true)
+    const [ category, setCategory ] = useState('')
     const sessionRef = doc(db, 'sessions', code)
     const { deviceID: authDeviceID, currentUser } = useContext(AuthContext)
 
@@ -47,9 +48,11 @@ export function PlayGameCard ({ code }) {
             if (doc.exists()) {
                 const sessionData = doc.data()
                 setPlayers(sessionData?.players)
+                if (turns?.currentTurn > sessionData?.turns?.currentTurn) setIntroRound(true)
                 setTurns(sessionData?.turns)
                 setSuspect(sessionData?.suspect)
                 setIsHost(sessionData?.host == authDeviceID)
+                setCategory(sessionData?.category)
             }
             else {
                 setError(true)
@@ -70,15 +73,13 @@ export function PlayGameCard ({ code }) {
             let newRound = turns?.currentRound
             let newFinished = turns?.hasFinished
             newTurn += 1
+            if (turns?.currentRound == turns?.totalRounds && newTurn == players?.length){
+                newFinished = true
+            }
             if (newTurn > players.length) {
                 newTurn = 0
                 newRound += 1
                 setIntroRound(true)
-            }
-            if (newRound > turns?.totalRounds) {
-                newFinished = true
-                newRound = turns?.totalRounds + 1
-                newTurn = players.length
             }
             let newTurns = {...turns,
                 currentTurn: newTurn,
@@ -140,6 +141,7 @@ export function PlayGameCard ({ code }) {
                     isHost={isHost}
                     players={players}
                     handleNextTurn={handleNextTurn}
+                    category={category}
                     />
             </Animated.View>
         )

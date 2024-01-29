@@ -98,6 +98,7 @@ export function ResultCard ({
                 </View>
                 <FlatList
                     contentContainerStyle={styles.flatlist}
+                    ItemSeparatorComponent={() => <View style={{height: 15}} />}
                     data={players}
                     renderItem={({item, index}) => (
                         <Animated.View 
@@ -106,7 +107,7 @@ export function ResultCard ({
                             style={styles.btnWrapper}>
                             <PrimaryButton 
                                 text={item?.choice}
-                                onPress={() => handleVote(index)}
+                                onPress={() => handleVote(item?.choice)}
                                 />
                         </Animated.View >
                     )}
@@ -121,7 +122,7 @@ export function ResultCard ({
                 <View style={styles.mainTxtWrapper}>
                     <Text style={styles.choiceTxt}>{isCorrect ? "YOU WON" : "YOU LOST"}</Text>
                     <View style={styles.divider} />
-                    <Text style={styles.quoteTxt}>It was {players[suspect]?.choice}!</Text>
+                    <Text style={styles.quoteTxt}>It was {suspect}!</Text>
                 </View>
                 {bestActor && <BestActorRow bestActor={bestActor} mostVotes={mostVotes}/>}
                 <PrimaryButton 

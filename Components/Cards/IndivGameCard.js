@@ -119,10 +119,10 @@ export function IndivGameCard ({
     }
 
     const toggleChoice = () => {
-        // if (reviews.length < numReviews) setShowChoice(true)
-        // else handleNext()
+        if (reviews.length < numReviews) setShowChoice(true)
+        else handleNext()
         //dev only:
-        setShowChoice(true)
+        // setShowChoice(true)
     }
 
     return(

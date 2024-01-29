@@ -44,7 +44,8 @@ exports.updateWaitingHandler = async ({
                 newPlayersArray.push(player)
             }
         })
-        const randomSuspect = Math.floor(Math.random() * newPlayersArray.length)
+        const randomSuspectIndex = Math.floor(Math.random() * newPlayersArray.length)
+        const randomSuspect = newPlayersArray[randomSuspectIndex]?.choice
         const sessionRef = db.collection('sessions').doc(code)
         await sessionRef.update({
             players: newPlayersArray,
