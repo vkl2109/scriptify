@@ -32,11 +32,13 @@ import { VoteRow } from '../Rows/VoteRow'
 import {
     AuthContext,
 } from '../../Context'
+import { getFunctions, httpsCallable } from "firebase/functions";
 
 export function FinalRoundCard ({ 
     code,
     currentRound,
-    isHost
+    isHost,
+    players,
 }) {
     const [ error, setError ] = useState(false)
     const [ selectedVote, setSelectedVote ] = useState(null)
@@ -90,6 +92,21 @@ export function FinalRoundCard ({
     const toggleNextRound = async () => {
         try {
             setLoading(true)
+            const chosenCharacters = players.reduce((acc, player) => {
+                acc.push(player?.choice)
+                return acc;
+            }, []);
+            const functions = getFunctions();
+            const updateNextRound = httpsCallable(functions, 'updateNextRound');
+            const result = await updateNextRound({ 
+                currentRound: currentRound, 
+                code: code,
+                scenario: generateScenario({
+                    category: 'Friends',
+                    characters: JSON.stringify(chosenCharacters)
+                }),
+            })
+            if (!result?.data?.success) throw new Error ("failed to update game")
         }
         catch (e) {
             console.log(e)
