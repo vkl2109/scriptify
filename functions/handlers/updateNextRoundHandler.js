@@ -4,18 +4,24 @@ const {
     HttpsError
  } = require('../config.js')
 const { generateScenario } = require("../langchain/generateScenario.js")
+const { writeNextScenario } = require("../langchain/writeScenario.js")
 
 exports.updateNextRoundHandler = async ({
     request: request,
     secret: secret,
 }) => {
     try {
-        const { currentRound, code, scenario } = request.data
+        const { currentRound, code, category, characters, choice } = request.data
         
         let newScenario = ''
         let newQuotes = {}
         let generatedOptions = []
         let newOptions = {}
+        const scenario = writeNextScenario({
+            category,
+            characters,
+            choice,
+        })
         const updateScenarioResult = await generateScenario({
             scenario: scenario,
             secret: secret,

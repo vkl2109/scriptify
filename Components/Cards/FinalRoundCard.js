@@ -111,11 +111,9 @@ export function FinalRoundCard ({
             const result = await updateNextRound({ 
                 currentRound: currentRound, 
                 code: code,
-                scenario: generateNextScenario({
-                    category: category,
-                    characters: JSON.stringify(chosenCharacters),
-                    choice: highestVotedOption["key"]
-                }),
+                category: category,
+                characters: JSON.stringify(chosenCharacters),
+                choice: highestVotedOption["key"]
             })
             if (!result?.data?.success) throw new Error ("failed to update game")
             handleNextTurn()

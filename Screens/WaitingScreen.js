@@ -114,10 +114,8 @@ export function WaitingScreen ({ route }) {
                 totalPlayers: totalPlayers, 
                 rounds: rounds, 
                 code: code,
-                scenario: generateScenario({
-                    category: 'Friends',
-                    characters: JSON.stringify(chosenCharacters)
-                }),
+                category: 'Friends',
+                characters: JSON.stringify(chosenCharacters)
             })
             if (!result?.data?.success) throw new Error ("failed to update game")
         }

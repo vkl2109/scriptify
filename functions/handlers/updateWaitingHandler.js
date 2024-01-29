@@ -4,13 +4,14 @@ const {
     HttpsError
  } = require('../config.js')
 const { generateScenario } = require("../langchain/generateScenario.js")
+const { writeScenario } = require("../langchain/writeScenario.js")
 
 exports.updateWaitingHandler = async ({
     request: request,
     secret: secret,
 }) => {
     try {
-        const { totalPlayers, rounds, code, scenario } = request.data
+        const { totalPlayers, rounds, code, category, characters } = request.data
         
         for (let i = 1; i <= rounds; i++) {
             let newScenario = ''
@@ -18,6 +19,10 @@ exports.updateWaitingHandler = async ({
             let generatedOptions = []
             let newOptions = {}
             if (i == 1) {
+                const scenario = writeScenario({
+                    category,
+                    characters
+                })
                 const generateScenarioResult = await generateScenario({
                     scenario: scenario,
                     secret: secret,
