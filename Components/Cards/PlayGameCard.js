@@ -49,11 +49,12 @@ export function PlayGameCard ({ code }) {
             if (doc.exists()) {
                 const sessionData = doc.data()
                 setPlayers(sessionData?.players)
-                if (turns?.currentTurn > sessionData?.turns?.currentTurn) setIntroRound(true)
+                const previousTurn = turns?.currentTurn;
                 setTurns(sessionData?.turns)
                 setSuspect(sessionData?.suspect)
                 setIsHost(sessionData?.host == authDeviceID)
                 setCategory(sessionData?.category)
+                if (previousTurn == 0) setIntroRound(true)
             }
             else {
                 setError(true)

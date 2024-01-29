@@ -114,7 +114,7 @@ export function WaitingScreen ({ route }) {
                 totalPlayers: totalPlayers, 
                 rounds: rounds, 
                 code: code,
-                category: 'Friends',
+                category: category,
                 characters: JSON.stringify(chosenCharacters)
             })
             if (!result?.data?.success) throw new Error ("failed to update game")
