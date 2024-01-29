@@ -38,20 +38,28 @@ export function LandingScreen () {
     const [ joinGame, setJoinGame ] = useState(false)
     const { currentUser } = useContext(AuthContext)
     const [ isAuth, setIsAuth ] = useState(false)
+    const [ loading, setLoading ] = useState(false)
 
     const handleStart = async () => {
         navigation.navigate("Categories")
         // testing only hehehehe
         // try { 
+        //     setLoading(true)
         //     const functions = getFunctions();
         //     const testScriptGenerator = httpsCallable(functions, 'testScriptGenerator');
         //     const result = await testScriptGenerator({
-        //       scenario: generateScenario
+        //       scenario: generateScenario({
+        //         category: 'Friends',
+        //         characters: JSON.stringify(['Ross', 'Rachel', 'Monica'])
+        //       })
         //     })
         //     console.log(result.data)
         // }
         // catch (e) {
         //   console.log(e)
+        // }
+        // finally {
+        //   setLoading(false)
         // }
     }
 
@@ -78,6 +86,7 @@ export function LandingScreen () {
                 <PrimaryButton
                     onPress={handleStart}
                     text={"Start Game"}
+                    loading={loading}
                     />
                 <View style={{ height: 20 }} />
                 <PrimaryButton

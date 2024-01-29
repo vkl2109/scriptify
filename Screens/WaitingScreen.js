@@ -104,13 +104,20 @@ export function WaitingScreen ({ route }) {
     const handleStart = async () => {
         try {
             setLoading(true)
+            const chosenCharacters = []
+            totalPlayers.map((player) => {
+                if (player?.deviceID != '') chosenCharacters.push(player?.choice)
+            })
             const functions = getFunctions();
             const updateWaitingRoom = httpsCallable(functions, 'updateWaitingRoom');
             const result = await updateWaitingRoom({ 
                 totalPlayers: totalPlayers, 
                 rounds: rounds, 
                 code: code,
-                scenario: generateScenario(category),
+                scenario: generateScenario({
+                    category: 'Friends',
+                    characters: JSON.stringify(chosenCharacters)
+                }),
             })
             if (!result?.data?.success) throw new Error ("failed to update game")
         }
