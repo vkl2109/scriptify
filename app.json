@@ -18,7 +18,8 @@
       "supportsTablet": true,
       "config": {
         "usesNonExemptEncryption": false
-      }
+      },
+      "bundleIdentifier": "com.vkl2109.Scriptify"
     },
     "android": {
       "adaptiveIcon": {
@@ -28,6 +29,11 @@
     },
     "web": {
       "favicon": "./assets/theatre.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "67843e90-d2f2-484b-82b8-837b188926ac"
+      }
     }
   }
 }
