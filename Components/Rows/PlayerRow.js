@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
         width: '100%',
         backgroundColor: '#161A30',
         borderBottomWidth: 2.5,
-        borderColor: '#F0ECE5'
+        borderColor: '#F0ECE5',
     }),
     middleTxt: {
         color: '#B6BBC4',

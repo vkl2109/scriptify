@@ -36,16 +36,17 @@ import {
 import { AuthContext } from '../../Context'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-function ChoicePlayer ({ player, selected }) {
+function ChoicePlayer ({ player, selected, isHost }) {
     const { height, width } = useWindowDimensions()
     
     return(
         <View style={[choiceStyles.wrapper, {
             backgroundColor: selected ? '#31304D' : '#F0ECE5',
-            width: width * 0.5
+            width: width * (isHost ? 0.35 : 0.7)
         }]}>
             <Text style={[choiceStyles.playerTxt, {
                 color: selected ? '#F0ECE5' : '#161A30',
+                fontSize: isHost ? 15 : 25,
             }]}>{player}</Text>
         </View>
     )
@@ -66,6 +67,7 @@ const choiceStyles = StyleSheet.create({
     },
     playerTxt: {
         marginVertical: 5,
+        fontWeight: 'bold',
     },
 })
 
@@ -74,6 +76,7 @@ export function PlayerList ({
     totalPlayers,
     unchosen,
     code,
+    isHost
 }) {
     const { height, width } = useWindowDimensions()
     const [ choosePlayer, setChoosePlayer ] = useState(false)
@@ -82,21 +85,17 @@ export function PlayerList ({
     const { currentUser, deviceID } = useContext(AuthContext)
 
 
-    const handlePlay = async () => {
+    const handlePlay = async (selectedChoice) => {
         try {
-            if (!choice) {
-                setChoosePlayer(true)
-                return
-            }
             const sessionRef = doc(db, 'sessions', code)
             const newPlayerObject = {
                 deviceID: deviceID,
                 name: currentUser,
-                choice: choice,
+                choice: selectedChoice,
             }
             const newPlayersArray = []
             for (const player of totalPlayers) {
-                if (player?.choice == choice) {
+                if (player?.choice == selectedChoice) {
                     newPlayersArray.push(newPlayerObject)
                 }
                 else if (player?.deviceID == deviceID) {
@@ -113,22 +112,12 @@ export function PlayerList ({
             await updateDoc(sessionRef, {
                 players: newPlayersArray
             })
-            setChoice()
             setError('')
             setChoosePlayer(true)
         }
         catch (e) {
             console.log(e)
             setError('Please Try Again')
-        }
-    }
-
-    const toggleChoice = (item) => {
-        if (choice == item) {
-            setChoice()
-        }
-        else {
-            setChoice(item)
         }
     }
 
@@ -145,6 +134,7 @@ export function PlayerList ({
                     entering={SlideInDown.springify().damping(15)} 
                     exiting={SlideOutDown.duration(500)}
                     data={players}
+                    scrollEnabled
                     contentContainerStyle={styles.flatlist}
                     renderItem={({ item, index }) => (
                         <PlayerRow key={index} player={item} />
@@ -158,33 +148,37 @@ export function PlayerList ({
                     <FlatList
                         data={unchosen}
                         contentContainerStyle={styles.flatlistPlayers}
+                        numColumns={isHost ? 2 : 1}
                         renderItem={({ item, index }) => (
                             <TouchableOpacity 
-                                onPress={() => toggleChoice(item?.choice)}
+                                onPress={() => handlePlay(item?.choice)}
                                 key={index}
                                 >
-                                <ChoicePlayer player={item?.choice} selected={choice == item?.choice}/>
+                                <ChoicePlayer player={item?.choice} selected={choice == item?.choice} isHost={isHost}/>
                             </TouchableOpacity>
                         )}
                         />
-                        <View style={styles.btnWrapper}>
+                        {/* <View style={styles.btnWrapper}>
                             <PrimaryButton 
                                 text={"Choose Player"} 
                                 onPress={handlePlay}
                                 />
-                        </View>
+                        </View> */}
                 </Animated.View>
                 }
             </View>
-            {choosePlayer &&
             <TouchableOpacity 
-                onPress={() => setChoosePlayer(false)}
+                onPress={() => setChoosePlayer(prevState => !prevState)}
                 style={styles.addButtonWrapper}
                 >
                 <View style={styles.addButtonInnerWrapper}>
-                    <AntDesign name="plus" size={30} color="#31304D" />
+                    {choosePlayer ?
+                        <AntDesign name="plus" size={30} color="#31304D" />
+                    :
+                        <AntDesign name="back" size={30} color="#31304D" />
+                    }
                 </View>
-            </TouchableOpacity>}
+            </TouchableOpacity>
         </View>
     )
 }
@@ -198,20 +192,17 @@ const styles = StyleSheet.create({
     },
     flatlist: {
         width: '100%',
-        height: '100%',
         justifyContent: 'flex-start',
         alignItems: 'center',
         padding: 10,
-        flex: 1,
         backgroundColor: '#161A30',
         borderRadius: 17.5,
-        overflow: 'hidden',
     },
     flatlistWrapper: (w) => ({
         width: w * 0.9,
+        flex: 1,
         justifyContent: 'flex-start',
         alignItems: 'center',
-        flex: 1,
         padding: 5,
         backgroundColor: '#161A30',
         borderRadius: 20,
@@ -226,7 +217,6 @@ const styles = StyleSheet.create({
         height: '100%',
         justifyContent: 'flex-start',
         alignItems: 'center',
-        flex: 1,
         borderWidth: 2.5,
         backgroundColor: '#161A30',
         borderColor: '#F0ECE5',
@@ -236,8 +226,8 @@ const styles = StyleSheet.create({
     },
     addButtonWrapper: {
         position: 'absolute',
-        bottom: 15,
-        right: 15,
+        top: -30,
+        right: 10,
         borderRadius: 100,
         padding: 2.5,
         backgroundColor: '#F0ECE5',
@@ -263,16 +253,14 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         backgroundColor: '#161A30',
-        paddingHorizontal: 20,
-        paddingTop: 20,
         justifyContent: 'space-between',
         alignItems: 'center'
     },
     flatlistPlayers: {
         flex: 1,
         width: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
+        justifyContent: 'space-evenly',
+        alignItems: 'space-evenly',
     },
     errorText: {
         color: 'red',
@@ -287,7 +275,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     btnWrapper: {
-        margin: 20,
+        margin: 5,
         width: '100%',
         justifyContent: 'center',
         alignItems: 'center',

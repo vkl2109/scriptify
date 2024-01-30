@@ -65,7 +65,6 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.75,
         shadowRadius: 0.75,
         borderColor: '#F0ECE5',
-        borderBottomWidth: 0.5,
     },
     innerWrapper: {
         borderTopRightRadius: 17.5,
@@ -76,7 +75,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#161A30',
         borderColor: '#F0ECE5',
         borderWidth: 2.5,
-        borderBottomWidth: 0,
+        borderBottomWidth: 0.5,
         padding: 5,
     },
     text: {

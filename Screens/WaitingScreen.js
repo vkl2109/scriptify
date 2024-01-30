@@ -57,6 +57,7 @@ export function WaitingScreen ({ route }) {
     const [ loading, setLoading ] = useState(false)
     const [ rounds, setRounds ] = useState(roundsData[0].label)
     const [ error, setError ] = useState(false)
+    const [ choosePlayer, setChoosePlayer ] = useState(false)
     const navigation = useNavigation()
     const isHost = host == deviceID
     const sessionRef = doc(db, 'sessions', code)
@@ -204,6 +205,7 @@ export function WaitingScreen ({ route }) {
                 totalPlayers={totalPlayers}
                 unchosen={unchosen}
                 code={code}
+                isHost={isHost}
                 />
             }
             {unchosen.length > 0 ?
@@ -243,7 +245,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#31304D',
         alignItems: 'center',
         justifyContent: 'space-between',
-        paddingVertical: 10,
+        paddingBottom: 10,
     },
     subText: {
         color: '#F0ECE5',

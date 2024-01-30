@@ -28,6 +28,7 @@ export function CodeInput ({ value, setValue }) {
             keyboardType="default"
             textContentType="oneTimeCode"
             autoFocus
+            autoCapitalize={'characters'}
             autoComplete={"one-time-code"}
             renderCell={({index, symbol, isFocused}) => (
             <Text
