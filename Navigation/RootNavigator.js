@@ -15,7 +15,7 @@ export function RootNavigator () {
 
     return(
         <Stack.Navigator 
-            screenOptions={{ headerShown: false }}
+            screenOptions={{ headerShown: false, gestureEnabled: false }}
             initialRouteName={'Landing'}
             >
             <Stack.Screen name="Landing" component={LandingScreen} />
